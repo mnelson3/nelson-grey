@@ -1,10 +1,28 @@
-## [fastlane match](https://docs.fastlane.tools/actions/match/)
+# Nelson Grey - Shared Resources & Certificates
 
-> Do not modify this file, as it gets overwritten every time you run _match_.
+This repository contains shared resources, certificates, and utilities used across multiple Nelson Grey projects.
 
-This repository contains all your certificates and provisioning profiles needed to build and sign your applications. They are encrypted using OpenSSL via a passphrase.
+## Structure
 
-**Important:** Make sure this repository is set to private and only your team members have access to this repo.
+### certs/
+Contains all certificates with their private keys for iOS/macOS application signing.
+
+### profiles/
+Contains all provisioning profiles for iOS/macOS applications.
+
+### shared/
+Contains shared utilities and libraries used across multiple projects:
+
+#### github-auth/
+GitHub CLI authentication library for automated GitHub Actions runner token management
+- `github-auth-lib.sh`: Shared bash functions for GitHub CLI authentication, token generation, and validation
+
+## Usage
+
+### Certificates & Profiles
+This repository is managed by [fastlane match](https://docs.fastlane.tools/actions/match/) for automated certificate and provisioning profile management.
+
+**Important:** Make sure this repository is set to private and only team members have access.
 
 ### Installation
 
@@ -40,18 +58,10 @@ fastlane match development
 fastlane match enterprise
 ```
 
-For more information open [fastlane match git repo](https://docs.fastlane.tools/actions/match/)
+### Shared Libraries
 
-### Content
+The `shared/` directory contains reusable code libraries:
 
-#### certs
-
-This directory contains all your certificates with their private keys
-
-#### profiles
-
-This directory contains all provisioning profiles
-
----
+- **GitHub Auth Library**: Used by token-refresh.sh scripts in various projects for automated GitHub Actions runner management
 
 For more information open [fastlane match git repo](https://docs.fastlane.tools/actions/match/)
