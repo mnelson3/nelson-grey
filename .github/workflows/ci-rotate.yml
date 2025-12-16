@@ -11,6 +11,9 @@ jobs:
     # Use a self-hosted macOS runner (ensure your runner has these labels)
     runs-on: [self-hosted, macOS]
     environment: production
+    env:
+      # Comma-separated list of projects to rotate; can be overridden in repo Settings or workflow_dispatch
+      ROTATE_PROJECTS: "modulo-squares,vehicle-vitals,wishlist-wizard"
 
     steps:
       - name: Checkout
