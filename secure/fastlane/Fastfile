@@ -1,0 +1,44 @@
+default_platform :ios
+
+# Auto-decode App Store Connect private key from base64 env var into a .p8
+before_all do
+  if ENV['ASC_PRIVATE_KEY'] && !ENV['APP_STORE_CONNECT_KEY_PATH']
+    require 'base64'
+    key_path = File.expand_path('../../asc_key.p8', __FILE__)
+    UI.message("Writing App Store Connect key to #{key_path}")
+    File.write(key_path, Base64.decode64(ENV['ASC_PRIVATE_KEY']))
+    File.chmod(0600, key_path)
+    ENV['APP_STORE_CONNECT_KEY_PATH'] = key_path
+    ENV['APP_STORE_CONNECT_ISSUER_ID'] ||= ENV['ASC_ISSUER_ID']
+    ENV['APP_STORE_CONNECT_KEY_ID'] ||= ENV['ASC_KEY_ID']
+  end
+end
+
+platform :ios do
+  desc "Fetch development certificates and profiles"
+  lane :development do
+    match(type: "development", readonly: false)
+  end
+
+  desc "Fetch distribution certificates and profiles"
+  lane :distribution do
+    match(type: "appstore", readonly: false)
+  end
+
+  desc "Sync all (development + distribution)"
+  lane :sync_all do
+    match(type: "development", readonly: false)
+    match(type: "appstore", readonly: false)
+  end
+
+  desc "CI: rotate certificates if needed (runs match and pushes to match repo)"
+  lane :ci_rotate do
+    UI.message("Starting CI rotate lane: running match for development and appstore")
+
+    # Run match for development and appstore to ensure certs and profiles are present
+    match(type: "development", readonly: false)
+    match(type: "appstore", readonly: false)
+
+    UI.message("Completed match runs. If new certs/profiles were generated, they will be pushed to MATCH_GIT_URL.")
+  end
+end

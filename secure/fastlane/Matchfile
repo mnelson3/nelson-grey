@@ -1,0 +1,8 @@
+git_url ENV.fetch("MATCH_GIT_URL")
+type ENV.fetch("MATCH_TYPE", "appstore")
+storage_mode ENV.fetch("MATCH_STORAGE_MODE", "git")
+readonly ENV.fetch("MATCH_READONLY", "false") == "true"
+username ENV.fetch("FASTLANE_APPLE_ID")
+# PASS: use environment variable `MATCH_PASSWORD`
+# Example env vars used by CI / vault:
+# MATCH_GIT_URL, MATCH_PASSWORD, FASTLANE_APPLE_ID
