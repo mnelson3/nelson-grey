@@ -1,0 +1,8 @@
+# Ignore private keys and env files for runner-manager
+app-private-key.pem
+*.pem
+.env
+.env.local
+.env.*.local
+.secrets/
+node_modules/
