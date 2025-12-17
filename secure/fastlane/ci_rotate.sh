@@ -7,6 +7,20 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "$0")" && cd .. && pwd)"
 cd "$ROOT_DIR"
 
+
+  # If token is provided, also set a GIT_ASKPASS helper as a fallback for environments
+  # where embedding the token in URL may be modified. This helper prints the token.
+  if [[ -n "${MATCH_GIT_URL_TOKEN:-}" ]]; then
+    ASKPASS_SCRIPT="$(mktemp -t git_askpass_XXXX.sh)"
+    cat > "$ASKPASS_SCRIPT" <<'SH'
+#!/usr/bin/env sh
+printf '%s' "$1" >/dev/null 2>&1
+printf "%s" "${MATCH_GIT_URL_TOKEN}"
+SH
+    chmod 700 "$ASKPASS_SCRIPT"
+    export GIT_ASKPASS="$ASKPASS_SCRIPT"
+    export GIT_TERMINAL_PROMPT=0
+  fi
 # Load .env if present (optional local testing)
 if [ -f ../.env ]; then
   # shellcheck disable=SC1091
