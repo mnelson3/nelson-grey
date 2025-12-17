@@ -27,6 +27,23 @@ jobs:
           ruby-version: '3.2'
           bundler-cache: true
 
+      - name: Prepare SSH deploy key (optional)
+        if: ${{ secrets.MATCH_SSH_PRIVATE_KEY != '' }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.MATCH_SSH_PRIVATE_KEY }}" > ~/.ssh/match_deploy_key
+          chmod 600 ~/.ssh/match_deploy_key
+          # start ssh-agent and add key
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/match_deploy_key
+          # ensure github host key is present
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          # convert existing MATCH_GIT_URL (https://github.com/owner/repo.git) to SSH form
+          if [ -n "${{ secrets.MATCH_GIT_URL }}" ]; then
+            path="${{ secrets.MATCH_GIT_URL#https://github.com/}}"
+            echo "MATCH_GIT_URL=git@github.com:${path}" >> $GITHUB_ENV
+          fi
+
       - name: Install fastlane gems
         run: |
           cd secure/fastlane
