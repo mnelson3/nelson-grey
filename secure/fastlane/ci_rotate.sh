@@ -49,9 +49,46 @@ run_for_project() {
   export ASC_KEY_ID=$(get_var ASC_KEY_ID)
   export FASTLANE_APPLE_ID=$(get_var FASTLANE_APPLE_ID)
 
+  # If MATCH_GIT_URL uses HTTPS and a token is provided, embed the token for non-interactive auth
+  if [[ -n "${MATCH_GIT_URL}" && "${MATCH_GIT_URL}" == https://* && -n "${MATCH_GIT_URL_TOKEN:-}" ]]; then
+    suf=${MATCH_GIT_URL#https://}
+    export MATCH_GIT_URL="https://${MATCH_GIT_URL_TOKEN}@${suf}"
+  fi
+
+  # Support SSH deploy key for match cloning (per-project or global)
+  SSH_KEY_VAR_NAME="MATCH_SSH_PRIVATE_KEY_${suffix}"
+  # prefer per-project then global
+  SSH_KEY_VAL=""
+  eval "SSH_KEY_VAL=\"\${${SSH_KEY_VAR_NAME}:-\${MATCH_SSH_PRIVATE_KEY:-}}\""
+  if [[ -n "$SSH_KEY_VAL" ]]; then
+    echo "Found SSH deploy key for project $project; configuring ssh-agent"
+    mkdir -p "$HOME/.ssh"
+    # create a temp key file
+    KEY_FILE="$HOME/.ssh/match_deploy_key_${project}"
+    printf '%s' "$SSH_KEY_VAL" > "$KEY_FILE"
+    chmod 600 "$KEY_FILE"
+    # start ssh-agent and add key
+    eval "$(ssh-agent -s)" >/dev/null 2>&1 || true
+    ssh-add "$KEY_FILE" >/dev/null 2>&1 || true
+    # ensure github known host
+    ssh-keyscan -H github.com >> "$HOME/.ssh/known_hosts" 2>/dev/null || true
+    # if MATCH_GIT_URL is https, convert to ssh form
+    if [[ -n "${MATCH_GIT_URL}" && "${MATCH_GIT_URL}" == https://* ]]; then
+      path=${MATCH_GIT_URL#https://github.com/}
+      export MATCH_GIT_URL="git@github.com:${path}"
+    fi
+  fi
+
   echo "Running rotate for project: $project"
   if command -v bundle >/dev/null 2>&1; then
-    bundle exec fastlane ci_rotate
+    # prefer Bundler 2.7.2 for compatibility with the project's Gemfile
+    if gem list bundler -i -v 2.7.2 >/dev/null 2>&1; then
+      bundle _2.7.2_ exec fastlane ci_rotate
+    else
+      # attempt to install Bundler 2.7.2 locally then run
+      gem install bundler:2.7.2 >/dev/null 2>&1 || true
+      bundle _2.7.2_ exec fastlane ci_rotate || fastlane ci_rotate
+    fi
   else
     fastlane ci_rotate
   fi
