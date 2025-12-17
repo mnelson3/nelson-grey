@@ -50,6 +50,12 @@ run_for_project() {
   export FASTLANE_APPLE_ID=$(get_var FASTLANE_APPLE_ID)
 
   # If MATCH_GIT_URL uses HTTPS and a token is provided, embed the token for non-interactive auth
+  # trim whitespace and carriage returns from MATCH_GIT_URL
+  if [[ -n "${MATCH_GIT_URL}" ]]; then
+    MATCH_GIT_URL="$(printf '%s' "$MATCH_GIT_URL" | tr -d '\r' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+    export MATCH_GIT_URL
+  fi
+
   if [[ -n "${MATCH_GIT_URL}" && "${MATCH_GIT_URL}" == https://* && -n "${MATCH_GIT_URL_TOKEN:-}" ]]; then
     suf=${MATCH_GIT_URL#https://}
     export MATCH_GIT_URL="https://${MATCH_GIT_URL_TOKEN}@${suf}"
