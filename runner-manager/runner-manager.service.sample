@@ -1,0 +1,22 @@
+[Unit]
+Description=Nelson Grey Runner Manager
+After=network.target
+
+[Service]
+Type=simple
+User=runner
+Group=runner
+WorkingDirectory=/opt/nelson-grey/runner-manager
+ExecStart=/usr/bin/env NODE_ENV=production PORT=3001 node index.js
+Restart=on-failure
+RestartSec=5
+Environment=REQUIRE_HTTPS=1
+Environment=RUNNER_MANAGER_API_KEYS_FILE=/etc/runner-manager/api_keys.txt
+# ensure the key file is readable only by this service user
+
+[Install]
+WantedBy=multi-user.target
+
+# Notes:
+# - Place your API keys into /etc/runner-manager/api_keys.txt (one per line, mode 600).
+# - Manage TLS at the proxy (nginx) and set X-Forwarded-Proto header.

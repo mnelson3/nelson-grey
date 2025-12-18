@@ -1,0 +1,4 @@
+*.pem
+*.p8
+*.txt
+.secrets/
