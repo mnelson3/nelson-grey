@@ -28,20 +28,25 @@ jobs:
           bundler-cache: true
 
       - name: Prepare SSH deploy key (optional)
-        if: ${{ secrets.MATCH_SSH_PRIVATE_KEY != '' }}
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.MATCH_SSH_PRIVATE_KEY }}" > ~/.ssh/match_deploy_key
-          chmod 600 ~/.ssh/match_deploy_key
-          # start ssh-agent and add key
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/match_deploy_key
-          # ensure github host key is present
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-          # convert existing MATCH_GIT_URL (https://github.com/owner/repo.git) to SSH form
+          # Use shell checks for secrets (expressions like secrets.X != '' are not supported here)
+          if [ -n "${{ secrets.MATCH_SSH_PRIVATE_KEY }}" ]; then
+            mkdir -p ~/.ssh
+            printf '%s' "${{ secrets.MATCH_SSH_PRIVATE_KEY }}" > ~/.ssh/match_deploy_key
+            chmod 600 ~/.ssh/match_deploy_key
+            # start ssh-agent and add key
+            eval "$(ssh-agent -s)"
+            ssh-add ~/.ssh/match_deploy_key
+            # ensure github host key is present
+            ssh-keyscan -H github.com >> ~/.ssh/known_hosts
+          fi
+          # If an HTTPS MATCH_GIT_URL is provided, convert it to SSH form and export to env
           if [ -n "${{ secrets.MATCH_GIT_URL }}" ]; then
-            path="${{ secrets.MATCH_GIT_URL#https://github.com/}}"
-            echo "MATCH_GIT_URL=git@github.com:${path}" >> $GITHUB_ENV
+            url="${{ secrets.MATCH_GIT_URL }}"
+            path="${url#https://github.com/}"
+            if [ "$path" != "$url" ]; then
+              echo "MATCH_GIT_URL=git@github.com:${path}" >> $GITHUB_ENV
+            fi
           fi
 
       - name: Install fastlane gems
