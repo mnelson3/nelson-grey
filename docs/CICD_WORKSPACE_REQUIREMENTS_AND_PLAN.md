@@ -44,9 +44,13 @@ This workspace contains multiple application repos and their corresponding self-
 - Standardized to: ASC API key auth + Match over HTTPS + ephemeral keychain.
 - Implemented across: `modulo-squares`, `vehicle-vitals`, `wishlist-wizard`.
 
-### WS-B: Runner reliability / auto-recovery (IN PROGRESS)
+### WS-B: Runner reliability / auto-recovery (✅ DONE)
 - Add/align runner watchdogs (LaunchDaemon preferred for true zero-touch).
-- Fix runner repo drift (notably `modulo-squares-actions-runner` missing runner `bin/` payload).
+- **Status:** All three runner repos now have complete watchdog implementations
+  - `modulo-squares-actions-runner`: ✅ setup-service.sh, health-check.sh, auto-recover.sh, monitor.sh
+  - `vehicle-vitals-actions-runner`: ✅ setup-service.sh, health-check.sh, auto-recover.sh, monitor.sh
+  - `wishlist-wizard-actions-runner`: ✅ (already complete)
+- Shared templates created in `nelson-grey/shared/runner-scripts/` for future centralization
 
 ### WS-C: Docker runners auto-restart (IN PROGRESS)
 - Token refresh + health checks run on a schedule and now attempt a container restart when unhealthy.
