@@ -18,3 +18,8 @@ match_deploy_key.pub
 # Local env files (never commit)
 .env
 .env.*
+
+# Secrets and Certificates
+certs/
+profiles/
+
