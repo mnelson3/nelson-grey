@@ -1,53 +1,62 @@
-# Quick Deployment Guide — Zero-Touch Runners
+# Quick Deployment Guide — Shared Runner
 
-**Purpose:** Fast setup for deploying auto-recovering runners across all projects.
+**Purpose:** Fast setup for deploying the shared macOS runner for the `nelsongrey` organization.
 
-## Quick Start (Per Runner)
+## Zero-Touch Automation
 
-### 1. Modulo Squares
-
-```bash
-cd ~/Circus/Repositories/modulo-squares-actions-runner
-
-# Bootstrap runner payload (if needed)
-chmod +x scripts/bootstrap-runner-payload.sh
-./scripts/bootstrap-runner-payload.sh
-
-# Install LaunchDaemon service
-chmod +x scripts/setup-service.sh scripts/health-check.sh scripts/auto-recover.sh scripts/monitor.sh
-./scripts/setup-service.sh
-
-# Verify
-./scripts/health-check.sh
-```
-
-### 2. Vehicle Vitals
+We have a master automation script that handles setup, service management, and monitoring.
 
 ```bash
-cd ~/Circus/Repositories/vehicle-vitals-actions-runner
-
-# Install LaunchDaemon service
-chmod +x scripts/setup-service.sh scripts/health-check.sh scripts/auto-recover.sh scripts/monitor.sh
-./scripts/setup-service.sh
-
-# Verify
-./scripts/health-check.sh
+cd ~/Circus/Repositories/nelson-grey
+./automate.sh
 ```
 
-### 3. Wishlist Wizard
+Use the menu to:
+1.  **Check Health:** Verify the runner is online.
+2.  **Full Setup:** Download and configure the runner (requires token).
+3.  **Service Management:** Install, start, or restart the background service.
+4.  **Enable Auto-Monitoring:** Add a cron job to auto-recover the runner if it crashes.
+
+## Manual Setup (Alternative)
+
+### Shared Runner (nelson-grey)
+
+This single runner handles builds for `modulo-squares`, `vehicle-vitals`, and `wishlist-wizard`.
 
 ```bash
-cd ~/Circus/Repositories/wishlist-wizard-actions-runner
+cd ~/Circus/Repositories/nelson-grey
 
-# Already has complete scripts; just ensure permissions
-chmod +x scripts/setup-service.sh scripts/health-check.sh scripts/auto-recover.sh scripts/monitor.sh
+# 1. Run Setup Script
+# You will need a registration token from: https://github.com/settings/actions/runners/new (if User) or Organization Settings
+chmod +x setup-shared-runner.sh
+./setup-shared-runner.sh
 
-# If re-installing service
-./scripts/setup-service.sh
+# 2. Install & Start Service
+cd actions-runner
+./svc.sh install
+./svc.sh start
 
-# Verify
-./scripts/health-check.sh
+# 3. Verify Status
+./svc.sh status
 ```
+
+## Maintenance
+
+### Restarting the Runner
+```bash
+cd ~/Circus/Repositories/nelson-grey/actions-runner
+./svc.sh restart
+```
+
+### Checking Logs
+Logs are located in `~/Circus/Repositories/nelson-grey/actions-runner/_diag`.
+
+### Updating the Runner
+The runner auto-updates itself when GitHub releases a new version. If you need to manually reinstall:
+1. Stop the service: `./svc.sh stop`
+2. Uninstall the service: `./svc.sh uninstall`
+3. Run `./setup-shared-runner.sh` again with the `--replace` flag (included in script).
+
 
 ## Verification Checklist
 
@@ -65,40 +74,27 @@ sudo launchctl list | grep "actions.runner.mnelson3"
 tail -f service.log
 ```
 
-## Enable Periodic Monitoring
-
-Add to macOS crontab (run `crontab -e`):
-
-```bash
-# Monitor all runners every 5 minutes
-*/5 * * * * /path/to/modulo-squares-actions-runner/scripts/monitor.sh >/dev/null 2>&1
-*/5 * * * * /path/to/vehicle-vitals-actions-runner/scripts/monitor.sh >/dev/null 2>&1
-*/5 * * * * /path/to/wishlist-wizard-actions-runner/scripts/monitor.sh >/dev/null 2>&1
-```
-
 ## Troubleshooting
 
 ### Service not loading?
 
 ```bash
 # Check plist path
-ls /Library/LaunchDaemons/actions.runner.*.plist
+ls ~/Library/LaunchAgents/actions.runner.*.plist
 
 # Manually load
-sudo launchctl load /Library/LaunchDaemons/actions.runner.mnelson3-modulo-squares.modulo-squares-macos-runner.plist
+launchctl load ~/Library/LaunchAgents/actions.runner.mnelson3-nelson-grey.nelson-grey-macos-runner.plist
 
 # Check for errors
-sudo launchctl list | grep actions.runner
+launchctl list | grep actions.runner
 ```
 
 ### Runner offline?
 
 ```bash
-# Manual recovery
-./scripts/auto-recover.sh
-
 # Check logs
-tail -f scripts/monitor.log
+cd ~/Circus/Repositories/nelson-grey/actions-runner
+tail -f _diag/*.log
 ```
 
 ### GitHub CLI authentication issue?

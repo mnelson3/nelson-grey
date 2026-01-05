@@ -6,9 +6,15 @@ node_modules/
 
 # Runner artifacts (never commit)
 actions-runner/
+runners/
 runner-manager/.env
 **/_work/
 **/_diag/
+**/bin/
+**/bin*
+**/externals/
+**/externals*
+
 
 # Local deploy keys / private keys (never commit)
 match_deploy_key
