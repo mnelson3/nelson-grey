@@ -105,7 +105,7 @@ jobs:
 
       # 5. Service Account Setup (if needed)
       - name: 📦 Setup Firebase Service Account
-        if: secrets.firebase_service_account_key != ''
+        continue-on-error: true
         run: |
           echo "📦 Setting up Firebase service account..."
           mkdir -p android/app
@@ -114,7 +114,8 @@ jobs:
           echo "✅ Firebase service account configured"
 
       - name: 📦 Setup Google Play Service Account
-        if: secrets.google_play_key_json != '' && inputs.build_type == 'release'
+        if: inputs.build_type == 'release'
+        continue-on-error: true
         run: |
           echo "📦 Setting up Google Play service account..."
           mkdir -p android/app/google-play
