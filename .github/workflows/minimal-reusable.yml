@@ -1,0 +1,16 @@
+name: Minimal Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      test_input:
+        required: false
+        type: string
+        default: "test"
+
+jobs:
+  do-nothing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Echo
+        run: echo "Hello from reusable"
