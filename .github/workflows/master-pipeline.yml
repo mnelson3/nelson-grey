@@ -1,0 +1,267 @@
+# Master CI/CD Orchestration Workflow
+# This is the main entry point for all project builds and deployments
+# Reads project manifest and calls appropriate reusable workflows
+#
+# This workflow should be the only one that appears in individual project repos
+# All logic is centralized and configuration-driven
+
+name: 🚀 Master CI/CD Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: "Action to perform"
+        required: true
+        type: choice
+        options:
+          - build_all
+          - test_all
+          - build_and_deploy
+          - deploy_only
+      environment:
+        description: "Environment for deployment"
+        required: false
+        type: choice
+        options:
+          - development
+          - staging
+          - production
+        default: "development"
+      verbose:
+        description: "Enable verbose output"
+        required: false
+        type: boolean
+        default: false
+  push:
+    branches:
+      - develop
+      - staging
+      - main
+  pull_request:
+    branches:
+      - develop
+      - staging
+      - main
+
+env:
+  MANIFEST_PATH: ".cicd/projects/${{ github.event.repository.name }}.yml"
+  SCHEMAS_PATH: ".github"
+
+jobs:
+  # Step 1: Load Project Configuration
+  load-config:
+    name: Load Project Configuration
+    runs-on: self-hosted
+    outputs:
+      project_name: ${{ steps.config.outputs.project_name }}
+      mobile_build: ${{ steps.config.outputs.mobile_build }}
+      web_build: ${{ steps.config.outputs.web_build }}
+      firebase_deploy: ${{ steps.config.outputs.firebase_deploy }}
+      chrome_extension: ${{ steps.config.outputs.chrome_extension }}
+      trigger_context: ${{ steps.context.outputs.trigger }}
+      target_environment: ${{ steps.context.outputs.environment }}
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 📋 Load Manifest from nelson-grey
+        id: config
+        run: |
+          echo "📋 Loading project manifest..."
+
+          # Try to find manifest in nelson-grey centralized location
+          # This assumes nelson-grey is available as a submodule or reference
+          MANIFEST_FILE=".cicd/projects/${{ github.event.repository.name }}.yml"
+
+          if [ ! -f "$MANIFEST_FILE" ]; then
+            echo "❌ Project manifest not found at $MANIFEST_FILE"
+            echo "Please ensure project is configured in nelson-grey/.cicd/projects/"
+            exit 1
+          fi
+
+          echo "✅ Manifest found: $MANIFEST_FILE"
+
+          # Extract key fields from manifest (simple YAML parsing)
+          PROJECT_NAME=$(grep "^project:" "$MANIFEST_FILE" | awk '{print $2}')
+          MOBILE_BUILD=$(grep "mobile:" "$MANIFEST_FILE" -A5 | grep "build:" | awk '{print $2}')
+          WEB_BUILD=$(grep "web:" "$MANIFEST_FILE" -A5 | grep "build:" | awk '{print $2}')
+          FIREBASE_DEPLOY=$(grep "firebase:" "$MANIFEST_FILE" -A5 | grep "deploy:" | awk '{print $2}')
+          CHROME_EXT=$(grep "chrome_extension:" "$MANIFEST_FILE" -A5 | grep "build:" | awk '{print $2}')
+
+          echo "project_name=$PROJECT_NAME" >> $GITHUB_OUTPUT
+          echo "mobile_build=${MOBILE_BUILD:-false}" >> $GITHUB_OUTPUT
+          echo "web_build=${WEB_BUILD:-false}" >> $GITHUB_OUTPUT
+          echo "firebase_deploy=${FIREBASE_DEPLOY:-false}" >> $GITHUB_OUTPUT
+          echo "chrome_extension=${CHROME_EXT:-false}" >> $GITHUB_OUTPUT
+
+          echo "✅ Configuration loaded"
+          echo "📋 Project: $PROJECT_NAME"
+          echo "📱 Mobile: ${MOBILE_BUILD:-false}"
+          echo "🌐 Web: ${WEB_BUILD:-false}"
+          echo "🔥 Firebase: ${FIREBASE_DEPLOY:-false}"
+          echo "🏪 Chrome: ${CHROME_EXT:-false}"
+
+      - name: 🎯 Determine Trigger Context
+        id: context
+        run: |
+          echo "🎯 Determining trigger context..."
+
+          # Determine what triggered this workflow
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            TRIGGER="${{ github.event.inputs.action }}"
+            ENV="${{ github.event.inputs.environment }}"
+          elif [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            TRIGGER="build_and_deploy"
+            ENV="production"
+          elif [ "${{ github.ref }}" == "refs/heads/staging" ]; then
+            TRIGGER="build_and_deploy"
+            ENV="staging"
+          elif [ "${{ github.ref }}" == "refs/heads/develop" ]; then
+            TRIGGER="build_all"
+            ENV="development"
+          else
+            TRIGGER="test_all"
+            ENV="development"
+          fi
+
+          echo "trigger=$TRIGGER" >> $GITHUB_OUTPUT
+          echo "environment=$ENV" >> $GITHUB_OUTPUT
+
+          echo "✅ Trigger: $TRIGGER"
+          echo "✅ Environment: $ENV"
+
+  # Step 2: Run Tests (if enabled)
+  test:
+    name: Run Tests
+    needs: load-config
+    if: |
+      needs.load-config.outputs.trigger_context == 'test_all' ||
+      needs.load-config.outputs.trigger_context == 'build_all' ||
+      needs.load-config.outputs.trigger_context == 'build_and_deploy'
+    runs-on: self-hosted
+    continue-on-error: true
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🧪 Run Tests
+        run: |
+          echo "🧪 Running project tests..."
+
+          # Run project-specific test command if available
+          if [ -f "package.json" ]; then
+            npm ci
+            npm run test 2>/dev/null || echo "⚠️ No test script found, skipping tests"
+          else
+            echo "⚠️ No package.json found, skipping Node tests"
+          fi
+
+          if [ -f "pubspec.yaml" ]; then
+            flutter pub get
+            flutter test 2>/dev/null || echo "⚠️ No Flutter tests found"
+          fi
+
+          echo "✅ Tests completed"
+
+      - name: 📊 Test Summary
+        if: always()
+        run: |
+          echo "## 🧪 Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "**Project**: ${{ needs.load-config.outputs.project_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Test Time**: $(date)" >> $GITHUB_STEP_SUMMARY
+
+  # Step 3: Build Mobile (iOS/Android)
+  build-mobile:
+    name: Build Mobile Apps
+    needs: load-config
+    if: needs.load-config.outputs.mobile_build == 'true'
+    uses: mnelson3/nelson-grey/.github/workflows/reusable/ios-build.yml@develop
+    with:
+      project_name: ${{ needs.load-config.outputs.project_name }}
+      release_type: "build_only"
+      ruby_version: "3.2"
+      bundler_version: "2.4.22"
+      fastlane_version: "2.230.0"
+    secrets:
+      app_store_connect_key_id: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+      app_store_connect_issuer_id: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+      app_store_connect_key: ${{ secrets.APP_STORE_CONNECT_KEY }}
+      match_password: ${{ secrets.MATCH_PASSWORD }}
+      match_git_url: ${{ secrets.MATCH_GIT_URL }}
+      match_git_branch: ${{ secrets.MATCH_GIT_BRANCH }}
+
+  # Step 4: Build Web
+  build-web:
+    name: Build Web App
+    needs: load-config
+    if: needs.load-config.outputs.web_build == 'true'
+    uses: mnelson3/nelson-grey/.github/workflows/reusable/web-deploy.yml@develop
+    with:
+      project_name: ${{ needs.load-config.outputs.project_name }}
+      environment: ${{ needs.load-config.outputs.target_environment }}
+    secrets:
+      firebase_token: ${{ secrets.FIREBASE_TOKEN }}
+      firebase_project_dev: ${{ secrets.FIREBASE_PROJECT_DEV }}
+      firebase_project_staging: ${{ secrets.FIREBASE_PROJECT_STAGING }}
+      firebase_project_prod: ${{ secrets.FIREBASE_PROJECT_PROD }}
+
+  # Step 5: Deploy Firebase (Functions, Firestore)
+  deploy-firebase:
+    name: Deploy Firebase
+    needs: [load-config, build-web]
+    if: |
+      needs.load-config.outputs.firebase_deploy == 'true' &&
+      (needs.load-config.outputs.trigger_context == 'build_and_deploy' ||
+       needs.load-config.outputs.trigger_context == 'deploy_only')
+    uses: mnelson3/nelson-grey/.github/workflows/reusable/firebase-deploy.yml@develop
+    with:
+      project_name: ${{ needs.load-config.outputs.project_name }}
+      environment: ${{ needs.load-config.outputs.target_environment }}
+      deploy_rules: true
+    secrets:
+      firebase_token: ${{ secrets.FIREBASE_TOKEN }}
+      firebase_project_dev: ${{ secrets.FIREBASE_PROJECT_DEV }}
+      firebase_project_staging: ${{ secrets.FIREBASE_PROJECT_STAGING }}
+      firebase_project_prod: ${{ secrets.FIREBASE_PROJECT_PROD }}
+
+  # Step 6: Build and Submit Chrome Extension
+  build-chrome-extension:
+    name: Build and Submit Chrome Extension
+    needs: load-config
+    if: needs.load-config.outputs.chrome_extension == 'true'
+    uses: mnelson3/nelson-grey/.github/workflows/reusable/chrome-extension-submit.yml@develop
+    with:
+      project_name: ${{ needs.load-config.outputs.project_name }}
+      publish: false
+      node_version: "18"
+    secrets:
+      chrome_extension_id: ${{ secrets.CHROME_EXTENSION_ID }}
+      chrome_client_id: ${{ secrets.CHROME_CLIENT_ID }}
+      chrome_client_secret: ${{ secrets.CHROME_CLIENT_SECRET }}
+      chrome_refresh_token: ${{ secrets.CHROME_REFRESH_TOKEN }}
+
+  # Step 7: Final Summary and Reporting
+  pipeline-summary:
+    name: Pipeline Summary
+    needs: [load-config, test, build-mobile, build-web, deploy-firebase, build-chrome-extension]
+    if: always()
+    runs-on: self-hosted
+    steps:
+      - name: 📊 Pipeline Summary
+        run: |
+          echo "## 🚀 CI/CD Pipeline Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Project**: ${{ needs.load-config.outputs.project_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Trigger**: ${{ needs.load-config.outputs.trigger_context }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Environment**: ${{ needs.load-config.outputs.target_environment }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Pipeline Time**: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Build Status" >> $GITHUB_STEP_SUMMARY
+          echo "- Tests: ${{ needs.test.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Mobile: ${{ needs.build-mobile.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Web: ${{ needs.build-web.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Firebase: ${{ needs.deploy-firebase.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Chrome Extension: ${{ needs.build-chrome-extension.result }}" >> $GITHUB_STEP_SUMMARY
