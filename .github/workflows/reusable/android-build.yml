@@ -1,0 +1,209 @@
+# Reusable Android Build and Distribution Workflow
+# This workflow is called by project-specific workflows to build and distribute Android apps
+#
+# Usage in calling workflow:
+#   - uses: ./.github/workflows/reusable/android-build.yml
+#     with:
+#       project_name: "vehicle-vitals"
+#       build_type: "release"
+
+name: Reusable Android Build & Distribution
+
+on:
+  workflow_call:
+    inputs:
+      project_name:
+        required: true
+        type: string
+        description: "Name of the project (e.g., 'vehicle-vitals', 'modulo-squares')"
+      mobile_dir:
+        required: false
+        type: string
+        default: "packages/mobile"
+        description: "Path to mobile directory"
+      build_type:
+        required: true
+        type: string
+        description: "Build type: debug or release"
+      release_notes:
+        required: false
+        type: string
+        description: "Release notes for this build"
+      java_version:
+        required: false
+        type: string
+        default: "17"
+        description: "Java version for Android build"
+      flutter_channel:
+        required: false
+        type: string
+        default: "stable"
+        description: "Flutter channel to use"
+    secrets:
+      firebase_service_account_key:
+        required: false
+        description: "Firebase service account key (JSON)"
+      google_play_key_json:
+        required: false
+        description: "Google Play service account key"
+
+jobs:
+  build-android:
+    name: Build Android App (${{ inputs.build_type }})
+    runs-on: self-hosted
+    environment:
+      name: ${{ inputs.build_type == 'release' && 'PRODUCTION' || 'DEVELOPMENT' }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.mobile_dir }}
+    steps:
+      # 1. Environment and Prerequisites
+      - name: 🤖 Android Build Environment Check
+        working-directory: .
+        run: |
+          echo "🤖 Running on self-hosted runner for Android builds"
+          echo "📍 Hostname: $(hostname)"
+          echo "🖥️  OS: $(uname -s)"
+          echo "💰 Using self-hosted runner (cost savings)"
+
+      - name: 🔧 Fix Git Config for HTTPS Checkout
+        working-directory: .
+        run: |
+          echo "🔄 Configuring Git for HTTPS checkout..."
+          git config --global --unset-all url."git@github.com:".insteadOf || true
+          echo "✅ Git config ready"
+
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Flutter Setup
+      - name: 🦋 Setup Flutter
+        uses: subosito/flutter-action@v2.21.0
+        with:
+          channel: ${{ inputs.flutter_channel }}
+          architecture: arm64
+
+      - name: 📦 Get Flutter Dependencies
+        run: flutter pub get
+
+      # 3. Java Setup
+      - name: ☕ Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: "temurin"
+          java-version: ${{ inputs.java_version }}
+
+      # 4. Android SDK Setup
+      - name: 🔧 Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: 🏗️ Generate Android Platform Files
+        run: |
+          echo "🏗️ Generating Android platform files..."
+          flutter create --platforms=android .
+          echo "✅ Android platform files generated"
+
+      # 5. Service Account Setup (if needed)
+      - name: 📦 Setup Firebase Service Account
+        if: secrets.firebase_service_account_key != ''
+        run: |
+          echo "📦 Setting up Firebase service account..."
+          mkdir -p android/app
+          echo "${{ secrets.firebase_service_account_key }}" > android/app/service-account-key.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=android/app/service-account-key.json" >> $GITHUB_ENV
+          echo "✅ Firebase service account configured"
+
+      - name: 📦 Setup Google Play Service Account
+        if: secrets.google_play_key_json != '' && inputs.build_type == 'release'
+        run: |
+          echo "📦 Setting up Google Play service account..."
+          mkdir -p android/app/google-play
+          echo "${{ secrets.google_play_key_json }}" > android/app/google-play/service-account-key.json
+          echo "✅ Google Play service account configured"
+
+      # 6. Build Steps
+      - name: 🏗️ Build Android APK
+        run: |
+          echo "🏗️ Building Android ${{ inputs.build_type }} APK..."
+
+          case "${{ inputs.build_type }}" in
+            debug)
+              echo "🐛 Building debug APK..."
+              flutter build apk --debug
+              ;;
+            release)
+              echo "🚀 Building release APK..."
+              flutter build apk --release
+              ;;
+            *)
+              echo "❌ Unknown build type: ${{ inputs.build_type }}"
+              exit 1
+              ;;
+          esac
+
+          echo "✅ APK build complete"
+
+      - name: 🏗️ Build Android App Bundle
+        if: inputs.build_type == 'release'
+        run: |
+          echo "🏗️ Building Android App Bundle for Google Play..."
+          flutter build appbundle --release
+          echo "✅ App Bundle build complete"
+
+      # 7. Artifact Collection
+      - name: 📦 Collect Build Artifacts
+        if: success()
+        run: |
+          echo "📦 Collecting build artifacts..."
+          mkdir -p ${{ runner.temp }}/artifacts
+
+          if [ -f "build/app/outputs/flutter-apk/app-${{ inputs.build_type }}.apk" ]; then
+            cp "build/app/outputs/flutter-apk/app-${{ inputs.build_type }}.apk" "${{ runner.temp }}/artifacts/"
+            echo "📱 APK artifact collected"
+          fi
+
+          if [ -f "build/app/outputs/bundle/${inputs.build_type}Release/app-${inputs.build_type}.aab" ]; then
+            cp "build/app/outputs/bundle/${inputs.build_type}Release/app-${inputs.build_type}.aab" "${{ runner.temp }}/artifacts/"
+            echo "📦 App Bundle artifact collected"
+          fi
+
+      - name: 📤 Upload Build Artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-${{ inputs.build_type }}-build
+          path: ${{ runner.temp }}/artifacts
+          retention-days: 30
+
+      # 8. Cleanup and Reporting
+      - name: 🧹 Cleanup Sensitive Files
+        if: always()
+        run: |
+          echo "🧹 Cleaning up sensitive files..."
+          rm -f android/app/service-account-key.json
+          rm -f android/app/google-play/service-account-key.json
+          echo "✅ Cleanup complete"
+
+      - name: 📊 Build Summary
+        if: success()
+        run: |
+          echo "## ✅ Android Build Successful" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Project**: ${{ inputs.project_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Build Type**: ${{ inputs.build_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Build Time**: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -n "${{ inputs.release_notes }}" ]; then
+            echo "**Release Notes**: ${{ inputs.release_notes }}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: ⚠️ Build Failure Summary
+        if: failure()
+        run: |
+          echo "## ❌ Android Build Failed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Project**: ${{ inputs.project_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Build Type**: ${{ inputs.build_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Failed Time**: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "For debugging, see docs/TROUBLESHOOTING.md in nelson-grey repository" >> $GITHUB_STEP_SUMMARY

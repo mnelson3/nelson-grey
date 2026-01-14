@@ -1,0 +1,107 @@
+project:
+  name: modulo-squares
+  description: "Firebase-powered puzzle game with cross-platform support"
+  owner: mnelson3
+
+targets:
+  ios:
+    enabled: true
+    schemes:
+      - name: "Modulo Squares"
+        path: "packages/app/ios"
+        configuration: "Release"
+    signing:
+      team_id: "${APPLE_TEAM_ID}"
+      bundle_id: "com.modulo-squares"
+      profiles:
+        development: true
+        distribution: true
+    destinations:
+      testflight:
+        enabled: true
+        group: "Internal Testers"
+      appstore:
+        enabled: true
+
+  android:
+    enabled: true
+    path: "packages/app/android"
+    signing:
+      keystore_ref: "${ANDROID_KEYSTORE_PATH}"
+      key_alias: "${ANDROID_KEY_ALIAS}"
+    destinations:
+      firebase_app_distribution:
+        enabled: true
+        groups:
+          - testers
+      google_play:
+        enabled: true
+        track: "internal"
+
+  web:
+    enabled: true
+    build_command: "cd packages/app/web && npm run build"
+    destinations:
+      firebase_hosting:
+        enabled: true
+
+  docker:
+    enabled: false
+
+  firebase:
+    enabled: true
+    project_id: "modulo-squares-prod"
+    hosting:
+      enabled: true
+    functions:
+      enabled: false
+    firestore:
+      deploy_rules: true
+      deploy_indexes: true
+
+ci:
+  runners:
+    macos:
+      labels:
+        - self-hosted
+        - macOS
+        - ios
+      required: true
+    docker:
+      labels:
+        - self-hosted
+        - docker
+      required: false
+
+  triggers:
+    - event: push
+      branches:
+        - develop
+      paths:
+        - "packages/app/**"
+        - ".github/workflows/**"
+        - "pubspec.yaml"
+
+    - event: pull_request
+      branches:
+        - develop
+        - staging
+        - main
+
+    - event: workflow_dispatch
+
+  environment:
+    development:
+      firebase_config: "firebase.dev.json"
+      secrets_profile: "dev"
+    staging:
+      firebase_config: "firebase.staging.json"
+      secrets_profile: "staging"
+    production:
+      firebase_config: "firebase.prod.json"
+      secrets_profile: "prod"
+
+notifications:
+  slack_webhook: "${SLACK_WEBHOOK_URL}"
+  failure_recipients:
+    - "mark@example.com"

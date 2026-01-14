@@ -1,0 +1,173 @@
+# Reusable Chrome Extension Build and Submit Workflow
+# This workflow is called by project-specific workflows to build and submit browser extensions
+#
+# Usage in calling workflow:
+#   - uses: ./.github/workflows/reusable/chrome-extension-submit.yml
+#     with:
+#       project_name: "wishlist-wizard"
+#       publish: "false"
+
+name: Reusable Chrome Extension Submit
+
+on:
+  workflow_call:
+    inputs:
+      project_name:
+        required: true
+        type: string
+        description: "Name of the project"
+      extension_dir:
+        required: false
+        type: string
+        default: "packages/browser-extension"
+        description: "Path to browser extension directory"
+      publish:
+        required: false
+        type: boolean
+        default: false
+        description: "Auto-publish after upload"
+      node_version:
+        required: false
+        type: string
+        default: "18"
+        description: "Node.js version"
+    secrets:
+      chrome_extension_id:
+        required: true
+        description: "Chrome Web Store extension ID"
+      chrome_client_id:
+        required: true
+        description: "Chrome Web Store client ID"
+      chrome_client_secret:
+        required: true
+        description: "Chrome Web Store client secret"
+      chrome_refresh_token:
+        required: true
+        description: "Chrome Web Store refresh token"
+
+jobs:
+  build-and-submit-extension:
+    name: Build and Submit Chrome Extension
+    runs-on: self-hosted
+    environment:
+      name: PRODUCTION
+    steps:
+      # 1. Environment and Prerequisites
+      - name: 🏪 Chrome Extension Build Environment Check
+        run: |
+          echo "🏪 Building Chrome extension on self-hosted runner"
+          echo "📍 Hostname: $(hostname)"
+          echo "🖥️  OS: $(uname -s)"
+
+      - name: 🔧 Fix Git Config for HTTPS Checkout
+        run: |
+          echo "🔄 Configuring Git for HTTPS checkout..."
+          git config --global --unset-all url."git@github.com:".insteadOf || true
+          echo "✅ Git config ready"
+
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      # 2. Node.js Setup
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node_version }}
+          cache: 'npm'
+
+      # 3. Build Extension
+      - name: 📦 Install Dependencies
+        run: |
+          echo "📦 Installing extension dependencies..."
+          npm ci
+          echo "✅ Dependencies installed"
+
+      - name: 🏗️ Build Extension
+        run: |
+          echo "🏗️ Building Chrome extension..."
+          npm run build --workspace=${{ inputs.extension_dir }}
+          echo "✅ Extension built successfully"
+
+      # 4. Package Extension
+      - name: 📦 Package Extension
+        id: package
+        run: |
+          echo "📦 Packaging Chrome extension..."
+
+          PACKAGE_DIR="chrome-extension-package"
+          rm -rf "$PACKAGE_DIR"
+          mkdir -p "$PACKAGE_DIR"
+
+          # Copy extension files
+          echo "📋 Copying extension files..."
+          cp -r "${{ inputs.extension_dir }}/dist"/* "$PACKAGE_DIR/" || cp -r "${{ inputs.extension_dir }}/build"/* "$PACKAGE_DIR/"
+          cp "${{ inputs.extension_dir }}/manifest.json" "$PACKAGE_DIR/" 2>/dev/null || true
+          cp -r "${{ inputs.extension_dir }}/public/icons" "$PACKAGE_DIR/" 2>/dev/null || true
+
+          # Create zip package
+          echo "📦 Creating zip package..."
+          cd "$PACKAGE_DIR"
+          zip -r ../chrome-extension-submission.zip . -x "*.DS_Store" "node_modules/*"
+          cd -
+
+          PACKAGE_SIZE=$(du -h chrome-extension-submission.zip | cut -f1)
+          echo "📦 Package created: $PACKAGE_SIZE"
+          echo "package_size=$PACKAGE_SIZE" >> $GITHUB_OUTPUT
+          echo "✅ Packaging complete"
+
+      # 5. Upload to Chrome Web Store
+      - name: 🏪 Submit to Chrome Web Store
+        id: upload
+        uses: mnao305/chrome-extension-upload@v5.0.0
+        with:
+          file-path: chrome-extension-submission.zip
+          extension-id: ${{ secrets.chrome_extension_id }}
+          client-id: ${{ secrets.chrome_client_id }}
+          client-secret: ${{ secrets.chrome_client_secret }}
+          refresh-token: ${{ secrets.chrome_refresh_token }}
+          publish: ${{ inputs.publish }}
+
+      # 6. Store Artifacts
+      - name: 📤 Upload Package as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chrome-extension-submission
+          path: chrome-extension-submission.zip
+          retention-days: 30
+
+      # 7. Reporting
+      - name: 📊 Submission Summary
+        run: |
+          echo "## ✅ Chrome Extension Submitted" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Project**: ${{ inputs.project_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Extension ID**: ${{ secrets.chrome_extension_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Package Size**: ${{ steps.package.outputs.package_size }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Submission Time**: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "**Auto-publish**: ${{ inputs.publish }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ inputs.publish }}" == "true" ]]; then
+            echo "✅ Extension submitted and published automatically" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "📦 Extension submitted for review - manual publish required" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: ⚠️ Submission Failure Summary
+        if: failure()
+        run: |
+          echo "## ❌ Chrome Extension Submission Failed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Project**: ${{ inputs.project_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Extension ID**: ${{ secrets.chrome_extension_id }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Failed Time**: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "For debugging:" >> $GITHUB_STEP_SUMMARY
+          echo "- Check Chrome Web Store API credentials in secrets" >> $GITHUB_STEP_SUMMARY
+          echo "- Check manifest.json file is valid" >> $GITHUB_STEP_SUMMARY
+          echo "- Check extension ID matches Web Store entry" >> $GITHUB_STEP_SUMMARY
+          echo "- See docs/TROUBLESHOOTING.md in nelson-grey repository" >> $GITHUB_STEP_SUMMARY
+
+      # 8. Cache Cleanup
+      - name: 🧹 Clean npm Cache
+        if: always()
+        run: npm cache clean --force 2>/dev/null || true

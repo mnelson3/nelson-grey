@@ -1,0 +1,297 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Project Manifest Schema",
+  "description": "Configuration for projects in the nelsongrey organization CI/CD pipeline",
+  "type": "object",
+  "required": ["project", "targets"],
+  "properties": {
+    "project": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]+$",
+          "description": "Project name (matches repository name)"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable project description"
+        },
+        "owner": {
+          "type": "string",
+          "enum": ["nelsongrey", "mnelson3"],
+          "default": "nelsongrey",
+          "description": "GitHub organization/owner"
+        }
+      }
+    },
+    "targets": {
+      "type": "object",
+      "description": "Build targets to support",
+      "properties": {
+        "ios": {
+          "$ref": "#/definitions/ios_target"
+        },
+        "android": {
+          "$ref": "#/definitions/android_target"
+        },
+        "web": {
+          "$ref": "#/definitions/web_target"
+        },
+        "docker": {
+          "$ref": "#/definitions/docker_target"
+        },
+        "firebase": {
+          "$ref": "#/definitions/firebase_target"
+        }
+      }
+    },
+    "ci": {
+      "type": "object",
+      "description": "CI/CD configuration",
+      "properties": {
+        "runners": {
+          "type": "object",
+          "properties": {
+            "macos": {
+              "type": "object",
+              "properties": {
+                "labels": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "Runner labels for self-hosted macOS"
+                },
+                "required": {
+                  "type": "boolean",
+                  "default": false,
+                  "description": "Whether this runner is required"
+                }
+              }
+            },
+            "docker": {
+              "type": "object",
+              "properties": {
+                "labels": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                },
+                "required": {
+                  "type": "boolean",
+                  "default": false
+                }
+              }
+            }
+          }
+        },
+        "triggers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/trigger"
+          },
+          "description": "Workflow triggers"
+        },
+        "environment": {
+          "type": "object",
+          "properties": {
+            "development": {
+              "$ref": "#/definitions/env_config"
+            },
+            "staging": {
+              "$ref": "#/definitions/env_config"
+            },
+            "production": {
+              "$ref": "#/definitions/env_config"
+            }
+          }
+        }
+      }
+    },
+    "notifications": {
+      "type": "object",
+      "properties": {
+        "slack_webhook": {
+          "type": "string",
+          "description": "Slack webhook URL for notifications"
+        },
+        "failure_recipients": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Email addresses for failure notifications"
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ios_target": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "schemes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "path": { "type": "string" },
+              "configuration": { "type": "string", "default": "Release" }
+            },
+            "required": ["name", "path"]
+          }
+        },
+        "signing": {
+          "type": "object",
+          "properties": {
+            "team_id": { "type": "string" },
+            "bundle_id": { "type": "string" },
+            "profiles": {
+              "type": "object",
+              "properties": {
+                "development": { "type": "boolean" },
+                "distribution": { "type": "boolean" }
+              }
+            }
+          },
+          "required": ["team_id", "bundle_id"]
+        },
+        "destinations": {
+          "type": "object",
+          "properties": {
+            "testflight": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean" },
+                "group": { "type": "string", "default": "Internal Testers" }
+              }
+            },
+            "appstore": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "android_target": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "path": { "type": "string" },
+        "signing": {
+          "type": "object",
+          "properties": {
+            "keystore_ref": { "type": "string" },
+            "key_alias": { "type": "string" }
+          }
+        },
+        "destinations": {
+          "type": "object",
+          "properties": {
+            "firebase_app_distribution": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean" },
+                "groups": { "type": "array", "items": { "type": "string" } }
+              }
+            },
+            "google_play": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean" },
+                "track": { "type": "string", "enum": ["internal", "alpha", "beta", "production"] }
+              }
+            }
+          }
+        }
+      }
+    },
+    "web_target": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "build_command": { "type": "string", "default": "npm run build" },
+        "destinations": {
+          "type": "object",
+          "properties": {
+            "firebase_hosting": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean" }
+              }
+            },
+            "github_pages": {
+              "type": "object",
+              "properties": {
+                "enabled": { "type": "boolean" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "docker_target": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" },
+              "dockerfile": { "type": "string" },
+              "registry": { "type": "string", "default": "docker.io" },
+              "image_name": { "type": "string" }
+            },
+            "required": ["name", "dockerfile"]
+          }
+        }
+      }
+    },
+    "firebase_target": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "project_id": { "type": "string" },
+        "hosting": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" }
+          }
+        },
+        "functions": {
+          "type": "object",
+          "properties": {
+            "enabled": { "type": "boolean" },
+            "paths": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "firestore": {
+          "type": "object",
+          "properties": {
+            "deploy_rules": { "type": "boolean" },
+            "deploy_indexes": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "trigger": {
+      "type": "object",
+      "properties": {
+        "event": { "type": "string", "enum": ["push", "pull_request", "workflow_dispatch"] },
+        "branches": { "type": "array", "items": { "type": "string" } },
+        "paths": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["event"]
+    },
+    "env_config": {
+      "type": "object",
+      "properties": {
+        "firebase_config": { "type": "string" },
+        "secrets_profile": { "type": "string" }
+      }
+    }
+  }
+}

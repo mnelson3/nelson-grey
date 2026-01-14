@@ -78,9 +78,10 @@ fi
 
 KC_BASENAME="fastlane_tmp_keychain"
 KC_NAME="$KC_BASENAME.keychain-db"
-# Create the ephemeral keychain outside of ~/Library/Keychains so other desktop
-# apps don't start prompting for it if the user default/search list gets altered.
-KC_DIR="${RUNNER_TEMP:-/tmp}"
+# IMPORTANT: Fastlane and codesign expect the keychain to reside under
+# ~/Library/Keychains. Placing it in RUNNER_TEMP makes it undiscoverable and
+# causes the classic "Could not locate the provided keychain" failure.
+KC_DIR="$HOME/Library/Keychains"
 KC_PATH="$KC_DIR/$KC_NAME"
 
 # NOTE: Avoid using a `tr </dev/urandom | head` pipeline here.

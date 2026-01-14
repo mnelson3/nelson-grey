@@ -1,0 +1,278 @@
+# Reusable iOS Build and Distribution Workflow
+# This workflow is called by project-specific workflows to build and distribute iOS apps
+#
+# Usage in calling workflow:
+#   - uses: ./.github/workflows/reusable/ios-build.yml
+#     with:
+#       project_name: "vehicle-vitals"
+#       release_type: "testflight"
+#       release_notes: "Release notes here"
+
+name: Reusable iOS Build & Distribution
+
+on:
+  workflow_call:
+    inputs:
+      project_name:
+        required: true
+        type: string
+        description: "Name of the project (e.g., 'vehicle-vitals', 'modulo-squares')"
+      mobile_dir:
+        required: false
+        type: string
+        default: "packages/mobile"
+        description: "Path to mobile directory"
+      release_type:
+        required: true
+        type: string
+        description: "Type of build: build_only, testflight, app_store, full_pipeline"
+      release_notes:
+        required: false
+        type: string
+        description: "Release notes for this build"
+      beta_group_name:
+        required: false
+        type: string
+        default: "Internal Testers"
+        description: "TestFlight beta group name"
+      ruby_version:
+        required: false
+        type: string
+        default: "3.2"
+        description: "Ruby version for Fastlane"
+      bundler_version:
+        required: false
+        type: string
+        default: "2.4.22"
+        description: "Bundler version"
+      fastlane_version:
+        required: false
+        type: string
+        default: "2.230.0"
+        description: "Fastlane version"
+    secrets:
+      app_store_connect_key_id:
+        required: true
+        description: "App Store Connect key ID"
+      app_store_connect_issuer_id:
+        required: true
+        description: "App Store Connect issuer ID"
+      app_store_connect_key:
+        required: true
+        description: "App Store Connect private key"
+      fastlane_password:
+        required: false
+        description: "Fastlane password for App Store Connect"
+      match_password:
+        required: true
+        description: "Password for match certificate repository"
+      match_git_url:
+        required: true
+        description: "Git URL for match certificates repository"
+      match_git_branch:
+        required: true
+        description: "Git branch for match certificates"
+
+jobs:
+  build-ios:
+    name: Build iOS App (${{ inputs.release_type }})
+    runs-on: [self-hosted, macOS, ios]
+    environment:
+      name: ${{ (inputs.release_type == 'app_store' || inputs.release_type == 'full_pipeline') && 'PRODUCTION' || 'DEVELOPMENT' }}
+    defaults:
+      run:
+        working-directory: ${{ inputs.mobile_dir }}
+    steps:
+      # 1. Environment and Prerequisites
+      - name: 🍎 iOS Build Environment Check
+        working-directory: .
+        run: |
+          echo "🍎 Running on self-hosted macOS runner for iOS builds"
+          echo "📍 Hostname: $(hostname)"
+          echo "🖥️  macOS version: $(sw_vers -productVersion)"
+          echo "🛠️  Xcode version: $(xcodebuild -version | head -1)"
+          echo "💰 Using self-hosted runner (cost savings)"
+
+      - name: 🔧 Fix Git Config for HTTPS Checkout
+        working-directory: .
+        run: |
+          echo "🔄 Configuring Git for HTTPS checkout..."
+          git config --global --unset-all url."git@github.com:".insteadOf || true
+          echo "✅ Git config ready"
+
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: ⏰ Sync NTP Time
+        run: |
+          echo "🔄 Synchronizing system time with NTP..."
+          sudo sntp -sS time.apple.com || sudo ntpdate -u time.apple.com || echo "⚠️ NTP sync failed, continuing..."
+
+      # 2. Flutter Setup
+      - name: 🦋 Setup Flutter
+        uses: subosito/flutter-action@v2.21.0
+        with:
+          channel: stable
+          cache: false
+          architecture: arm64
+
+      - name: 📦 Get Flutter Dependencies
+        run: flutter pub get
+
+      # 3. Ruby and Fastlane Setup
+      - name: 🔧 Install GMP (Ruby dependency)
+        run: |
+          echo "📦 Installing GMP library..."
+          brew install gmp
+          echo "✅ GMP installed"
+
+      - name: 💎 Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: ${{ inputs.ruby_version }}
+          bundler: ${{ inputs.bundler_version }}
+          bundler-cache: true
+
+      - name: 🔧 Install Fastlane
+        run: |
+          echo "📦 Installing Fastlane ${{ inputs.fastlane_version }}..."
+          gem install fastlane -v ${{ inputs.fastlane_version }}
+          echo "📦 Installing CocoaPods..."
+          gem install cocoapods
+          fastlane --version
+          echo "✅ Fastlane and CocoaPods installed"
+
+      # 4. Certificates and Code Signing
+      - name: 🔏 Install Apple WWDR Certificate
+        run: |
+          set -euo pipefail
+          echo "🔏 Ensuring Apple WWDR intermediate certificate is available..."
+
+          TMP_WWDR="/tmp/AppleWWDRCA.cer"
+          rm -f "$TMP_WWDR" || true
+
+          # Try multiple common URLs for WWDR certificate
+          for url in \
+            "https://developer.apple.com/certificationauthority/AppleWWDRCAG3.cer" \
+            "https://developer.apple.com/certificationauthority/AppleWWDRCA.cer"; do
+            if curl -fsSL "$url" -o "$TMP_WWDR"; then
+              echo "✅ Downloaded WWDR certificate from: $url"
+              break
+            fi
+          done
+
+          if [ ! -s "$TMP_WWDR" ]; then
+            echo "❌ Failed to download Apple WWDR certificate"
+            exit 1
+          fi
+
+          # Import into login keychain
+          security import "$TMP_WWDR" -k "$HOME/Library/Keychains/login.keychain-db" -T /usr/bin/codesign -T /usr/bin/security || true
+          echo "✅ WWDR certificate imported"
+
+      - name: 🔐 Setup App Store Connect Authentication
+        run: |
+          echo "🔄 Setting up App Store Connect authentication..."
+
+          # Create ASC private key file
+          ASC_KEY_FILE="$HOME/.appstoreconnect/key.p8"
+          mkdir -p "$HOME/.appstoreconnect"
+          echo "${{ secrets.app_store_connect_key }}" > "$ASC_KEY_FILE"
+          chmod 600 "$ASC_KEY_FILE"
+          echo "✅ App Store Connect key configured"
+
+      - name: 🔓 Setup Match Certificate Store
+        env:
+          MATCH_PASSWORD: ${{ secrets.match_password }}
+          MATCH_GIT_URL: ${{ secrets.match_git_url }}
+          MATCH_GIT_BRANCH: ${{ secrets.match_git_branch }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.app_store_connect_key_id }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.app_store_connect_issuer_id }}
+          APP_STORE_CONNECT_KEY_FILE: ${{ runner.temp }}/app_store_connect_key.json
+        run: |
+          echo "🔓 Configuring Fastlane match for certificates..."
+
+          # Create App Store Connect key file for Fastlane
+          cat > "$APP_STORE_CONNECT_KEY_FILE" <<EOF
+          {
+            "key_id": "$APP_STORE_CONNECT_KEY_ID",
+            "issuer_id": "$APP_STORE_CONNECT_ISSUER_ID",
+            "key_filepath": "$HOME/.appstoreconnect/key.p8",
+            "duration": 1200,
+            "in_house": false
+          }
+          EOF
+
+          echo "✅ Match configuration ready"
+
+      # 5. Build Steps
+      - name: 🏗️ Build iOS App
+        env:
+          MATCH_PASSWORD: ${{ secrets.match_password }}
+          MATCH_GIT_URL: ${{ secrets.match_git_url }}
+          MATCH_GIT_BRANCH: ${{ secrets.match_git_branch }}
+          APP_STORE_CONNECT_KEY_ID: ${{ secrets.app_store_connect_key_id }}
+          APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.app_store_connect_issuer_id }}
+          APP_STORE_CONNECT_KEY_FILE: ${{ runner.temp }}/app_store_connect_key.json
+        run: |
+          echo "🏗️ Building iOS app for ${{ inputs.project_name }}..."
+
+          case "${{ inputs.release_type }}" in
+            build_only)
+              echo "📱 Building for local testing..."
+              flutter build ios --release --no-codesign
+              ;;
+            testflight)
+              echo "🧪 Building for TestFlight..."
+              cd ios
+              fastlane beta beta_group_name="${{ inputs.beta_group_name }}" release_notes="${{ inputs.release_notes }}"
+              ;;
+            app_store)
+              echo "🏪 Building for App Store..."
+              cd ios
+              fastlane release release_notes="${{ inputs.release_notes }}"
+              ;;
+            full_pipeline)
+              echo "🔄 Full pipeline: TestFlight then App Store..."
+              cd ios
+              fastlane beta beta_group_name="${{ inputs.beta_group_name }}" release_notes="${{ inputs.release_notes }}"
+              fastlane release release_notes="${{ inputs.release_notes }}"
+              ;;
+            *)
+              echo "❌ Unknown release type: ${{ inputs.release_type }}"
+              exit 1
+              ;;
+          esac
+
+      # 6. Cleanup and Reporting
+      - name: 🧹 Cleanup Sensitive Files
+        if: always()
+        run: |
+          echo "🧹 Cleaning up sensitive files..."
+          rm -f "$HOME/.appstoreconnect/key.p8"
+          rm -f "${{ runner.temp }}/app_store_connect_key.json"
+          echo "✅ Cleanup complete"
+
+      - name: 📊 Build Summary
+        if: success()
+        run: |
+          echo "## ✅ iOS Build Successful" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Project**: ${{ inputs.project_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Release Type**: ${{ inputs.release_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Build Time**: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -n "${{ inputs.release_notes }}" ]; then
+            echo "**Release Notes**: ${{ inputs.release_notes }}" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: ⚠️ Build Failure Summary
+        if: failure()
+        run: |
+          echo "## ❌ iOS Build Failed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Project**: ${{ inputs.project_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Release Type**: ${{ inputs.release_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Failed Time**: $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "For debugging, see docs/TROUBLESHOOTING.md in nelson-grey repository" >> $GITHUB_STEP_SUMMARY
