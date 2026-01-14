@@ -178,7 +178,7 @@ jobs:
     name: Build Mobile Apps
     needs: load-config
     if: needs.load-config.outputs.mobile_build == 'true'
-    uses: mnelson3/nelson-grey/.github/workflows/reusable/ios-build.yml@develop
+    uses: mnelson3/nelson-grey/.github/workflows/ios-build.yml@develop
     with:
       project_name: ${{ needs.load-config.outputs.project_name }}
       release_type: "build_only"
@@ -198,7 +198,7 @@ jobs:
     name: Build Web App
     needs: load-config
     if: needs.load-config.outputs.web_build == 'true'
-    uses: mnelson3/nelson-grey/.github/workflows/reusable/web-deploy.yml@develop
+    uses: mnelson3/nelson-grey/.github/workflows/web-deploy.yml@develop
     with:
       project_name: ${{ needs.load-config.outputs.project_name }}
       environment: ${{ needs.load-config.outputs.target_environment }}
@@ -216,7 +216,7 @@ jobs:
       needs.load-config.outputs.firebase_deploy == 'true' &&
       (needs.load-config.outputs.trigger_context == 'build_and_deploy' ||
        needs.load-config.outputs.trigger_context == 'deploy_only')
-    uses: mnelson3/nelson-grey/.github/workflows/reusable/firebase-deploy.yml@develop
+    uses: mnelson3/nelson-grey/.github/workflows/firebase-deploy.yml@develop
     with:
       project_name: ${{ needs.load-config.outputs.project_name }}
       environment: ${{ needs.load-config.outputs.target_environment }}
@@ -232,7 +232,7 @@ jobs:
     name: Build and Submit Chrome Extension
     needs: load-config
     if: needs.load-config.outputs.chrome_extension == 'true'
-    uses: mnelson3/nelson-grey/.github/workflows/reusable/chrome-extension-submit.yml@develop
+    uses: mnelson3/nelson-grey/.github/workflows/chrome-extension-submit.yml@develop
     with:
       project_name: ${{ needs.load-config.outputs.project_name }}
       publish: false
