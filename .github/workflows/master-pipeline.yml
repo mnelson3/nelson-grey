@@ -153,15 +153,23 @@ jobs:
 
           # Run project-specific test command if available
           if [ -f "package.json" ]; then
-            npm ci
-            npm run test 2>/dev/null || echo "⚠️ No test script found, skipping tests"
+            if command -v npm &> /dev/null; then
+              npm ci
+              npm run test 2>/dev/null || echo "⚠️ No test script found, skipping tests"
+            else
+              echo "⚠️ npm not found, skipping Node tests (self-hosted runner may need Node.js)"
+            fi
           else
             echo "⚠️ No package.json found, skipping Node tests"
           fi
 
           if [ -f "pubspec.yaml" ]; then
-            flutter pub get
-            flutter test 2>/dev/null || echo "⚠️ No Flutter tests found"
+            if command -v flutter &> /dev/null; then
+              flutter pub get
+              flutter test 2>/dev/null || echo "⚠️ No Flutter tests found"
+            else
+              echo "⚠️ flutter not found, skipping Flutter tests"
+            fi
           fi
 
           echo "✅ Tests completed"
