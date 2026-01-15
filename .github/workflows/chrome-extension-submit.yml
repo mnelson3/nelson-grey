@@ -115,10 +115,22 @@ jobs:
           echo "package_size=$PACKAGE_SIZE" >> $GITHUB_OUTPUT
           echo "✅ Packaging complete"
 
-      # 5. Upload to Chrome Web Store
+      # 5. Check Chrome Web Store Credentials
+      - name: 🔍 Check Chrome Web Store Credentials
+        id: check_credentials
+        run: |
+          if [ -z "${{ secrets.chrome_refresh_token }}" ]; then
+            echo "credentials_available=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Chrome Web Store credentials not configured - will skip upload"
+          else
+            echo "credentials_available=true" >> $GITHUB_OUTPUT
+            echo "✅ Chrome Web Store credentials configured"
+          fi
+
+      # 6. Upload to Chrome Web Store
       - name: 🏪 Submit to Chrome Web Store
         id: upload
-        if: ${{ secrets.chrome_refresh_token != '' }}
+        if: steps.check_credentials.outputs.credentials_available == 'true'
         uses: mnao305/chrome-extension-upload@v5.0.0
         with:
           file-path: chrome-extension-submission.zip
@@ -129,7 +141,7 @@ jobs:
           publish: ${{ inputs.publish }}
 
       - name: ⚠️ Chrome Web Store Upload Skipped
-        if: ${{ secrets.chrome_refresh_token == '' }}
+        if: steps.check_credentials.outputs.credentials_available == 'false'
         run: |
           echo "## ⚠️ Chrome Extension Build Only (Upload Skipped)" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -144,7 +156,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "See: https://github.com/mnao305/chrome-extension-upload#inputs" >> $GITHUB_STEP_SUMMARY
 
-      # 6. Store Artifacts
+      # 7. Store Artifacts
       - name: 📤 Upload Package as Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -152,8 +164,9 @@ jobs:
           path: chrome-extension-submission.zip
           retention-days: 30
 
-      # 7. Reporting
+      # 8. Reporting
       - name: 📊 Submission Summary
+        if: steps.check_credentials.outputs.credentials_available == 'true'
         run: |
           echo "## ✅ Chrome Extension Submitted" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -170,7 +183,7 @@ jobs:
           fi
 
       - name: ⚠️ Submission Failure Summary
-        if: failure()
+        if: failure() && steps.check_credentials.outputs.credentials_available == 'true'
         run: |
           echo "## ❌ Chrome Extension Submission Failed" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
@@ -184,7 +197,7 @@ jobs:
           echo "- Check extension ID matches Web Store entry" >> $GITHUB_STEP_SUMMARY
           echo "- See docs/TROUBLESHOOTING.md in nelson-grey repository" >> $GITHUB_STEP_SUMMARY
 
-      # 8. Cache Cleanup
+      # 9. Cache Cleanup
       - name: 🧹 Clean npm Cache
         if: always()
         run: npm cache clean --force 2>/dev/null || true
