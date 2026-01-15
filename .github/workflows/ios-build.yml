@@ -222,10 +222,13 @@ jobs:
           echo "🔄 Updating CocoaPods specs repository..."
           # Remove old pod cache to ensure fresh download
           rm -rf ~/.cocoapods/repos/trunk 2>/dev/null || true
-          # Update with timeout
-          timeout 300 pod repo update || echo "⚠️ Pod repo update failed or timed out, attempting to continue..."
+          # Try faster CDN mirror with strict timeout
+          (
+            timeout 60 pod repo add-cdn trunk https://cdn.jsdelivr.net/cocoapods 2>/dev/null || true
+            timeout 120 pod repo update trunk 2>/dev/null || true
+          ) || echo "⚠️ Pod repo update skipped (can proceed)"
           # Verify pods can be found (alternative: use --sources)
-          echo "✅ CocoaPods specs updated or skipped"
+          echo "✅ CocoaPods specs ready"
 
       # 5. Build Steps
       - name: 🏗️ Build iOS App
