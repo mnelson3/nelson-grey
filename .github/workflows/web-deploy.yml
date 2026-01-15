@@ -93,22 +93,22 @@ jobs:
           echo "✅ Firebase CLI installed"
 
       # 3. Build Steps
-      - name: 📦 Install Root Dependencies
+      - name: 📦 Install All Dependencies
         working-directory: .
         run: |
-          echo "📦 Installing root dependencies..."
+          echo "📦 Installing all dependencies (monorepo)..."
           npm ci --legacy-peer-deps 2>/dev/null || npm ci --force
+          echo "✅ All dependencies installed"
+
+      - name: 📦 Build Shared Packages
+        working-directory: .
+        run: |
           echo "📦 Building shared packages..."
           npm run build --workspace=@vehicle-vitals/shared 2>/dev/null || npm run build --workspace=@modulo-squares/shared 2>/dev/null || npm run build --workspace=@wishlist-wizard/shared 2>/dev/null || echo "No shared package found"
           echo "✅ Shared packages built"
 
-      - name: 📦 Install Web Dependencies
-        run: |
-          echo "📦 Installing web dependencies..."
-          npm ci --legacy-peer-deps 2>/dev/null || npm ci --force
-          echo "✅ Dependencies installed"
-
       - name: 🏗️ Build Web App
+        working-directory: ${{ inputs.web_dir }}
         run: |
           echo "🏗️ Building web app for ${{ inputs.environment }}..."
           ${{ inputs.build_command }}
