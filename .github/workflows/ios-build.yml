@@ -143,10 +143,8 @@ jobs:
 
       - name: 🔧 Install Fastlane
         run: |
-          echo "📦 Installing Fastlane ${{ inputs.fastlane_version }}..."
-          gem install fastlane -v ${{ inputs.fastlane_version }}
-          echo "📦 Installing CocoaPods..."
-          gem install cocoapods
+          echo "📦 Installing Fastlane and CocoaPods..."
+          gem install fastlane cocoapods
           fastlane --version
           echo "✅ Fastlane and CocoaPods installed"
 
