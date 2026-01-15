@@ -33,16 +33,16 @@ on:
         description: "Node.js version"
     secrets:
       chrome_extension_id:
-        required: true
+        required: false
         description: "Chrome Web Store extension ID"
       chrome_client_id:
-        required: true
+        required: false
         description: "Chrome Web Store client ID"
       chrome_client_secret:
-        required: true
+        required: false
         description: "Chrome Web Store client secret"
       chrome_refresh_token:
-        required: true
+        required: false
         description: "Chrome Web Store refresh token"
 
 jobs:
@@ -118,6 +118,7 @@ jobs:
       # 5. Upload to Chrome Web Store
       - name: 🏪 Submit to Chrome Web Store
         id: upload
+        if: ${{ secrets.chrome_refresh_token != '' }}
         uses: mnao305/chrome-extension-upload@v5.0.0
         with:
           file-path: chrome-extension-submission.zip
@@ -126,6 +127,22 @@ jobs:
           client-secret: ${{ secrets.chrome_client_secret }}
           refresh-token: ${{ secrets.chrome_refresh_token }}
           publish: ${{ inputs.publish }}
+
+      - name: ⚠️ Chrome Web Store Upload Skipped
+        if: ${{ secrets.chrome_refresh_token == '' }}
+        run: |
+          echo "## ⚠️ Chrome Extension Build Only (Upload Skipped)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Reason**: Chrome Web Store credentials not configured" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The extension was built successfully but not uploaded to Chrome Web Store." >> $GITHUB_STEP_SUMMARY
+          echo "To enable upload, configure the following secrets in your repository:" >> $GITHUB_STEP_SUMMARY
+          echo "- CHROME_EXTENSION_ID" >> $GITHUB_STEP_SUMMARY
+          echo "- CHROME_CLIENT_ID" >> $GITHUB_STEP_SUMMARY
+          echo "- CHROME_CLIENT_SECRET" >> $GITHUB_STEP_SUMMARY
+          echo "- CHROME_REFRESH_TOKEN" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "See: https://github.com/mnao305/chrome-extension-upload#inputs" >> $GITHUB_STEP_SUMMARY
 
       # 6. Store Artifacts
       - name: 📤 Upload Package as Artifact
