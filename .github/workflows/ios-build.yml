@@ -220,15 +220,23 @@ jobs:
       - name: 🔄 Update CocoaPods Specs Repo
         run: |
           echo "🔄 Updating CocoaPods specs repository..."
-          # Remove old pod cache to ensure fresh download
-          rm -rf ~/.cocoapods/repos/trunk 2>/dev/null || true
-          # Try faster CDN mirror with strict timeout
+          # Completely clear CocoaPods cache
+          rm -rf ~/.cocoapods/repos 2>/dev/null || true
+          rm -rf ~/Library/Caches/CocoaPods 2>/dev/null || true
+          
+          # Use CDN with aggressive retries
           (
-            timeout 60 pod repo add-cdn trunk https://cdn.jsdelivr.net/cocoapods 2>/dev/null || true
-            timeout 120 pod repo update trunk 2>/dev/null || true
-          ) || echo "⚠️ Pod repo update skipped (can proceed)"
-          # Verify pods can be found (alternative: use --sources)
-          echo "✅ CocoaPods specs ready"
+            for i in {1..3}; do
+              echo "Attempt $i: Setting up CDN..."
+              timeout 60 pod repo add-cdn trunk https://cdn.jsdelivr.net/cocoapods && break
+              sleep 5
+            done
+            
+            echo "Updating pod repo..."
+            timeout 120 pod repo update || true
+          ) || echo "⚠️ Pod repo setup skipped (pod install will attempt update)"
+          
+          echo "✅ CocoaPods ready for installation"
 
       # 5. Build Steps
       - name: 🏗️ Build iOS App
