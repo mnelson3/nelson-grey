@@ -211,6 +211,12 @@ jobs:
 
           echo "✅ Match configuration ready"
 
+      - name: 🔄 Update CocoaPods Specs Repo
+        run: |
+          echo "🔄 Updating CocoaPods specs repository..."
+          pod repo update || echo "⚠️ Pod repo update failed, continuing..."
+          echo "✅ CocoaPods specs updated"
+
       # 5. Build Steps
       - name: 🏗️ Build iOS App
         env:
