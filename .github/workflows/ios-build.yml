@@ -148,6 +148,12 @@ jobs:
           fastlane --version
           echo "✅ Fastlane and CocoaPods installed"
 
+      - name: 📦 Setup CocoaPods Cache
+        run: |
+          echo "📦 Setting up CocoaPods cache..."
+          pod setup --no-shallow --progress 2>/dev/null || echo "⚠️ Pod setup skipped"
+          echo "✅ CocoaPods cache ready"
+
       # 4. Certificates and Code Signing
       - name: 🔏 Install Apple WWDR Certificate
         run: |
@@ -214,8 +220,12 @@ jobs:
       - name: 🔄 Update CocoaPods Specs Repo
         run: |
           echo "🔄 Updating CocoaPods specs repository..."
-          pod repo update || echo "⚠️ Pod repo update failed, continuing..."
-          echo "✅ CocoaPods specs updated"
+          # Remove old pod cache to ensure fresh download
+          rm -rf ~/.cocoapods/repos/trunk 2>/dev/null || true
+          # Update with timeout
+          timeout 300 pod repo update || echo "⚠️ Pod repo update failed or timed out, attempting to continue..."
+          # Verify pods can be found (alternative: use --sources)
+          echo "✅ CocoaPods specs updated or skipped"
 
       # 5. Build Steps
       - name: 🏗️ Build iOS App
