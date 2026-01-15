@@ -109,15 +109,23 @@ jobs:
           sudo sntp -sS time.apple.com || sudo ntpdate -u time.apple.com || echo "⚠️ NTP sync failed, continuing..."
 
       # 2. Flutter Setup
-      - name: 🦋 Setup Flutter
-        uses: subosito/flutter-action@v2.21.0
-        with:
-          channel: stable
-          cache: false
-          architecture: arm64
+      - name: 🦋 Install Flutter SDK
+        working-directory: .
+        run: |
+          echo "🦋 Installing Flutter SDK..."
+          if [ ! -d "$HOME/flutter" ]; then
+            cd $HOME
+            git clone https://github.com/flutter/flutter.git -b stable --depth 1
+            echo "$HOME/flutter/bin" >> $GITHUB_PATH
+          fi
+          export PATH="$HOME/flutter/bin:$PATH"
+          flutter doctor -v
+          echo "✅ Flutter SDK installed"
 
       - name: 📦 Get Flutter Dependencies
-        run: flutter pub get
+        run: |
+          export PATH="$HOME/flutter/bin:$PATH"
+          flutter pub get
 
       # 3. Ruby and Fastlane Setup
       - name: 🔧 Install GMP (Ruby dependency)
