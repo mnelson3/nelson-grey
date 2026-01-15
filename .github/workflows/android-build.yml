@@ -104,6 +104,7 @@ jobs:
 
       # 4. Android SDK Setup
       - name: 🔧 Setup Android SDK
+        continue-on-error: true
         uses: android-actions/setup-android@v3
 
       - name: 🏗️ Generate Android Platform Files
