@@ -154,7 +154,29 @@ jobs:
           echo "${{ secrets.google_play_key_json }}" > android/app/google-play/service-account-key.json
           echo "✅ Google Play service account configured"
 
-      # 6. Build Steps
+      # 6. Pre-Build Verification
+      - name: 🔍 Verify Flutter and Android Environment
+        run: |
+          export PATH="$HOME/flutter/bin:$PATH"
+          echo "🔍 Pre-build environment verification..."
+          
+          echo "Flutter location:"
+          which flutter || echo "❌ flutter not in PATH"
+          
+          echo "Flutter version:"
+          flutter --version || echo "❌ flutter --version failed"
+          
+          echo "Dart version:"
+          dart --version || echo "❌ dart --version failed"
+          
+          echo "Android environment:"
+          echo "ANDROID_HOME=$ANDROID_HOME"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT"
+          
+          echo "PATH=$PATH"
+          echo "✅ Environment verification complete"
+
+      # 7. Build Steps
       - name: 🏗️ Build Android APK
         run: |
           export PATH="$HOME/flutter/bin:$PATH"
@@ -185,7 +207,7 @@ jobs:
           flutter build appbundle --release
           echo "✅ App Bundle build complete"
 
-      # 7. Artifact Collection
+      # 8. Artifact Collection
       - name: 📦 Collect Build Artifacts
         if: success()
         run: |
@@ -210,7 +232,7 @@ jobs:
           path: ${{ runner.temp }}/artifacts
           retention-days: 30
 
-      # 8. Cleanup and Reporting
+      # 9. Cleanup and Reporting
       - name: 🧹 Cleanup Sensitive Files
         if: always()
         run: |
