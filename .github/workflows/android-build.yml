@@ -185,12 +185,13 @@ jobs:
 
       # 7. Build Steps
       - name: 🏗️ Build Android APK
+        env:
+          BUILD_TYPE: ${{ inputs.build_type }}
         run: |
           export PATH="$HOME/flutter/bin:$PATH"
           cd ${{ inputs.mobile_dir }}
-          echo "🏗️ Building Android ${{ inputs.build_type }} APK..."
+          echo "🏗️ Building Android $BUILD_TYPE APK..."
 
-          BUILD_TYPE="${{ inputs.build_type }}"
           case "$BUILD_TYPE" in
             debug)
               echo "🐛 Building debug APK..."
