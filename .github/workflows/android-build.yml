@@ -91,6 +91,7 @@ jobs:
           echo "✅ Flutter SDK installed"
 
       - name: 📦 Get Flutter Dependencies
+        working-directory: ${{ inputs.mobile_dir }}
         run: |
           export PATH="$HOME/flutter/bin:$PATH"
           flutter pub get
@@ -130,6 +131,7 @@ jobs:
           echo "✅ Android SDK environment prepared"
 
       - name: 🏗️ Generate Android Platform Files
+        working-directory: ${{ inputs.mobile_dir }}
         run: |
           echo "🏗️ Generating Android platform files..."
           flutter create --platforms=android .
@@ -140,9 +142,9 @@ jobs:
         continue-on-error: true
         run: |
           echo "📦 Setting up Firebase service account..."
-          mkdir -p android/app
-          echo "${{ secrets.firebase_service_account_key }}" > android/app/service-account-key.json
-          echo "GOOGLE_APPLICATION_CREDENTIALS=android/app/service-account-key.json" >> $GITHUB_ENV
+          mkdir -p ${{ inputs.mobile_dir }}/android/app
+          echo "${{ secrets.firebase_service_account_key }}" > ${{ inputs.mobile_dir }}/android/app/service-account-key.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=${{ inputs.mobile_dir }}/android/app/service-account-key.json" >> $GITHUB_ENV
           echo "✅ Firebase service account configured"
 
       - name: 📦 Setup Google Play Service Account
@@ -150,8 +152,8 @@ jobs:
         continue-on-error: true
         run: |
           echo "📦 Setting up Google Play service account..."
-          mkdir -p android/app/google-play
-          echo "${{ secrets.google_play_key_json }}" > android/app/google-play/service-account-key.json
+          mkdir -p ${{ inputs.mobile_dir }}/android/app/google-play
+          echo "${{ secrets.google_play_key_json }}" > ${{ inputs.mobile_dir }}/android/app/google-play/service-account-key.json
           echo "✅ Google Play service account configured"
 
       # 6. Pre-Build Verification
@@ -180,6 +182,7 @@ jobs:
       - name: 🏗️ Build Android APK
         run: |
           export PATH="$HOME/flutter/bin:$PATH"
+          cd ${{ inputs.mobile_dir }}
           echo "🏗️ Building Android ${{ inputs.build_type }} APK..."
 
           case "${{ inputs.build_type }}" in
@@ -203,6 +206,7 @@ jobs:
         if: inputs.build_type == 'release'
         run: |
           export PATH="$HOME/flutter/bin:$PATH"
+          cd ${{ inputs.mobile_dir }}
           echo "🏗️ Building Android App Bundle for Google Play..."
           flutter build appbundle --release
           echo "✅ App Bundle build complete"
@@ -214,13 +218,13 @@ jobs:
           echo "📦 Collecting build artifacts..."
           mkdir -p ${{ runner.temp }}/artifacts
 
-          if [ -f "build/app/outputs/flutter-apk/app-${{ inputs.build_type }}.apk" ]; then
-            cp "build/app/outputs/flutter-apk/app-${{ inputs.build_type }}.apk" "${{ runner.temp }}/artifacts/"
+          if [ -f "${{ inputs.mobile_dir }}/build/app/outputs/flutter-apk/app-${{ inputs.build_type }}.apk" ]; then
+            cp "${{ inputs.mobile_dir }}/build/app/outputs/flutter-apk/app-${{ inputs.build_type }}.apk" "${{ runner.temp }}/artifacts/"
             echo "📱 APK artifact collected"
           fi
 
-          if [ -f "build/app/outputs/bundle/${inputs.build_type}Release/app-${inputs.build_type}.aab" ]; then
-            cp "build/app/outputs/bundle/${inputs.build_type}Release/app-${inputs.build_type}.aab" "${{ runner.temp }}/artifacts/"
+          if [ -f "${{ inputs.mobile_dir }}/build/app/outputs/bundle/${inputs.build_type}Release/app-${inputs.build_type}.aab" ]; then
+            cp "${{ inputs.mobile_dir }}/build/app/outputs/bundle/${inputs.build_type}Release/app-${inputs.build_type}.aab" "${{ runner.temp }}/artifacts/"
             echo "📦 App Bundle artifact collected"
           fi
 
@@ -237,8 +241,8 @@ jobs:
         if: always()
         run: |
           echo "🧹 Cleaning up sensitive files..."
-          rm -f android/app/service-account-key.json
-          rm -f android/app/google-play/service-account-key.json
+          rm -f ${{ inputs.mobile_dir }}/android/app/service-account-key.json
+          rm -f ${{ inputs.mobile_dir }}/android/app/google-play/service-account-key.json
           echo "✅ Cleanup complete"
 
       - name: 📊 Build Summary
