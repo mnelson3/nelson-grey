@@ -189,8 +189,8 @@ jobs:
           export PATH="$HOME/flutter/bin:$PATH"
           cd ${{ inputs.mobile_dir }}
           echo "🏗️ Building Android ${{ inputs.build_type }} APK..."
-         echo "📍 Working directory: $(pwd)"
-         echo "📁 Files: $(ls -la | head -20)"
+          echo "📍 Working directory: $(pwd)"
+          echo "📁 Files: $(ls -la | head -20)"
 
           case "${{ inputs.build_type }}" in
             debug)
