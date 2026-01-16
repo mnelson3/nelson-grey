@@ -107,6 +107,22 @@ jobs:
         continue-on-error: true
         uses: android-actions/setup-android@v3
 
+      - name: 🔧 Android SDK Manual Fix (if needed)
+        continue-on-error: true
+        run: |
+          echo "🔧 Ensuring Android SDK is properly configured..."
+          if [ -d "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" ]; then
+            export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
+            echo "✅ cmdline-tools found in latest"
+          elif [ -d "$ANDROID_SDK_ROOT/cmdline-tools/16.0/bin" ]; then
+            export PATH="$ANDROID_SDK_ROOT/cmdline-tools/16.0/bin:$PATH"
+            echo "✅ cmdline-tools found in 16.0"
+          fi
+          
+          # Accept licenses
+          yes | sdkmanager --licenses 2>/dev/null || echo "⚠️ License acceptance skipped"
+          echo "✅ Android SDK configured"
+
       - name: 🏗️ Generate Android Platform Files
         run: |
           echo "🏗️ Generating Android platform files..."
