@@ -189,15 +189,19 @@ jobs:
           export PATH="$HOME/flutter/bin:$PATH"
           cd ${{ inputs.mobile_dir }}
           echo "🏗️ Building Android ${{ inputs.build_type }} APK..."
+         echo "📍 Working directory: $(pwd)"
+         echo "📁 Files: $(ls -la | head -20)"
 
           case "${{ inputs.build_type }}" in
             debug)
               echo "🐛 Building debug APK..."
-              flutter build apk --debug
+               flutter build apk --debug --verbose 2>&1 | tee build.log
+               BUILD_EXIT=$?
               ;;
             release)
               echo "🚀 Building release APK..."
-              flutter build apk --release
+               flutter build apk --release --verbose 2>&1 | tee build.log
+               BUILD_EXIT=$?
               ;;
             *)
               echo "❌ Unknown build type: ${{ inputs.build_type }}"
@@ -205,7 +209,13 @@ jobs:
               ;;
           esac
 
-          echo "✅ APK build complete"
+           if [ $BUILD_EXIT -ne 0 ]; then
+             echo "❌ APK build failed with exit code $BUILD_EXIT"
+             echo "📋 Build log tail:"
+             tail -100 build.log 2>/dev/null || echo "Log file not found"
+             exit $BUILD_EXIT
+           fi
+           echo "✅ APK build complete"
 
       - name: 🏗️ Build Android App Bundle
         if: inputs.build_type == 'release'
