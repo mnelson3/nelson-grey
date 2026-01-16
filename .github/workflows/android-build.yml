@@ -131,10 +131,16 @@ jobs:
           echo "✅ Android SDK environment prepared"
 
       - name: 🏗️ Generate Android Platform Files
+        working-directory: ${{ inputs.mobile_dir }}
         run: |
-          echo "🏗️ Generating Android platform files..."
-          flutter create --platforms=android .
-          echo "✅ Android platform files generated"
+          echo "🏗️ Checking Android platform files..."
+          if [ ! -d "android" ]; then
+            echo "📁 Android directory not found, generating platform files..."
+            flutter create --platforms=android .
+          else
+            echo "✅ Android directory already exists, skipping generation"
+          fi
+          echo "✅ Android platform files ready"
 
       # 5. Service Account Setup (if needed)
       - name: 📦 Setup Firebase Service Account
