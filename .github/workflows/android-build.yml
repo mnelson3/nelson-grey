@@ -108,20 +108,34 @@ jobs:
         uses: android-actions/setup-android@v3
 
       - name: 🔧 Android SDK Manual Fix (if needed)
-        continue-on-error: true
         run: |
           echo "🔧 Ensuring Android SDK is properly configured..."
-          if [ -d "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" ]; then
-            export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$PATH"
-            echo "✅ cmdline-tools found in latest"
-          elif [ -d "$ANDROID_SDK_ROOT/cmdline-tools/16.0/bin" ]; then
-            export PATH="$ANDROID_SDK_ROOT/cmdline-tools/16.0/bin:$PATH"
-            echo "✅ cmdline-tools found in 16.0"
+          
+          # Check for Android SDK
+          if [ -z "$ANDROID_SDK_ROOT" ] && [ -z "$ANDROID_HOME" ]; then
+            echo "Setting default Android SDK paths..."
+            export ANDROID_SDK_ROOT="/root/.android/sdk"
+            export ANDROID_HOME="/root/.android/sdk"
+          else
+            export ANDROID_SDK_ROOT="${ANDROID_SDK_ROOT:-/root/.android/sdk}"
+            export ANDROID_HOME="${ANDROID_HOME:-/root/.android/sdk}"
           fi
           
-          # Accept licenses
-          yes | sdkmanager --licenses 2>/dev/null || echo "⚠️ License acceptance skipped"
-          echo "✅ Android SDK configured"
+          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
+          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH"
+          echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
+          
+          # Accept licenses if sdkmanager exists
+          if [ -f "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" ] || [ -f "$ANDROID_SDK_ROOT/cmdline-tools/16.0/bin/sdkmanager" ]; then
+            echo "Accepting Android licenses..."
+            yes | sdkmanager --licenses 2>/dev/null || echo "⚠️ License acceptance skipped"
+          fi
+          
+          echo "✅ Android SDK environment configured"
+          echo "ANDROID_HOME: $ANDROID_HOME"
+          echo "ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT"
 
       - name: 🏗️ Generate Android Platform Files
         run: |
