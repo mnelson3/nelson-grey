@@ -103,39 +103,31 @@ jobs:
           java-version: ${{ inputs.java_version }}
 
       # 4. Android SDK Setup
-      - name: 🔧 Setup Android SDK
-        continue-on-error: true
-        uses: android-actions/setup-android@v3
-
-      - name: 🔧 Android SDK Manual Fix (if needed)
+      - name: 🔧 Setup Android SDK Manually
         run: |
-          echo "🔧 Ensuring Android SDK is properly configured..."
+          echo "🔧 Setting up Android SDK manually..."
           
-          # Check for Android SDK
-          if [ -z "$ANDROID_SDK_ROOT" ] && [ -z "$ANDROID_HOME" ]; then
-            echo "Setting default Android SDK paths..."
-            export ANDROID_SDK_ROOT="/root/.android/sdk"
-            export ANDROID_HOME="/root/.android/sdk"
-          else
-            export ANDROID_SDK_ROOT="${ANDROID_SDK_ROOT:-/root/.android/sdk}"
-            export ANDROID_HOME="${ANDROID_HOME:-/root/.android/sdk}"
-          fi
+          # Set default paths if not set
+          export ANDROID_SDK_ROOT="${ANDROID_SDK_ROOT:-/root/.android/sdk}"
+          export ANDROID_HOME="${ANDROID_HOME:-/root/.android/sdk}"
           
           echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
           echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
-          export PATH="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$PATH"
-          echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
-          echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
           
-          # Accept licenses if sdkmanager exists
-          if [ -f "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" ] || [ -f "$ANDROID_SDK_ROOT/cmdline-tools/16.0/bin/sdkmanager" ]; then
+          # Add to PATH
+          echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
+          echo "$ANDROID_SDK_ROOT/cmdline-tools/16.0/bin" >> $GITHUB_PATH
+          echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
+          echo "$ANDROID_SDK_ROOT/tools/bin" >> $GITHUB_PATH
+          echo "$ANDROID_SDK_ROOT/emulator" >> $GITHUB_PATH
+          
+          # Try to accept licenses with graceful failure
+          if [ -d "$ANDROID_SDK_ROOT" ]; then
             echo "Accepting Android licenses..."
-            yes | sdkmanager --licenses 2>/dev/null || echo "⚠️ License acceptance skipped"
+            yes | sdkmanager --licenses 2>/dev/null || echo "⚠️ License acceptance skipped (non-critical)"
           fi
           
-          echo "✅ Android SDK environment configured"
-          echo "ANDROID_HOME: $ANDROID_HOME"
-          echo "ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT"
+          echo "✅ Android SDK environment prepared"
 
       - name: 🏗️ Generate Android Platform Files
         run: |
