@@ -91,6 +91,7 @@ jobs:
           echo "✅ Flutter SDK installed"
 
       - name: 📦 Get Flutter Dependencies
+        working-directory: ${{ inputs.mobile_dir }}
         run: |
           export PATH="$HOME/flutter/bin:$PATH"
           flutter pub get
