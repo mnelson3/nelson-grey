@@ -184,7 +184,8 @@ jobs:
           cd ${{ inputs.mobile_dir }}
           echo "🏗️ Building Android ${{ inputs.build_type }} APK..."
 
-          case "${{ inputs.build_type }}" in
+          BUILD_TYPE="${{ inputs.build_type }}"
+          case "$BUILD_TYPE" in
             debug)
               echo "🐛 Building debug APK..."
               flutter build apk --debug
@@ -194,7 +195,7 @@ jobs:
               flutter build apk --release
               ;;
             *)
-              echo "❌ Unknown build type: ${{ inputs.build_type }}"
+              echo "❌ Unknown build type: $BUILD_TYPE"
               exit 1
               ;;
           esac
