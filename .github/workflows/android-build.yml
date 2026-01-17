@@ -189,7 +189,6 @@ jobs:
           BUILD_TYPE: ${{ inputs.build_type }}
         run: |
           export PATH="$HOME/flutter/bin:$PATH"
-          cd ${{ inputs.mobile_dir }}
           echo "🏗️ Building Android $BUILD_TYPE APK..."
 
           case "$BUILD_TYPE" in
