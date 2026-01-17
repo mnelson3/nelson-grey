@@ -104,31 +104,8 @@ jobs:
           java-version: ${{ inputs.java_version }}
 
       # 4. Android SDK Setup
-      - name: 🔧 Setup Android SDK Manually
-        run: |
-          echo "🔧 Setting up Android SDK manually..."
-          
-          # Set default paths if not set
-          export ANDROID_SDK_ROOT="${ANDROID_SDK_ROOT:-/root/.android/sdk}"
-          export ANDROID_HOME="${ANDROID_HOME:-/root/.android/sdk}"
-          
-          echo "ANDROID_SDK_ROOT=$ANDROID_SDK_ROOT" >> $GITHUB_ENV
-          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
-          
-          # Add to PATH
-          echo "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" >> $GITHUB_PATH
-          echo "$ANDROID_SDK_ROOT/cmdline-tools/16.0/bin" >> $GITHUB_PATH
-          echo "$ANDROID_SDK_ROOT/platform-tools" >> $GITHUB_PATH
-          echo "$ANDROID_SDK_ROOT/tools/bin" >> $GITHUB_PATH
-          echo "$ANDROID_SDK_ROOT/emulator" >> $GITHUB_PATH
-          
-          # Try to accept licenses with graceful failure
-          if [ -d "$ANDROID_SDK_ROOT" ]; then
-            echo "Accepting Android licenses..."
-            yes | sdkmanager --licenses 2>/dev/null || echo "⚠️ License acceptance skipped (non-critical)"
-          fi
-          
-          echo "✅ Android SDK environment prepared"
+      - name: 🔧 Setup Android SDK
+        uses: android-actions/setup-android@v3
 
       - name: 🏗️ Generate Android Platform Files
         working-directory: ${{ inputs.mobile_dir }}
