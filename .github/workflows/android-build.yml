@@ -91,7 +91,6 @@ jobs:
           echo "✅ Flutter SDK installed"
 
       - name: 📦 Get Flutter Dependencies
-        working-directory: ${{ inputs.mobile_dir }}
         run: |
           export PATH="$HOME/flutter/bin:$PATH"
           flutter pub get
@@ -106,18 +105,17 @@ jobs:
       # 4. Android SDK Setup
       - name: 🔧 Setup Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          api-level: 34
+          target: default
+          arch: x64
+          cmdline-tools-version: 16.0
 
       - name: 🏗️ Generate Android Platform Files
-        working-directory: ${{ inputs.mobile_dir }}
         run: |
-          echo "🏗️ Checking Android platform files..."
-          if [ ! -d "android" ]; then
-            echo "📁 Android directory not found, generating platform files..."
-            flutter create --platforms=android .
-          else
-            echo "✅ Android directory already exists, skipping generation"
-          fi
-          echo "✅ Android platform files ready"
+          echo "🏗️ Generating Android platform files..."
+          flutter create --platforms=android .
+          echo "✅ Android platform files generated"
 
       # 5. Service Account Setup (if needed)
       - name: 📦 Setup Firebase Service Account
@@ -162,13 +160,11 @@ jobs:
 
       # 7. Build Steps
       - name: 🏗️ Build Android APK
-        env:
-          BUILD_TYPE: ${{ inputs.build_type }}
         run: |
           export PATH="$HOME/flutter/bin:$PATH"
-          echo "🏗️ Building Android $BUILD_TYPE APK..."
+          echo "🏗️ Building Android ${{ inputs.build_type }} APK..."
 
-          case "$BUILD_TYPE" in
+          case "${{ inputs.build_type }}" in
             debug)
               echo "🐛 Building debug APK..."
               flutter build apk --debug
@@ -178,7 +174,7 @@ jobs:
               flutter build apk --release
               ;;
             *)
-              echo "❌ Unknown build type: $BUILD_TYPE"
+              echo "❌ Unknown build type: ${{ inputs.build_type }}"
               exit 1
               ;;
           esac
@@ -196,19 +192,17 @@ jobs:
       # 8. Artifact Collection
       - name: 📦 Collect Build Artifacts
         if: success()
-        env:
-          BUILD_TYPE: ${{ inputs.build_type }}
         run: |
           echo "📦 Collecting build artifacts..."
           mkdir -p ${{ runner.temp }}/artifacts
 
-          if [ -f "build/app/outputs/flutter-apk/app-$BUILD_TYPE.apk" ]; then
-            cp "build/app/outputs/flutter-apk/app-$BUILD_TYPE.apk" "${{ runner.temp }}/artifacts/"
+          if [ -f "build/app/outputs/flutter-apk/app-${{ inputs.build_type }}.apk" ]; then
+            cp "build/app/outputs/flutter-apk/app-${{ inputs.build_type }}.apk" "${{ runner.temp }}/artifacts/"
             echo "📱 APK artifact collected"
           fi
 
-          if [ -f "build/app/outputs/bundle/${BUILD_TYPE}Release/app-${BUILD_TYPE}.aab" ]; then
-            cp "build/app/outputs/bundle/${BUILD_TYPE}Release/app-${BUILD_TYPE}.aab" "${{ runner.temp }}/artifacts/"
+          if [ -f "build/app/outputs/bundle/${inputs.build_type}Release/app-${inputs.build_type}.aab" ]; then
+            cp "build/app/outputs/bundle/${inputs.build_type}Release/app-${inputs.build_type}.aab" "${{ runner.temp }}/artifacts/"
             echo "📦 App Bundle artifact collected"
           fi
 

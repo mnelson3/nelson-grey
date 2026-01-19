@@ -123,12 +123,10 @@ jobs:
 
       # 6. Build Steps
       - name: 🏗️ Build Android APK
-        env:
-          BUILD_TYPE: ${{ inputs.build_type }}
         run: |
-          echo "🏗️ Building Android $BUILD_TYPE APK..."
+          echo "🏗️ Building Android ${{ inputs.build_type }} APK..."
 
-          case "$BUILD_TYPE" in
+          case "${{ inputs.build_type }}" in
             debug)
               echo "🐛 Building debug APK..."
               flutter build apk --debug
@@ -138,7 +136,7 @@ jobs:
               flutter build apk --release
               ;;
             *)
-              echo "❌ Unknown build type: $BUILD_TYPE"
+              echo "❌ Unknown build type: ${{ inputs.build_type }}"
               exit 1
               ;;
           esac
@@ -147,8 +145,6 @@ jobs:
 
       - name: 🏗️ Build Android App Bundle
         if: inputs.build_type == 'release'
-        env:
-          BUILD_TYPE: ${{ inputs.build_type }}
         run: |
           echo "🏗️ Building Android App Bundle for Google Play..."
           flutter build appbundle --release
@@ -157,19 +153,17 @@ jobs:
       # 7. Artifact Collection
       - name: 📦 Collect Build Artifacts
         if: success()
-        env:
-          BUILD_TYPE: ${{ inputs.build_type }}
         run: |
           echo "📦 Collecting build artifacts..."
           mkdir -p ${{ runner.temp }}/artifacts
 
-          if [ -f "build/app/outputs/flutter-apk/app-$BUILD_TYPE.apk" ]; then
-            cp "build/app/outputs/flutter-apk/app-$BUILD_TYPE.apk" "${{ runner.temp }}/artifacts/"
+          if [ -f "build/app/outputs/flutter-apk/app-${{ inputs.build_type }}.apk" ]; then
+            cp "build/app/outputs/flutter-apk/app-${{ inputs.build_type }}.apk" "${{ runner.temp }}/artifacts/"
             echo "📱 APK artifact collected"
           fi
 
-          if [ -f "build/app/outputs/bundle/${BUILD_TYPE}Release/app-${BUILD_TYPE}.aab" ]; then
-            cp "build/app/outputs/bundle/${BUILD_TYPE}Release/app-${BUILD_TYPE}.aab" "${{ runner.temp }}/artifacts/"
+          if [ -f "build/app/outputs/bundle/${inputs.build_type}Release/app-${inputs.build_type}.aab" ]; then
+            cp "build/app/outputs/bundle/${inputs.build_type}Release/app-${inputs.build_type}.aab" "${{ runner.temp }}/artifacts/"
             echo "📦 App Bundle artifact collected"
           fi
 
