@@ -257,18 +257,25 @@ jobs:
             testflight)
               echo "🧪 Building for TestFlight..."
               cd ios
-              fastlane beta beta_group_name="${{ inputs.beta_group_name }}" release_notes="${{ inputs.release_notes }}"
+              export RELEASE_NOTES="${{ inputs.release_notes }}"
+              export BETA_FEEDBACK_EMAIL="${{ inputs.beta_feedback_email }}"
+              export BETA_GROUP_NAME="${{ inputs.beta_group_name }}"
+              fastlane beta
               ;;
             app_store)
               echo "🏪 Building for App Store..."
               cd ios
-              fastlane release release_notes="${{ inputs.release_notes }}"
+              export RELEASE_NOTES="${{ inputs.release_notes }}"
+              fastlane release
               ;;
             full_pipeline)
               echo "🔄 Full pipeline: TestFlight then App Store..."
               cd ios
-              fastlane beta beta_group_name="${{ inputs.beta_group_name }}" release_notes="${{ inputs.release_notes }}"
-              fastlane release release_notes="${{ inputs.release_notes }}"
+              export RELEASE_NOTES="${{ inputs.release_notes }}"
+              export BETA_FEEDBACK_EMAIL="${{ inputs.beta_feedback_email }}"
+              export BETA_GROUP_NAME="${{ inputs.beta_group_name }}"
+              fastlane beta
+              fastlane release
               ;;
             *)
               echo "❌ Unknown release type: ${{ inputs.release_type }}"
