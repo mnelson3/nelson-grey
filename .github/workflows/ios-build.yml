@@ -237,6 +237,23 @@ jobs:
           
           echo "✅ CocoaPods ready for installation"
 
+      - name: 📦 Update CocoaPods Dependencies
+        run: |
+          echo "📦 Updating CocoaPods dependencies to resolve version conflicts..."
+          cd ios
+          
+          # Try to update FirebaseAppCheck specifically (common issue with Flutter Firebase plugins)
+          if pod update FirebaseAppCheck --no-repo-update 2>/dev/null; then
+            echo "✅ FirebaseAppCheck updated successfully"
+          else
+            echo "⚠️ FirebaseAppCheck update failed, trying full pod install..."
+            # If specific update fails, try a clean install
+            rm -f Podfile.lock
+            pod install --repo-update || pod install
+          fi
+          
+          echo "✅ CocoaPods dependencies updated"
+
       # 5. Build Steps
       - name: 🏗️ Build iOS App
         env:
