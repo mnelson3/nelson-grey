@@ -215,6 +215,15 @@ jobs:
           EOF
 
           echo "✅ Match configuration ready"
+            # Unlock keychain with match password to enable certificate import
+            KEYCHAIN_PATH="$HOME/Library/Keychains/login.keychain-db"
+            if [ -f "$KEYCHAIN_PATH" ]; then
+              echo "🔓 Unlocking keychain for certificate operations..."
+              security unlock-keychain -p "$MATCH_PASSWORD" "$KEYCHAIN_PATH" || true
+              security set-keychain-settings -t 3600 "$KEYCHAIN_PATH" || true
+            fi
+
+            echo "✅ Match configuration ready"
 
       - name: 🔄 Update CocoaPods Specs Repo
         run: |
