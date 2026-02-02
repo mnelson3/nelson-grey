@@ -45,10 +45,10 @@ The system achieves "Zero-Touch" operations through:
 - [x] **Workflow Standardization:** Unified GitHub Actions workflows for TestFlight/App Store.
 
 ### ✅ Documentation & Testing
-- [x] **Completion Summary:** `ZERO_TOUCH_COMPLETION_SUMMARY.md` created.
-- [x] **Test Plan:** `iOS_TESTFLIGHT_BUILD_TEST_PLAN.md` (40 test cases) created.
-- [x] **Execution Checklist:** `iOS_TESTFLIGHT_EXECUTION_CHECKLIST.md` created.
-- [x] **Navigation Index:** `iOS_TESTFLIGHT_README.md` created.
+- [x] **Completion Summary:** `docs/ZERO_TOUCH_COMPLETION_SUMMARY.md` created.
+- [x] **Test Plan:** `docs/Ios_TESTFLIGHT_BUILD_TEST_PLAN.md` (40 test cases) created.
+- [x] **Execution Checklist:** `docs/Ios_TESTFLIGHT_EXECUTION_CHECKLIST.md` created.
+- [x] **Navigation Index:** `docs/Ios_TESTFLIGHT_README.md` created.
 
 ---
 
@@ -74,7 +74,7 @@ The system achieves "Zero-Touch" operations through:
 
 ## 5. Final Recommendations
 
-1.  **Execute Test Plan:** Use the `iOS_TESTFLIGHT_EXECUTION_CHECKLIST.md` to validate `vehicle-vitals` and `wishlist-wizard` just as we did for `modulo-squares`.
+1.  **Execute Test Plan:** Use the `docs/Ios_TESTFLIGHT_EXECUTION_CHECKLIST.md` to validate `vehicle-vitals` and `wishlist-wizard` just as we did for `modulo-squares`.
 2.  **Monitor Runners:** Keep an eye on the `monitor.log` files in the runner directories to ensure auto-recovery continues to function as expected.
 3.  **Rotate Secrets:** Schedule a rotation of the App Store Connect API keys in 6 months (as per security best practices).
 

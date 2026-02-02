@@ -71,9 +71,9 @@ jobs:
 
 ### Complete Documentation (Start Here)
 
-1. **[COMPLETE_DELIVERY_SUMMARY.md](./COMPLETE_DELIVERY_SUMMARY.md)** - What's delivered (this package)
-2. **[ARCHITECTURE.md](./ARCHITECTURE.md)** - How it works & why
-3. **[IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md)** - 5-week roadmap
+1. **[docs/COMPLETE_DELIVERY_SUMMARY.md](./docs/COMPLETE_DELIVERY_SUMMARY.md)** - What's delivered (this package)
+2. **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - How it works & why
+3. **[docs/IMPLEMENTATION_PLAN.md](./docs/IMPLEMENTATION_PLAN.md)** - 5-week roadmap
 4. **[docs/SETUP.md](./docs/SETUP.md)** - Step-by-step setup
 5. **[docs/PROJECT_MANIFEST.md](./docs/PROJECT_MANIFEST.md)** - Configuration reference
 6. **[docs/TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md)** - Fix issues (includes keychain fix!)
@@ -92,9 +92,9 @@ jobs:
 
 | Role | What to Read | Time |
 |------|-------------|------|
-| **Executive** | IMPLEMENTATION_PLAN.md | 10 min |
-| **Tech Lead** | ARCHITECTURE.md + PROJECT_MANIFEST.md | 30 min |
-| **DevOps** | SETUP.md + IMPLEMENTATION_PLAN.md | 45 min |
+| **Executive** | docs/IMPLEMENTATION_PLAN.md | 10 min |
+| **Tech Lead** | docs/ARCHITECTURE.md + PROJECT_MANIFEST.md | 30 min |
+| **DevOps** | SETUP.md + docs/IMPLEMENTATION_PLAN.md | 45 min |
 | **Support** | TROUBLESHOOTING.md | Browse as needed |
 | **Developer** | PROJECT_MANIFEST.md + one example | 15 min |
 
@@ -143,15 +143,15 @@ Still broken? Check docs/TROUBLESHOOTING.md (solutions provided)
 
 ### Path 1: Understanding (Tomorrow)
 ```
-1. Read: COMPLETE_DELIVERY_SUMMARY.md (10 min)
-2. Read: ARCHITECTURE.md (15 min)
+1. Read: docs/COMPLETE_DELIVERY_SUMMARY.md (10 min)
+2. Read: docs/ARCHITECTURE.md (15 min)
 3. Skim: A project manifest (5 min)
 → Done! You understand the vision
 ```
 
 ### Path 2: Implementing (This Week)
 ```
-1. Read: IMPLEMENTATION_PLAN.md (10 min)
+1. Read: docs/IMPLEMENTATION_PLAN.md (10 min)
 2. Start: Phase 2 (Reusable Workflows)
 3. Timeline: 1-2 weeks for Phase 2
 → You'll have the reusable templates ready
@@ -183,10 +183,10 @@ All files are in: **`nelson-grey/` repository**
 
 ```
 nelson-grey/
-├── COMPLETE_DELIVERY_SUMMARY.md         ← Start here
-├── ARCHITECTURE.md
-├── IMPLEMENTATION_PLAN.md
-├── DELIVERABLES.md
+├── docs/COMPLETE_DELIVERY_SUMMARY.md         ← Start here
+├── docs/ARCHITECTURE.md
+├── docs/IMPLEMENTATION_PLAN.md
+├── docs/DELIVERABLES.md
 ├── .cicd/
 │   ├── schemas/
 │   │   └── project-manifest.schema.json
@@ -234,7 +234,7 @@ nelson-grey/
 **A**: Old workflows remain as backup. Progressive rollout. Full testing before production.
 
 ### Q: How is this different?
-**A**: See: ARCHITECTURE.md and IMPLEMENTATION_PLAN.md for comparison
+**A**: See: docs/ARCHITECTURE.md and docs/IMPLEMENTATION_PLAN.md for comparison
 
 ### Q: Where's the keychain fix?
 **A**: In docs/TROUBLESHOOTING.md - search for "Could not locate the provided keychain"
@@ -246,7 +246,7 @@ nelson-grey/
 **A**: Centralized in nelson-grey. One source to maintain.
 
 ### Q: Can we customize it?
-**A**: Absolutely. The architecture is extensible. See: ARCHITECTURE.md
+**A**: Absolutely. The architecture is extensible. See: docs/ARCHITECTURE.md
 
 ---
 
@@ -270,8 +270,8 @@ It includes:
 ## Recommended Reading Order
 
 1. **This document** (10 min) ← You are here
-2. **IMPLEMENTATION_PLAN.md** (10 min) → Understand the plan
-3. **ARCHITECTURE.md** (15 min) → Understand the design
+2. **docs/IMPLEMENTATION_PLAN.md** (10 min) → Understand the plan
+3. **docs/ARCHITECTURE.md** (15 min) → Understand the design
 4. **docs/SETUP.md** (45 min) → Understand setup
 5. **docs/PROJECT_MANIFEST.md** (20 min) → Understand configuration
 6. **docs/TROUBLESHOOTING.md** (browse) → Bookmark for reference
@@ -286,7 +286,7 @@ It includes:
 
 **Found an issue?** Check docs/TROUBLESHOOTING.md
 
-**Want to contribute?** Submit PRs following ARCHITECTURE.md patterns
+**Want to contribute?** Submit PRs following docs/ARCHITECTURE.md patterns
 
 ---
 
@@ -308,4 +308,4 @@ This comprehensive package represents insights from 2+ months of real-world CI/C
 
 Choose your path above and start with the first document!
 
-Don't know where to start? Read **IMPLEMENTATION_PLAN.md** next.
+Don't know where to start? Read **docs/IMPLEMENTATION_PLAN.md** next.

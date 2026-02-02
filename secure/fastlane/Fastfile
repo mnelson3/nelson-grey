@@ -2,15 +2,19 @@ default_platform :ios
 
 # Auto-decode App Store Connect private key from base64 env var into a .p8
 before_all do
-  if ENV['ASC_PRIVATE_KEY'] && !ENV['APP_STORE_CONNECT_KEY_PATH']
+  key_content = ENV['APP_STORE_CONNECT_KEY']
+  issuer_id = ENV['APP_STORE_CONNECT_ISSUER_ID']
+  key_id = ENV['APP_STORE_CONNECT_KEY_ID']
+
+  if key_content && !ENV['APP_STORE_CONNECT_KEY_PATH']
     require 'base64'
     key_path = File.expand_path('../../asc_key.p8', __FILE__)
     UI.message("Writing App Store Connect key to #{key_path}")
-    File.write(key_path, Base64.decode64(ENV['ASC_PRIVATE_KEY']))
+    File.write(key_path, Base64.decode64(key_content))
     File.chmod(0600, key_path)
     ENV['APP_STORE_CONNECT_KEY_PATH'] = key_path
-    ENV['APP_STORE_CONNECT_ISSUER_ID'] ||= ENV['ASC_ISSUER_ID']
-    ENV['APP_STORE_CONNECT_KEY_ID'] ||= ENV['ASC_KEY_ID']
+    ENV['APP_STORE_CONNECT_ISSUER_ID'] ||= issuer_id
+    ENV['APP_STORE_CONNECT_KEY_ID'] ||= key_id
   end
 end
 

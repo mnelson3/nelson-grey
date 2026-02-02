@@ -73,9 +73,9 @@ Navigate to GitHub repo → Settings → Secrets and variables → Actions
 - [ ] FASTLANE_APPLE_ID (value: _______________)
 - [ ] FASTLANE_TEAM_ID (value: _______________)
 - [ ] FASTLANE_ITC_TEAM_ID (value: _______________)
-- [ ] ASC_KEY_ID (value: _______________)
-- [ ] ASC_ISSUER_ID (value: _______________)
-- [ ] ASC_PRIVATE_KEY (exists: Y/N)
+- [ ] APP_STORE_CONNECT_KEY_ID (value: _______________)
+- [ ] APP_STORE_CONNECT_ISSUER_ID (value: _______________)
+- [ ] APP_STORE_CONNECT_KEY (exists: Y/N)
 - [ ] MATCH_GIT_URL (value: _______________)
 - [ ] MATCH_PASSWORD (exists: Y/N)
 - [ ] BETA_FEEDBACK_EMAIL (value: _______________)
@@ -204,7 +204,7 @@ fastlane env
 **Results:**
 - [ ] FASTLANE_APPLE_ID set
 - [ ] FASTLANE_TEAM_ID set
-- [ ] ASC_KEY_ID set
+- [ ] APP_STORE_CONNECT_KEY_ID set
 - [ ] MATCH_GIT_URL set
 - [ ] MATCH_PASSWORD set
 
@@ -520,10 +520,10 @@ release_type: full_pipeline
 ---
 
 ### TC8.2: API Failure
-*Use invalid ASC API key*
+*Use invalid App Store Connect API key*
 
 **Setup:**
-- Modify ASC_KEY_ID to invalid value
+- Modify APP_STORE_CONNECT_KEY_ID to invalid value
 - Trigger build
 
 **Results:**

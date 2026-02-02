@@ -7,17 +7,17 @@
 ## 🎯 Start Here (Choose Your Path)
 
 ### If You Have 5 Minutes
-→ **Read**: [QUICK_START.md](./QUICK_START.md)
+→ **Read**: [docs/QUICK_START.md](./docs/QUICK_START.md)
 → **Outcome**: Understand the big picture
 
 ### If You Have 15 Minutes
-→ **Read**: [QUICK_START.md](./QUICK_START.md) + [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md)
+→ **Read**: [docs/QUICK_START.md](./docs/QUICK_START.md) + [docs/IMPLEMENTATION_PLAN.md](./docs/IMPLEMENTATION_PLAN.md)
 → **Outcome**: Understand the plan and timeline
 
 ### If You Have 1 Hour
 → **Read**:
-  1. [QUICK_START.md](./QUICK_START.md) (10 min)
-  2. [ARCHITECTURE.md](./ARCHITECTURE.md) (15 min)
+  1. [docs/QUICK_START.md](./docs/QUICK_START.md) (10 min)
+  2. [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) (15 min)
   3. [docs/PROJECT_MANIFEST.md](./docs/PROJECT_MANIFEST.md) (20 min)
   4. Review one example: [.cicd/projects/vehicle-vitals.yml](./.cicd/projects/vehicle-vitals.yml) (10 min)
 → **Outcome**: Understand architecture, configuration, and how to use it
@@ -34,11 +34,11 @@
 
 | File | Purpose | Read Time | Who Should Read |
 |------|---------|-----------|-----------------|
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | Complete design document explaining the three-layer architecture, benefits, and rationale | 15 min | Everyone |
-| [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) | 5-week phased implementation plan with effort estimates and success criteria | 10 min | Project leads, Management |
-| [COMPLETE_DELIVERY_SUMMARY.md](./COMPLETE_DELIVERY_SUMMARY.md) | What's delivered in this package, file structure, next steps | 10 min | Quick reference |
-| [DELIVERABLES.md](./DELIVERABLES.md) | Detailed breakdown of all deliverables with file locations | 10 min | Reference |
-| [QUICK_START.md](./QUICK_START.md) | One-page overview with reading paths by role | 5 min | Quick reference |
+| [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Complete design document explaining the three-layer architecture, benefits, and rationale | 15 min | Everyone |
+| [docs/IMPLEMENTATION_PLAN.md](./docs/IMPLEMENTATION_PLAN.md) | 5-week phased implementation plan with effort estimates and success criteria | 10 min | Project leads, Management |
+| [docs/COMPLETE_DELIVERY_SUMMARY.md](./docs/COMPLETE_DELIVERY_SUMMARY.md) | What's delivered in this package, file structure, next steps | 10 min | Quick reference |
+| [docs/DELIVERABLES.md](./docs/DELIVERABLES.md) | Detailed breakdown of all deliverables with file locations | 10 min | Reference |
+| [docs/QUICK_START.md](./docs/QUICK_START.md) | One-page overview with reading paths by role | 5 min | Quick reference |
 
 ### Configuration Reference
 
@@ -71,9 +71,9 @@
 
 **Goal**: Understand the plan and value
 
-1. **Read**: [QUICK_START.md](./QUICK_START.md) (5 min)
-2. **Read**: [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) (10 min)
-3. **Review**: Success metrics section (in IMPLEMENTATION_PLAN.md)
+1. **Read**: [docs/QUICK_START.md](./docs/QUICK_START.md) (5 min)
+2. **Read**: [docs/IMPLEMENTATION_PLAN.md](./docs/IMPLEMENTATION_PLAN.md) (10 min)
+3. **Review**: Success metrics section (in docs/IMPLEMENTATION_PLAN.md)
 
 **Key Takeaway**: 5-week plan, clear milestones, solves the 14-iteration iOS issue
 
@@ -83,9 +83,9 @@
 
 **Goal**: Understand design decisions and trade-offs
 
-1. **Read**: [ARCHITECTURE.md](./ARCHITECTURE.md) (15 min)
-2. **Read**: [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) (10 min)
-3. **Review**: [COMPLETE_DELIVERY_SUMMARY.md](./COMPLETE_DELIVERY_SUMMARY.md) (10 min)
+1. **Read**: [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) (15 min)
+2. **Read**: [docs/IMPLEMENTATION_PLAN.md](./docs/IMPLEMENTATION_PLAN.md) (10 min)
+3. **Review**: [docs/COMPLETE_DELIVERY_SUMMARY.md](./docs/COMPLETE_DELIVERY_SUMMARY.md) (10 min)
 
 **Key Takeaway**: Three-layer architecture, centralized configuration, eliminates duplication
 
@@ -95,9 +95,9 @@
 
 **Goal**: Understand implementation and deployment
 
-1. **Read**: [ARCHITECTURE.md](./ARCHITECTURE.md) (15 min)
+1. **Read**: [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) (15 min)
 2. **Read**: [docs/SETUP.md](./docs/SETUP.md) (45 min) - IMPORTANT
-3. **Review**: [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) phases 2-5
+3. **Review**: [docs/IMPLEMENTATION_PLAN.md](./docs/IMPLEMENTATION_PLAN.md) phases 2-5
 4. **Reference**: [docs/TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md)
 
 **Key Takeaway**: Complete setup procedure, 5-week implementation, comprehensive troubleshooting
@@ -108,7 +108,7 @@
 
 **Goal**: Understand how projects are configured
 
-1. **Read**: [QUICK_START.md](./QUICK_START.md) (5 min)
+1. **Read**: [docs/QUICK_START.md](./docs/QUICK_START.md) (5 min)
 2. **Read**: [docs/PROJECT_MANIFEST.md](./docs/PROJECT_MANIFEST.md) (20 min)
 3. **Review**: [.cicd/projects/vehicle-vitals.yml](./.cicd/projects/vehicle-vitals.yml) (10 min)
 
@@ -132,7 +132,7 @@
 
 **Goal**: Understand what's changed and how it works
 
-1. **Read**: [QUICK_START.md](./QUICK_START.md) (5 min)
+1. **Read**: [docs/QUICK_START.md](./docs/QUICK_START.md) (5 min)
 2. **Skim**: [docs/PROJECT_MANIFEST.md](./docs/PROJECT_MANIFEST.md) - "Configuration-Driven" section (5 min)
 3. **Review**: [.cicd/projects/modulo-squares.yml](./.cicd/projects/modulo-squares.yml) (5 min)
 
@@ -144,7 +144,7 @@
 
 **Goal**: Get up to speed quickly
 
-1. **Read**: [QUICK_START.md](./QUICK_START.md) (5 min)
+1. **Read**: [docs/QUICK_START.md](./docs/QUICK_START.md) (5 min)
 2. **Read**: [docs/PROJECT_MANIFEST.md](./docs/PROJECT_MANIFEST.md) (20 min)
 3. **Follow**: [docs/SETUP.md](./docs/SETUP.md) to set up locally (45 min)
 4. **Bookmark**: [docs/TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md) for reference
@@ -159,12 +159,12 @@
 
 | Question | Document | Section |
 |----------|----------|---------|
-| How does it work? | ARCHITECTURE.md | Architecture Overview |
-| What's the plan? | IMPLEMENTATION_PLAN.md | Implementation Strategy |
+| How does it work? | docs/ARCHITECTURE.md | Architecture Overview |
+| What's the plan? | docs/IMPLEMENTATION_PLAN.md | Implementation Strategy |
 | How do I set it up? | docs/SETUP.md | Detailed Setup |
 | How do I configure a project? | docs/PROJECT_MANIFEST.md | All Sections |
 | What if X breaks? | docs/TROUBLESHOOTING.md | Specific Issue |
-| What's delivered? | DELIVERABLES.md | What's Been Created |
+| What's delivered? | docs/DELIVERABLES.md | What's Been Created |
 | Show me an example | .cicd/projects/*.yml | See 3 examples |
 | How do I create a new project? | docs/PROJECT_MANIFEST.md | Migration Guide |
 | What's the keychain fix? | docs/TROUBLESHOOTING.md | Keychain Problems section |
@@ -177,14 +177,14 @@
 
 | Document | Time | Importance |
 |----------|------|------------|
-| QUICK_START.md | 5 min | ⭐⭐⭐ Essential |
-| ARCHITECTURE.md | 15 min | ⭐⭐⭐ Essential |
-| IMPLEMENTATION_PLAN.md | 10 min | ⭐⭐⭐ Essential |
+| docs/QUICK_START.md | 5 min | ⭐⭐⭐ Essential |
+| docs/ARCHITECTURE.md | 15 min | ⭐⭐⭐ Essential |
+| docs/IMPLEMENTATION_PLAN.md | 10 min | ⭐⭐⭐ Essential |
 | docs/PROJECT_MANIFEST.md | 20 min | ⭐⭐⭐ Essential |
 | docs/SETUP.md | 45 min | ⭐⭐ Important (for setup) |
 | docs/TROUBLESHOOTING.md | Variable | ⭐⭐ Reference (as needed) |
-| COMPLETE_DELIVERY_SUMMARY.md | 10 min | ⭐⭐ Reference |
-| DELIVERABLES.md | 5 min | ⭐ Reference |
+| docs/COMPLETE_DELIVERY_SUMMARY.md | 10 min | ⭐⭐ Reference |
+| docs/DELIVERABLES.md | 5 min | ⭐ Reference |
 
 **Minimum to understand everything**: ~1 hour (QUICK_START + ARCHITECTURE + PROJECT_MANIFEST + examples)
 
@@ -193,13 +193,13 @@
 ## 🎓 Learning Paths
 
 ### Path 1: Executive Overview (15 minutes)
-1. QUICK_START.md
-2. IMPLEMENTATION_PLAN.md
+1. docs/QUICK_START.md
+2. docs/IMPLEMENTATION_PLAN.md
 → Understand the value and timeline
 
 ### Path 2: Technical Deep Dive (1.5 hours)
-1. QUICK_START.md
-2. ARCHITECTURE.md
+1. docs/QUICK_START.md
+2. docs/ARCHITECTURE.md
 3. docs/PROJECT_MANIFEST.md
 4. Review project examples
 5. Skim docs/TROUBLESHOOTING.md
@@ -208,12 +208,12 @@
 ### Path 3: Implementation (2-3 hours)
 1. All of "Technical Deep Dive" above
 2. docs/SETUP.md
-3. IMPLEMENTATION_PLAN.md (phases 2-5)
+3. docs/IMPLEMENTATION_PLAN.md (phases 2-5)
 4. Reference docs/TROUBLESHOOTING.md
 → Ready to implement
 
 ### Path 4: Support Specialist (30 minutes)
-1. QUICK_START.md
+1. docs/QUICK_START.md
 2. docs/PROJECT_MANIFEST.md
 3. Bookmark docs/TROUBLESHOOTING.md
 4. Practice one solution
@@ -229,12 +229,12 @@ All files are in the `nelson-grey/` repository:
 nelson-grey/
 │
 ├── Core Architecture Docs
-│   ├── ARCHITECTURE.md
-│   ├── IMPLEMENTATION_PLAN.md
-│   ├── COMPLETE_DELIVERY_SUMMARY.md
-│   ├── DELIVERABLES.md
-│   ├── QUICK_START.md
-│   └── README_NAVIGATION_INDEX.md (this file)
+│   ├── docs/ARCHITECTURE.md
+│   ├── docs/IMPLEMENTATION_PLAN.md
+│   ├── docs/COMPLETE_DELIVERY_SUMMARY.md
+│   ├── docs/DELIVERABLES.md
+│   ├── docs/QUICK_START.md
+│   └── docs/README_NAVIGATION_INDEX.md (this file)
 │
 ├── Configuration Docs
 │   └── docs/
@@ -273,11 +273,11 @@ nelson-grey/
 
 ## ✅ Document Status
 
-- ✅ QUICK_START.md - Complete
-- ✅ ARCHITECTURE.md - Complete
-- ✅ IMPLEMENTATION_PLAN.md - Complete
-- ✅ COMPLETE_DELIVERY_SUMMARY.md - Complete
-- ✅ DELIVERABLES.md - Complete
+- ✅ docs/QUICK_START.md - Complete
+- ✅ docs/ARCHITECTURE.md - Complete
+- ✅ docs/IMPLEMENTATION_PLAN.md - Complete
+- ✅ docs/COMPLETE_DELIVERY_SUMMARY.md - Complete
+- ✅ docs/DELIVERABLES.md - Complete
 - ✅ docs/SETUP.md - Complete
 - ✅ docs/PROJECT_MANIFEST.md - Complete
 - ✅ docs/TROUBLESHOOTING.md - Complete
@@ -306,7 +306,7 @@ nelson-grey/
 - **Search**: Use Ctrl+F to find specific topics
 - **Examples**: Review all 3 project manifests to see patterns
 - **Questions**: Check the FAQ sections in each doc
-- **Implementation**: Start with Phase 2 after reading ARCHITECTURE.md
+- **Implementation**: Start with Phase 2 after reading docs/ARCHITECTURE.md
 
 ---
 
@@ -314,9 +314,9 @@ nelson-grey/
 
 **Can't find something?** Use Ctrl+F to search across documents
 
-**Still lost?** Start with QUICK_START.md and follow the paths above
+**Still lost?** Start with docs/QUICK_START.md and follow the paths above
 
-**Need more context?** Read ARCHITECTURE.md for the big picture
+**Need more context?** Read docs/ARCHITECTURE.md for the big picture
 
 ---
 

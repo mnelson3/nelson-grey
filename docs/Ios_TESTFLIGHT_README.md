@@ -11,7 +11,7 @@
 ### Phase 1: Understanding the Workflow
 Start here to understand what we're testing and why.
 
-1. **[ZERO_TOUCH_COMPLETION_SUMMARY.md](./ZERO_TOUCH_COMPLETION_SUMMARY.md)** (9.9K)
+1. **[docs/ZERO_TOUCH_COMPLETION_SUMMARY.md](./docs/ZERO_TOUCH_COMPLETION_SUMMARY.md)** (9.9K)
    - Executive summary of the entire ZERO-TOUCH iOS APP DISTRIBUTION deliverable
    - Architecture diagrams and overview
    - Security practices and token management
@@ -19,7 +19,7 @@ Start here to understand what we're testing and why.
    - What's been completed and what's next
    - **Read First:** Yes, for project context
 
-2. **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** (3.4K)
+2. **[docs/DEPLOYMENT_GUIDE.md](./docs/DEPLOYMENT_GUIDE.md)** (3.4K)
    - Quick reference deployment steps
    - Verification checklist
    - Troubleshooting guide
@@ -31,7 +31,7 @@ Start here to understand what we're testing and why.
 ### Phase 2: Running the Tests
 These documents contain the actual test procedures.
 
-3. **[iOS_TESTFLIGHT_BUILD_TEST_PLAN.md](./iOS_TESTFLIGHT_BUILD_TEST_PLAN.md)** (24K) ⭐ COMPREHENSIVE
+3. **[docs/Ios_TESTFLIGHT_BUILD_TEST_PLAN.md](./docs/Ios_TESTFLIGHT_BUILD_TEST_PLAN.md)** (24K) ⭐ COMPREHENSIVE
    - Complete testing reference guide
    - 40 comprehensive test cases organized in 10 phases
    - Each test case includes:
@@ -45,7 +45,7 @@ These documents contain the actual test procedures.
    - **Purpose:** Understanding what to test and why
    - **Audience:** QA engineers, release managers, developers
 
-4. **[iOS_TESTFLIGHT_EXECUTION_CHECKLIST.md](./iOS_TESTFLIGHT_EXECUTION_CHECKLIST.md)** (16K) ⭐ INTERACTIVE
+4. **[docs/Ios_TESTFLIGHT_EXECUTION_CHECKLIST.md](./docs/Ios_TESTFLIGHT_EXECUTION_CHECKLIST.md)** (16K) ⭐ INTERACTIVE
    - Interactive tester checklist (printable format)
    - Pre-test verification section
    - Phase-by-phase checkboxes
@@ -63,7 +63,7 @@ These documents contain the actual test procedures.
 ### Phase 3: Validation & Results
 Documents showing infrastructure is ready.
 
-5. **[TEST_VALIDATION_REPORT.md](./TEST_VALIDATION_REPORT.md)** (12K)
+5. **[docs/TEST_VALIDATION_REPORT.md](./docs/TEST_VALIDATION_REPORT.md)** (12K)
    - Results from runner infrastructure testing
    - 59 test cases PASSED (100%)
    - Proof that auto-recovery and health checks work
@@ -97,28 +97,28 @@ Documents showing infrastructure is ready.
 ## How to Use These Documents
 
 ### For First-Time Readers
-1. Read: **ZERO_TOUCH_COMPLETION_SUMMARY.md** (understand the project)
-2. Read: **DEPLOYMENT_GUIDE.md** (understand the deployment process)
-3. Skim: **iOS_TESTFLIGHT_BUILD_TEST_PLAN.md** (understand what's being tested)
+1. Read: **docs/ZERO_TOUCH_COMPLETION_SUMMARY.md** (understand the project)
+2. Read: **docs/DEPLOYMENT_GUIDE.md** (understand the deployment process)
+3. Skim: **docs/Ios_TESTFLIGHT_BUILD_TEST_PLAN.md** (understand what's being tested)
 
 ### For QA/Test Execution
-1. Verify: Pre-test environment checklist in **iOS_TESTFLIGHT_EXECUTION_CHECKLIST.md**
+1. Verify: Pre-test environment checklist in **docs/Ios_TESTFLIGHT_EXECUTION_CHECKLIST.md**
 2. Execute: Follow the checklist phase by phase
-3. Reference: Detailed test steps from **iOS_TESTFLIGHT_BUILD_TEST_PLAN.md** if needed
+3. Reference: Detailed test steps from **docs/Ios_TESTFLIGHT_BUILD_TEST_PLAN.md** if needed
 4. Document: Fill in results and issues in the checklist
 5. Sign-off: Complete final summary and approvals
 
 ### For Infrastructure Team
-1. Reference: **TEST_VALIDATION_REPORT.md** (previous testing results)
-2. Review: **DEPLOYMENT_GUIDE.md** (deployment procedures)
+1. Reference: **docs/TEST_VALIDATION_REPORT.md** (previous testing results)
+2. Review: **docs/DEPLOYMENT_GUIDE.md** (deployment procedures)
 3. Monitor: Health check and auto-recovery sections
-4. Track: Logs and monitoring via **iOS_TESTFLIGHT_EXECUTION_CHECKLIST.md**
+4. Track: Logs and monitoring via **docs/Ios_TESTFLIGHT_EXECUTION_CHECKLIST.md**
 
 ---
 
 ## File Details
 
-### iOS_TESTFLIGHT_BUILD_TEST_PLAN.md (24K)
+### docs/Ios_TESTFLIGHT_BUILD_TEST_PLAN.md (24K)
 ```
 ✅ Complete Test Reference
 ├─ Phase 1: Prerequisite Validation (4 tests)
@@ -140,7 +140,7 @@ Features:
 • Documentation references
 ```
 
-### iOS_TESTFLIGHT_EXECUTION_CHECKLIST.md (16K)
+### docs/Ios_TESTFLIGHT_EXECUTION_CHECKLIST.md (16K)
 ```
 ✅ Interactive Tester Checklist
 ├─ Pre-Test Verification
@@ -277,9 +277,9 @@ Features:
 - ✅ FASTLANE_APPLE_ID
 - ✅ FASTLANE_TEAM_ID
 - ✅ FASTLANE_ITC_TEAM_ID
-- ✅ ASC_KEY_ID
-- ✅ ASC_ISSUER_ID
-- ✅ ASC_PRIVATE_KEY
+- ✅ APP_STORE_CONNECT_KEY_ID
+- ✅ APP_STORE_CONNECT_ISSUER_ID
+- ✅ APP_STORE_CONNECT_KEY
 - ✅ MATCH_GIT_URL
 - ✅ MATCH_PASSWORD
 - ✅ BETA_FEEDBACK_EMAIL
@@ -345,8 +345,8 @@ ls -la /tmp/test-match/provisioning_profiles/
 ```
 
 ### Step 4: Open Test Documents
-- Comprehensive plan: [iOS_TESTFLIGHT_BUILD_TEST_PLAN.md](./iOS_TESTFLIGHT_BUILD_TEST_PLAN.md)
-- Interactive checklist: [iOS_TESTFLIGHT_EXECUTION_CHECKLIST.md](./iOS_TESTFLIGHT_EXECUTION_CHECKLIST.md)
+- Comprehensive plan: [docs/Ios_TESTFLIGHT_BUILD_TEST_PLAN.md](./docs/Ios_TESTFLIGHT_BUILD_TEST_PLAN.md)
+- Interactive checklist: [docs/Ios_TESTFLIGHT_EXECUTION_CHECKLIST.md](./docs/Ios_TESTFLIGHT_EXECUTION_CHECKLIST.md)
 
 ### Step 5: Start Testing
 - Use the checklist as your guide
@@ -362,7 +362,7 @@ ls -la /tmp/test-match/provisioning_profiles/
 
 **Code Signing Fails**
 - Check: MATCH_PASSWORD is correct
-- Check: ASC_KEY_ID is valid and has Admin role
+- Check: APP_STORE_CONNECT_KEY_ID is valid and has Admin role
 - Solution: Verify match repo access with `git ls-remote`
 
 **TestFlight Upload Fails**
@@ -444,9 +444,9 @@ ls -la /tmp/test-match/provisioning_profiles/
 
 ## Related Documentation
 
-- **Architecture Overview:** [ZERO_TOUCH_COMPLETION_SUMMARY.md](./ZERO_TOUCH_COMPLETION_SUMMARY.md)
-- **Deployment Reference:** [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)
-- **Infrastructure Testing:** [TEST_VALIDATION_REPORT.md](./TEST_VALIDATION_REPORT.md)
+- **Architecture Overview:** [docs/ZERO_TOUCH_COMPLETION_SUMMARY.md](./docs/ZERO_TOUCH_COMPLETION_SUMMARY.md)
+- **Deployment Reference:** [docs/DEPLOYMENT_GUIDE.md](./docs/DEPLOYMENT_GUIDE.md)
+- **Infrastructure Testing:** [docs/TEST_VALIDATION_REPORT.md](./docs/TEST_VALIDATION_REPORT.md)
 - **Runner Scripts:** [shared/runner-scripts/README.md](./shared/runner-scripts/README.md)
 - **iOS Workflow:** [modulo-squares/.github/workflows/ios-cicd-release.yml](../modulo-squares/.github/workflows/ios-cicd-release.yml)
 
@@ -456,18 +456,18 @@ ls -la /tmp/test-match/provisioning_profiles/
 
 | Document | Version | Updated | Size |
 |----------|---------|---------|------|
-| iOS_TESTFLIGHT_BUILD_TEST_PLAN.md | 1.0 | Dec 29, 2025 | 24K |
-| iOS_TESTFLIGHT_EXECUTION_CHECKLIST.md | 1.0 | Dec 29, 2025 | 16K |
-| ZERO_TOUCH_COMPLETION_SUMMARY.md | 1.0 | Dec 29, 2025 | 9.9K |
-| DEPLOYMENT_GUIDE.md | 1.0 | Dec 29, 2025 | 3.4K |
-| TEST_VALIDATION_REPORT.md | 1.0 | Dec 29, 2025 | 12K |
+| docs/Ios_TESTFLIGHT_BUILD_TEST_PLAN.md | 1.0 | Dec 29, 2025 | 24K |
+| docs/Ios_TESTFLIGHT_EXECUTION_CHECKLIST.md | 1.0 | Dec 29, 2025 | 16K |
+| docs/ZERO_TOUCH_COMPLETION_SUMMARY.md | 1.0 | Dec 29, 2025 | 9.9K |
+| docs/DEPLOYMENT_GUIDE.md | 1.0 | Dec 29, 2025 | 3.4K |
+| docs/TEST_VALIDATION_REPORT.md | 1.0 | Dec 29, 2025 | 12K |
 
 ---
 
 ## Contact & Support
 
 **Questions about the tests?**
-- Reference the detailed test plan: iOS_TESTFLIGHT_BUILD_TEST_PLAN.md
+- Reference the detailed test plan: docs/Ios_TESTFLIGHT_BUILD_TEST_PLAN.md
 - Check troubleshooting section above
 - Review deployment guide for setup issues
 
@@ -478,8 +478,8 @@ ls -la /tmp/test-match/provisioning_profiles/
 - Reference the test case number
 
 **Need to modify tests?**
-- Update iOS_TESTFLIGHT_BUILD_TEST_PLAN.md (reference doc)
-- Update iOS_TESTFLIGHT_EXECUTION_CHECKLIST.md (tester guide)
+- Update docs/Ios_TESTFLIGHT_BUILD_TEST_PLAN.md (reference doc)
+- Update docs/Ios_TESTFLIGHT_EXECUTION_CHECKLIST.md (tester guide)
 - Version the document changes
 - Notify team of updates
 
@@ -489,5 +489,5 @@ ls -la /tmp/test-match/provisioning_profiles/
 **Status:** ✅ READY FOR EXECUTION  
 **Last Updated:** December 29, 2025  
 
-🎯 **Start Here:** [iOS_TESTFLIGHT_BUILD_TEST_PLAN.md](./iOS_TESTFLIGHT_BUILD_TEST_PLAN.md)  
-🚀 **Begin Testing:** [iOS_TESTFLIGHT_EXECUTION_CHECKLIST.md](./iOS_TESTFLIGHT_EXECUTION_CHECKLIST.md)
+🎯 **Start Here:** [docs/Ios_TESTFLIGHT_BUILD_TEST_PLAN.md](./docs/Ios_TESTFLIGHT_BUILD_TEST_PLAN.md)  
+🚀 **Begin Testing:** [docs/Ios_TESTFLIGHT_EXECUTION_CHECKLIST.md](./docs/Ios_TESTFLIGHT_EXECUTION_CHECKLIST.md)

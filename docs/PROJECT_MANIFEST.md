@@ -367,7 +367,9 @@ firebase_config: "firebase.${ENV}.json"  # → firebase.dev.json (in dev)
 
 **GitHub Secrets** (all organization secrets available):
 - `${APPLE_TEAM_ID}`
-- `${ASC_KEY_ID}`
+- `${APP_STORE_CONNECT_KEY_ID}`
+- `${APP_STORE_CONNECT_ISSUER_ID}`
+- `${APP_STORE_CONNECT_KEY}`
 - `${FIREBASE_TOKEN}`
 - Any custom secret: `${MY_CUSTOM_SECRET}`
 
@@ -672,7 +674,7 @@ APPLE_TEAM_ID="A123B456CD" \
 
 ## Related Documentation
 
-- [Architecture Overview](./ARCHITECTURE.md)
+- [Architecture Overview](./docs/ARCHITECTURE.md)
 - [Setup Instructions](./SETUP.md)
 - [Troubleshooting Guide](./TROUBLESHOOTING.md)
 - [Schema Definition](../.cicd/schemas/project-manifest.schema.json)

@@ -136,7 +136,7 @@ All scripts validated with `bash -n` (syntax checking):
 
 ### 5. Supporting Documentation (✅ 3/3 Files Created)
 
-#### nelson-grey/ZERO_TOUCH_COMPLETION_SUMMARY.md
+#### nelson-grey/docs/ZERO_TOUCH_COMPLETION_SUMMARY.md
 - **Size:** 9.9K
 - **Content:**
   - Executive summary of deliverable
@@ -146,7 +146,7 @@ All scripts validated with `bash -n` (syntax checking):
   - Next steps and future consolidation path
 - **Status:** ✅ CREATED & VERIFIED
 
-#### nelson-grey/DEPLOYMENT_GUIDE.md
+#### nelson-grey/docs/DEPLOYMENT_GUIDE.md
 - **Size:** 3.4K
 - **Content:**
   - Quick deployment steps for each runner

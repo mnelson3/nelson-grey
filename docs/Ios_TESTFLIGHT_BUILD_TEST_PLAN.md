@@ -35,9 +35,9 @@ This document outlines a comprehensive testing plan for the iOS build and TestFl
   - `FASTLANE_APPLE_ID`: Apple ID email
   - `FASTLANE_TEAM_ID`: Apple Developer Team ID
   - `FASTLANE_ITC_TEAM_ID`: iTunes Connect Team ID
-  - `ASC_KEY_ID`: App Store Connect API Key ID
-  - `ASC_ISSUER_ID`: App Store Connect Issuer ID
-  - `ASC_PRIVATE_KEY`: App Store Connect private key (base64-encoded)
+   - `APP_STORE_CONNECT_KEY_ID`: App Store Connect API Key ID
+   - `APP_STORE_CONNECT_ISSUER_ID`: App Store Connect Issuer ID
+   - `APP_STORE_CONNECT_KEY`: App Store Connect private key (base64-encoded)
   - `MATCH_GIT_URL`: GitHub URL to code signing certificates repo
   - `MATCH_PASSWORD`: Encryption password for match certificates
   - `BETA_FEEDBACK_EMAIL`: Email for TestFlight feedback
@@ -87,9 +87,9 @@ Steps:
    - FASTLANE_APPLE_ID
    - FASTLANE_TEAM_ID
    - FASTLANE_ITC_TEAM_ID
-   - ASC_KEY_ID
-   - ASC_ISSUER_ID
-   - ASC_PRIVATE_KEY
+   - APP_STORE_CONNECT_KEY_ID
+   - APP_STORE_CONNECT_ISSUER_ID
+   - APP_STORE_CONNECT_KEY
    - MATCH_GIT_URL
    - MATCH_PASSWORD
    - BETA_FEEDBACK_EMAIL
@@ -97,7 +97,7 @@ Steps:
 Expected Results:
 ✅ All 9 secrets present
 ✅ No empty values
-✅ ASC_PRIVATE_KEY properly base64-encoded
+✅ APP_STORE_CONNECT_KEY properly base64-encoded
 ```
 
 #### TC1.3: Code Signing Repository Access
@@ -124,7 +124,7 @@ Expected Results:
 Objective: Verify App Store Connect API key works
 Steps:
 1. SSH into runner
-2. Extract ASC_PRIVATE_KEY from secrets
+2. Extract APP_STORE_CONNECT_KEY from secrets
 3. Create JWT token using API key
 4. Execute: curl -H "Authorization: Bearer <JWT>" https://api.appstoreconnect.apple.com/v1/apps
 5. Verify HTTP 200 response
@@ -204,7 +204,7 @@ Steps:
 4. Verify output includes:
    - FASTLANE_APPLE_ID
    - FASTLANE_TEAM_ID
-   - ASC_KEY_ID
+   - APP_STORE_CONNECT_KEY_ID
    - MATCH_GIT_URL (token included)
    - MATCH_PASSWORD
 
@@ -584,9 +584,9 @@ Expected Results:
 #### TC8.2: App Store Connect API Failure
 ```
 Objective: Verify handling of App Store Connect API issues
-Trigger Condition: Use expired/invalid ASC API key
+Trigger Condition: Use expired/invalid App Store Connect API key
 Steps:
-1. Trigger build with invalid ASC_KEY_ID
+1. Trigger build with invalid APP_STORE_CONNECT_KEY_ID
 2. Monitor workflow
 3. Verify:
    - API authentication fails with clear message
@@ -791,7 +791,7 @@ Expected Results:
 1. Check error logs for root cause
 2. If code signing issue:
    - Verify MATCH_PASSWORD correct
-   - Verify ASC_KEY_ID valid
+   - Verify APP_STORE_CONNECT_KEY_ID valid
    - Re-run match command manually
 3. If dependency issue:
    - Check pubspec.lock/Podfile.lock
@@ -816,8 +816,8 @@ Expected Results:
 
 - [iOS CI/CD Workflow](../.github/workflows/ios-cicd-release.yml)
 - [Fastlane Configuration](../../packages/mobile/ios/fastlane/Fastfile)
-- [Runner Setup Guide](./DEPLOYMENT_GUIDE.md)
-- [Completion Summary](./ZERO_TOUCH_COMPLETION_SUMMARY.md)
+- [Runner Setup Guide](./docs/DEPLOYMENT_GUIDE.md)
+- [Completion Summary](./docs/ZERO_TOUCH_COMPLETION_SUMMARY.md)
 
 ---
 

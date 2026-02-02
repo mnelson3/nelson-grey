@@ -18,10 +18,10 @@ Usage examples
 --------------
 Store a secret:
 
-  ./vault_store.sh asc_private_key /path/to/AuthKey.p8
+  ./vault_store.sh app_store_connect_key /path/to/AuthKey.p8
 
 Fetch a secret:
 
-  ./vault_fetch.sh asc_private_key /tmp/AuthKey.p8
+  ./vault_fetch.sh app_store_connect_key /tmp/AuthKey.p8
 
 The scripts are intentionally minimal — for production, integrate with AppRole/Kubernetes auth and secure the Vault policies.

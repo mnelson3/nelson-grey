@@ -26,7 +26,7 @@
 
 #### 3. **Configuration Updates** ✅
 - 3 master-pipeline.yml files updated with environment variable aliasing blocks
-- Secret name mapping: `ASC_KEY_ID` → `APP_STORE_CONNECT_KEY_ID` (via env)
+- App Store Connect secrets standardized to `APP_STORE_CONNECT_*`
 - Fallback defaults set for Firebase project IDs
 
 #### 4. **Comprehensive Documentation** ✅
@@ -101,7 +101,7 @@ master-pipeline.yml triggered (workflow_dispatch)
 ### Documentation (7 Guides)
 ```
 ✅ README_PHASE5_COMPLETE.md              ← Executive summary + next steps
-✅ PHASE5B_QUICK_START.md                 ← Manual execution guide
+✅ PHASE5B_docs/QUICK_START.md                 ← Manual execution guide
 ✅ PHASE5_COMPLETION_REPORT.md            ← Detailed validation results
 ✅ PHASE5_STATUS.md                       ← System status dashboard
 ✅ PHASE5_VALIDATION.md                   ← Per-project checklist
@@ -120,9 +120,9 @@ master-pipeline.yml triggered (workflow_dispatch)
 
 ### Reference Docs (Existing)
 ```
-✅ ARCHITECTURE.md                        ← Full system design
+✅ docs/ARCHITECTURE.md                        ← Full system design
 ✅ PROJECT_MANIFEST.md                    ← Manifest specification
-✅ IMPLEMENTATION_PLAN.md                 ← 6-phase roadmap
+✅ docs/IMPLEMENTATION_PLAN.md                 ← 6-phase roadmap
 ```
 
 ---
@@ -203,7 +203,7 @@ gh api repos/mnelson3/modulo-squares/actions/runners | jq '.runners[] | {name, s
 | "Android build fails" | Missing keystore | Add `ANDROID_KEYSTORE_BASE64` secret |
 | "Workflow never runs" | No available runner | Check: `gh api repos/.../actions/runners` |
 
-See [PHASE5B_QUICK_START.md](./PHASE5B_QUICK_START.md) for full troubleshooting guide.
+See [PHASE5B_docs/QUICK_START.md](./PHASE5B_docs/QUICK_START.md) for full troubleshooting guide.
 
 ---
 
@@ -217,7 +217,7 @@ See [PHASE5B_QUICK_START.md](./PHASE5B_QUICK_START.md) for full troubleshooting 
 
 ### Path 2: Manual CLI (More Control)
 ```bash
-# Follow PHASE5B_QUICK_START.md step-by-step
+# Follow PHASE5B_docs/QUICK_START.md step-by-step
 gh secret set ...
 gh workflow run ...
 gh run list ...
@@ -247,7 +247,7 @@ NOW (Today)
 │ ├─ Monitors execution (10 min)
 │ └─ Reports status ✅
 │
-├─ Option B: Follow PHASE5B_QUICK_START.md manually (20 min)
+├─ Option B: Follow PHASE5B_docs/QUICK_START.md manually (20 min)
 │ └─ Step-by-step GitHub CLI commands
 │
 └─ Option C: Use GitHub UI (30 min)
@@ -313,13 +313,13 @@ Post-Success (Once all builds complete)
 
 ### Start Here 👇
 - **README_PHASE5_COMPLETE.md** — Overview + execution options
-- **PHASE5B_QUICK_START.md** — Detailed step-by-step guide
+- **PHASE5B_docs/QUICK_START.md** — Detailed step-by-step guide
 - **phase5b-execute.sh** — Automated execution (recommended)
 
 ### Reference
 - **SECRETS_MAPPING.md** — Secret name conversions
 - **PHASE5_COMPLETION_REPORT.md** — Full validation details
-- **ARCHITECTURE.md** — System design
+- **docs/ARCHITECTURE.md** — System design
 - **PROJECT_MANIFEST.md** — Manifest specification
 
 ### Execute
@@ -333,13 +333,13 @@ cd /Users/marknelson/Circus/Repositories/nelson-grey
 ## Questions?
 
 **Q: Which execution method should I choose?**  
-A: Use `./phase5b-execute.sh full` (Method A) for automation, or PHASE5B_QUICK_START.md (Method B) for manual control.
+A: Use `./phase5b-execute.sh full` (Method A) for automation, or PHASE5B_docs/QUICK_START.md (Method B) for manual control.
 
 **Q: How long will this take?**  
 A: Test validation: 15 min. Full builds: 30-60 min per project (can run sequentially, 2-4 hours total).
 
 **Q: What if a build fails?**  
-A: Check logs in GitHub Actions UI, reference PHASE5B_QUICK_START.md troubleshooting, and re-run.
+A: Check logs in GitHub Actions UI, reference PHASE5B_docs/QUICK_START.md troubleshooting, and re-run.
 
 **Q: When do I proceed to Phase 6?**  
 A: After Phase 5B builds complete successfully and artifacts are generated.

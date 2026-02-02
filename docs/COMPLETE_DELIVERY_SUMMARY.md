@@ -24,7 +24,7 @@ After 2+ months of iterative debugging through 14+ cycles on a single iOS workfl
 ### 📦 Complete Package Contents
 
 #### Part 1: Architecture & Design
-1. **ARCHITECTURE.md** (2500 lines)
+1. **docs/ARCHITECTURE.md** (2500 lines)
    - Complete three-layer architecture design
    - Project discovery system
    - Configuration inheritance patterns
@@ -32,7 +32,7 @@ After 2+ months of iterative debugging through 14+ cycles on a single iOS workfl
    - Migration strategy
    - Success metrics
 
-2. **IMPLEMENTATION_PLAN.md** (1500 lines)
+2. **docs/IMPLEMENTATION_PLAN.md** (1500 lines)
    - 5-week phased implementation
    - Phase-by-phase breakdown with effort estimates
    - Quick start guides
@@ -95,13 +95,13 @@ After 2+ months of iterative debugging through 14+ cycles on a single iOS workfl
     - Performance optimization
 
 #### Part 4: Delivery Documentation
-11. **DELIVERABLES.md** (500 lines)
+11. **docs/DELIVERABLES.md** (500 lines)
     - Summary of what's delivered
     - File organization
     - How to use the package
     - Quick start guides
 
-12. **This document** (COMPLETE_DELIVERY_SUMMARY.md)
+12. **This document** (docs/COMPLETE_DELIVERY_SUMMARY.md)
     - Complete overview
     - How everything fits together
 
@@ -204,7 +204,7 @@ KC_DIR="$HOME/Library/Keychains"
 
 ### Issue #2: Fragmented Workflows ✅
 
-**Documented in**: `ARCHITECTURE.md`
+**Documented in**: `docs/ARCHITECTURE.md`
 
 **Fix**: Extract common patterns into reusable templates
 
@@ -227,7 +227,7 @@ KC_DIR="$HOME/Library/Keychains"
 
 ### Issue #4: Manual Intervention ✅
 
-**Documented in**: `IMPLEMENTATION_PLAN.md`
+**Documented in**: `docs/IMPLEMENTATION_PLAN.md`
 
 **Fix**: Automation through health monitoring and scripts
 
@@ -244,9 +244,9 @@ KC_DIR="$HOME/Library/Keychains"
 ```
 nelson-grey/
 │
-├── 📄 ARCHITECTURE.md                          ✅ Complete
-├── 📄 IMPLEMENTATION_PLAN.md                   ✅ Complete
-├── 📄 DELIVERABLES.md                         ✅ Complete
+├── 📄 docs/ARCHITECTURE.md                          ✅ Complete
+├── 📄 docs/IMPLEMENTATION_PLAN.md                   ✅ Complete
+├── 📄 docs/DELIVERABLES.md                         ✅ Complete
 │
 ├── .cicd/
 │   ├── schemas/
@@ -287,9 +287,9 @@ nelson-grey/
 
 ### Step 1: Understand (1 hour)
 ```
-Read: ARCHITECTURE.md (15 min)
-      IMPLEMENTATION_PLAN.md (10 min)
-      DELIVERABLES.md (5 min)
+Read: docs/ARCHITECTURE.md (15 min)
+      docs/IMPLEMENTATION_PLAN.md (10 min)
+      docs/DELIVERABLES.md (5 min)
       This document (10 min)
       
 Goal: Understand the vision and why the redesign is needed
@@ -306,7 +306,7 @@ Goal: Understand how projects are configured
 
 ### Step 3: Plan Implementation (15 minutes)
 ```
-Review: IMPLEMENTATION_PLAN.md
+Review: docs/IMPLEMENTATION_PLAN.md
 
 Check: Phase 2 tasks (Reusable Workflows)
 
@@ -363,10 +363,10 @@ Goal: Full implementation in production
 ### If You Want To...
 
 **Understand the Architecture**
-→ Read: `ARCHITECTURE.md`
+→ Read: `docs/ARCHITECTURE.md`
 
 **Know the Implementation Plan**
-→ Read: `IMPLEMENTATION_PLAN.md`
+→ Read: `docs/IMPLEMENTATION_PLAN.md`
 
 **Configure a Project**
 → Read: `docs/PROJECT_MANIFEST.md`  
@@ -379,20 +379,20 @@ Goal: Full implementation in production
 → Reference: `docs/TROUBLESHOOTING.md`
 
 **See What's Delivered**
-→ Read: `DELIVERABLES.md`
+→ Read: `docs/DELIVERABLES.md`
 
 ---
 
 ## Next Steps
 
 ### For Management/Stakeholders
-1. Review IMPLEMENTATION_PLAN.md
+1. Review docs/IMPLEMENTATION_PLAN.md
 2. Approve 5-week timeline
 3. Allocate 40-50 hours developer time
 
 ### For Technical Team
-1. Read ARCHITECTURE.md
-2. Review IMPLEMENTATION_PLAN.md
+1. Read docs/ARCHITECTURE.md
+2. Review docs/IMPLEMENTATION_PLAN.md
 3. Start Phase 2 (Reusable Workflows)
 
 ### For DevOps
@@ -456,7 +456,7 @@ Estimated: 1-2 weeks for Phase 2
 - TROUBLESHOOTING.md covers common issues
 - PROJECT_MANIFEST.md explains configuration
 - Examples in `.cicd/projects/` show real configurations
-- ARCHITECTURE.md explains the why
+- docs/ARCHITECTURE.md explains the why
 
 ---
 
@@ -517,9 +517,9 @@ This is a complete, production-ready redesign of your CI/CD infrastructure based
 
 ## Document Index
 
-1. **ARCHITECTURE.md** - Design document
-2. **IMPLEMENTATION_PLAN.md** - 5-week rollout plan
-3. **DELIVERABLES.md** - What's delivered summary
+1. **docs/ARCHITECTURE.md** - Design document
+2. **docs/IMPLEMENTATION_PLAN.md** - 5-week rollout plan
+3. **docs/DELIVERABLES.md** - What's delivered summary
 4. **docs/SETUP.md** - Step-by-step setup guide
 5. **docs/PROJECT_MANIFEST.md** - Configuration reference
 6. **docs/TROUBLESHOOTING.md** - Issue resolution (includes keychain fix)

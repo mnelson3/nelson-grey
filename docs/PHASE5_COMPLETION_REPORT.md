@@ -59,7 +59,7 @@ stream-control/.cicd/projects/stream-control.yml         ✅ VALID YAML
 #### Secrets Status per Repository
 
 **modulo-squares**:
-- Existing secrets: ~20 (ASC_*, FIREBASE_*, MATCH_*)
+- Existing secrets: ~20 (APP_STORE_CONNECT_* with legacy ASC_*, FIREBASE_*, MATCH_*)
 - Missing: `MATCH_GIT_BRANCH`, Android credentials
 - Status: ⚠️ PARTIAL (iOS/Firebase ready, Android needs creds)
 
@@ -69,7 +69,7 @@ stream-control/.cicd/projects/stream-control.yml         ✅ VALID YAML
 - Status: ⚠️ PARTIAL (iOS/Firebase ready, Android needs creds)
 
 **wishlist-wizard**:
-- Existing secrets: ~20 (ASC_*, FIREBASE_*, MATCH_*, CHROME_*)
+- Existing secrets: ~20 (APP_STORE_CONNECT_* with legacy ASC_*, FIREBASE_*, MATCH_*, CHROME_*)
 - Missing: `CHROME_REFRESH_TOKEN`, `MATCH_GIT_BRANCH`, Android credentials
 - Status: ⚠️ PARTIAL (iOS/Firebase/Chrome ready, Android & refresh token need setup)
 
@@ -82,7 +82,7 @@ stream-control/.cicd/projects/stream-control.yml         ✅ VALID YAML
 ### 3. Secret Name Mapping Documentation ✅
 
 Created [SECRETS_MAPPING.md](./SECRETS_MAPPING.md) documenting:
-- Old vs. new secret names (e.g., `ASC_KEY_ID` → `APP_STORE_CONNECT_KEY_ID`)
+- Standard App Store Connect secret names (`APP_STORE_CONNECT_KEY_ID`, `APP_STORE_CONNECT_ISSUER_ID`, `APP_STORE_CONNECT_KEY`)
 - Conversion strategy for each repository
 - Missing secrets and installation instructions
 - Environment variable aliasing in master-pipeline.yml
@@ -96,9 +96,9 @@ Updated `load-config` job in 3 master-pipeline.yml files to add environment vari
 **modulo-squares/.github/workflows/master-pipeline.yml**:
 ```yaml
 env:
-  APP_STORE_CONNECT_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-  APP_STORE_CONNECT_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+  APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+  APP_STORE_CONNECT_KEY: ${{ secrets.APP_STORE_CONNECT_KEY }}
   FIREBASE_PROJECT_DEV: ${{ secrets.FIREBASE_PROJECT_DEV || 'modulo-squares-dev' }}
   FIREBASE_PROJECT_STAGING: ${{ secrets.FIREBASE_PROJECT_STAGING || 'modulo-squares-staging' }}
   FIREBASE_PROJECT_PROD: ${{ secrets.FIREBASE_PROJECT_PROD || 'modulo-squares-prod' }}
@@ -108,9 +108,9 @@ env:
 **vehicle-vitals/.github/workflows/master-pipeline.yml**:
 ```yaml
 env:
-  APP_STORE_CONNECT_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-  APP_STORE_CONNECT_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+  APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+  APP_STORE_CONNECT_KEY: ${{ secrets.APP_STORE_CONNECT_KEY }}
   FIREBASE_PROJECT_DEV: ${{ secrets.FIREBASE_PROJECT_DEV || 'vehicle-vitals-dev' }}
   FIREBASE_PROJECT_STAGING: ${{ secrets.FIREBASE_PROJECT_STAGING || 'vehicle-vitals-staging' }}
   FIREBASE_PROJECT_PROD: ${{ secrets.FIREBASE_PROJECT_PROD || 'vehicle-vitals-prod' }}
@@ -120,9 +120,9 @@ env:
 **wishlist-wizard/.github/workflows/master-pipeline.yml**:
 ```yaml
 env:
-  APP_STORE_CONNECT_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-  APP_STORE_CONNECT_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+  APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+  APP_STORE_CONNECT_KEY: ${{ secrets.APP_STORE_CONNECT_KEY }}
   FIREBASE_PROJECT_DEV: ${{ secrets.FIREBASE_PROJECT_DEVELOPMENT || 'wishlist-wizard-dev' }}
   FIREBASE_PROJECT_STAGING: ${{ secrets.FIREBASE_PROJECT_STAGING || 'wishlist-wizard-staging' }}
   FIREBASE_PROJECT_PROD: ${{ secrets.FIREBASE_PROJECT_PRODUCTION || 'wishlist-wizard-prod' }}
@@ -209,7 +209,7 @@ mv .github/workflows/test-*.yml .github/workflows/archive/
 3. **Execute Step 2** (Phase 5B): Trigger `test_all` workflows to validate pipeline structure
 4. **Monitor Results**: Watch GitHub Actions for build logs and errors
 5. **Execute Step 4**: Archive legacy workflows upon success
-6. **Document Completion**: Update IMPLEMENTATION_PLAN.md with Phase 5 results
+6. **Document Completion**: Update docs/IMPLEMENTATION_PLAN.md with Phase 5 results
 
 ---
 
@@ -230,7 +230,7 @@ wishlist-wizard/.github/workflows/master-pipeline.yml     (added env block)
 - [SECRETS_MAPPING.md](./SECRETS_MAPPING.md) — Detailed secret name conversions & missing setup
 - [PHASE5_VALIDATION.md](./PHASE5_VALIDATION.md) — Validation checklist with secret inventory
 - [PROJECT_MANIFEST.md](./PROJECT_MANIFEST.md) — Project manifest specification & examples
-- [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) — Full 5-phase implementation roadmap
+- [docs/IMPLEMENTATION_PLAN.md](./docs/IMPLEMENTATION_PLAN.md) — Full 5-phase implementation roadmap
 
 ---
 

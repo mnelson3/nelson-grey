@@ -131,7 +131,7 @@ Self-Hosted Runner (modulo-squares/vehicle-vitals/wishlist-wizard-macos-runner)
     ↓
   [If unhealthy → Auto-recover → Re-register → Retry]
     ↓
-Fetch Secrets (ASC_KEY_ID, ASC_ISSUER_ID, ASC_PRIVATE_KEY, MATCH_PASSWORD)
+Fetch Secrets (APP_STORE_CONNECT_KEY_ID, APP_STORE_CONNECT_ISSUER_ID, APP_STORE_CONNECT_KEY, MATCH_PASSWORD)
     ↓
 Fastlane Match over HTTPS (pull signing certs/profiles from nelson-grey)
     ↓
@@ -139,7 +139,7 @@ Build iOS app in ephemeral keychain
     ↓
 Upload to App Store Connect
     ↓
-Clean up secrets (delete ASC key file, Fastlane .env)
+Clean up secrets (delete App Store Connect key file, Fastlane .env)
 ```
 
 ### Credential Flow

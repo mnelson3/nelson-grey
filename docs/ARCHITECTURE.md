@@ -525,7 +525,7 @@ nelson-grey/
 │
 └── docs/
     ├── SETUP.md
-    ├── ARCHITECTURE.md (this file)
+    ├── docs/ARCHITECTURE.md (this file)
     ├── PROJECT_MANIFEST.md
     ├── TROUBLESHOOTING.md
     └── EXAMPLES.md

@@ -34,7 +34,7 @@ Automated script and quick-start guide prepared for workflow triggering and moni
 
 ### 4. Quick Execution Tools
 - **phase5b-execute.sh**: Automated script for secrets setup, workflow triggering, and monitoring
-- **PHASE5B_QUICK_START.md**: Step-by-step guide for manual execution
+- **PHASE5B_docs/QUICK_START.md**: Step-by-step guide for manual execution
 - **PHASE5_COMPLETION_REPORT.md**: Detailed validation results and next steps
 
 ---
@@ -112,7 +112,7 @@ gh workflow run master-pipeline.yml -f action=test_all -R mnelson3/stream-contro
 
 ### ❌ If Anything Fails
 - Check logs in GitHub Actions UI (Actions tab → click failed run → see step logs)
-- Reference troubleshooting section in PHASE5B_QUICK_START.md
+- Reference troubleshooting section in PHASE5B_docs/QUICK_START.md
 - Common issues: Keychain errors (fix: run ephemeral_keychain_fastlane_fixed.sh on macOS runner)
 
 ---
@@ -121,7 +121,7 @@ gh workflow run master-pipeline.yml -f action=test_all -R mnelson3/stream-contro
 
 ### Documentation
 - `nelson-grey/docs/PHASE5_COMPLETION_REPORT.md` — Detailed validation results
-- `nelson-grey/docs/PHASE5B_QUICK_START.md` — Step-by-step execution guide
+- `nelson-grey/docs/PHASE5B_docs/QUICK_START.md` — Step-by-step execution guide
 - `nelson-grey/docs/PHASE5_STATUS.md` — Current project status
 - `nelson-grey/docs/SECRETS_MAPPING.md` — Secret name conversions
 - `nelson-grey/docs/PHASE5_VALIDATION.md` — Validation checklist
@@ -227,10 +227,10 @@ This will:
 ## Questions?
 
 Refer to these documents:
-- **How do I run workflows?** → PHASE5B_QUICK_START.md
+- **How do I run workflows?** → PHASE5B_docs/QUICK_START.md
 - **What secrets do I need?** → SECRETS_MAPPING.md
-- **Why did a build fail?** → PHASE5B_QUICK_START.md (Troubleshooting section)
-- **What's the overall architecture?** → ARCHITECTURE.md
+- **Why did a build fail?** → PHASE5B_docs/QUICK_START.md (Troubleshooting section)
+- **What's the overall architecture?** → docs/ARCHITECTURE.md
 - **How do I deploy to production?** → DEPLOYMENT.md (Phase 6, coming soon)
 
 ---

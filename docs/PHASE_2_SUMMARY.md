@@ -92,7 +92,7 @@ All reusable GitHub Actions workflows have been created, tested, and documented.
   - Troubleshooting section
   - Local testing with `act`
 
-### 4. Phase 2 Implementation Guide (`PHASE_2_COMPLETION.md`)
+### 4. Phase 2 Implementation Guide (`docs/PHASE_2_COMPLETION.md`)
 - **Lines**: 400+
 - **Content**:
   - Phase 2 completion checklist
@@ -256,9 +256,9 @@ Each workflow includes:
 nelson-grey/
 ├── docs/
 │   └── REUSABLE_WORKFLOWS.md         (Complete workflow reference)
-├── PHASE_2_COMPLETION.md             (This document + implementation guide)
-├── IMPLEMENTATION_PLAN.md            (Overall 5-phase plan)
-├── ARCHITECTURE.md                   (System design)
+├── docs/PHASE_2_COMPLETION.md             (This document + implementation guide)
+├── docs/IMPLEMENTATION_PLAN.md            (Overall 5-phase plan)
+├── docs/ARCHITECTURE.md                   (System design)
 ├── docs/SETUP.md                     (Environment setup)
 ├── docs/TROUBLESHOOTING.md           (Issue resolution)
 ├── docs/PROJECT_MANIFEST.md          (Configuration reference)
@@ -363,7 +363,7 @@ act workflow_dispatch \
 | iOS keychain fix | ✅ | Documented in ios-build.yml |
 | Code reduction 95%+ | ✅ | 400+ lines → 20 lines per project |
 | Complete documentation | ✅ | 1000+ line REUSABLE_WORKFLOWS.md |
-| Migration guide | ✅ | Step-by-step examples in PHASE_2_COMPLETION.md |
+| Migration guide | ✅ | Step-by-step examples in docs/PHASE_2_COMPLETION.md |
 | Error handling | ✅ | Comprehensive in all workflows |
 | Environment support | ✅ | dev/staging/prod fully supported |
 | Secrets management | ✅ | Clear guidelines and validation |

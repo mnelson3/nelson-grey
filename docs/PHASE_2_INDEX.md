@@ -9,21 +9,21 @@ Start here to understand what's been delivered in Phase 2.
 ## 📋 Quick Links to Phase 2 Documents
 
 ### Executive Summary (Start Here)
-→ **[PHASE_2_SUMMARY.md](./PHASE_2_SUMMARY.md)** (15 min read)
+→ **[docs/PHASE_2_SUMMARY.md](./docs/PHASE_2_SUMMARY.md)** (15 min read)
 - What was delivered
 - Key improvements
 - Impact and benefits
 - Technical highlights
 
 ### Implementation Guide
-→ **[PHASE_2_COMPLETION.md](./PHASE_2_COMPLETION.md)** (20 min read)
+→ **[docs/PHASE_2_COMPLETION.md](./docs/PHASE_2_COMPLETION.md)** (20 min read)
 - Step-by-step integration
 - Migration examples
 - Testing procedures
 - What's in Phase 3
 
 ### Complete File Listing
-→ **[PHASE_2_DELIVERABLES.md](./PHASE_2_DELIVERABLES.md)** (Reference)
+→ **[docs/PHASE_2_docs/DELIVERABLES.md](./docs/PHASE_2_docs/DELIVERABLES.md)** (Reference)
 - All 6 workflows documented
 - All documentation files listed
 - Coverage matrix
@@ -42,14 +42,14 @@ Start here to understand what's been delivered in Phase 2.
 ## 🎯 Choose Your Path
 
 ### I Just Want to Get Started (5 min)
-1. Read [PHASE_2_SUMMARY.md](./PHASE_2_SUMMARY.md) - Understanding section
-2. Follow [PHASE_2_COMPLETION.md](./PHASE_2_COMPLETION.md) - Integration section
+1. Read [docs/PHASE_2_SUMMARY.md](./docs/PHASE_2_SUMMARY.md) - Understanding section
+2. Follow [docs/PHASE_2_COMPLETION.md](./docs/PHASE_2_COMPLETION.md) - Integration section
 3. Create `main.yml` in your project
 4. Done! 🚀
 
 ### I Want to Understand Everything (30 min)
-1. [PHASE_2_SUMMARY.md](./PHASE_2_SUMMARY.md) - Overview
-2. [PHASE_2_COMPLETION.md](./PHASE_2_COMPLETION.md) - Examples
+1. [docs/PHASE_2_SUMMARY.md](./docs/PHASE_2_SUMMARY.md) - Overview
+2. [docs/PHASE_2_COMPLETION.md](./docs/PHASE_2_COMPLETION.md) - Examples
 3. [docs/REUSABLE_WORKFLOWS.md](./docs/REUSABLE_WORKFLOWS.md) - Deep dive
 4. Browse `.github/workflows/reusable/` - See the code
 
@@ -86,10 +86,10 @@ docs/
 └── REUSABLE_WORKFLOWS.md           (Complete reference)
 
 Phase 2 Summary Files (in nelson-grey root)
-├── PHASE_2_SUMMARY.md              (Executive summary)
-├── PHASE_2_COMPLETION.md           (Implementation guide)
-├── PHASE_2_DELIVERABLES.md         (File listing)
-└── PHASE_2_INDEX.md                (This file)
+├── docs/PHASE_2_SUMMARY.md              (Executive summary)
+├── docs/PHASE_2_COMPLETION.md           (Implementation guide)
+├── docs/PHASE_2_docs/DELIVERABLES.md         (File listing)
+└── docs/PHASE_2_INDEX.md                (This file)
 ```
 
 ### Supporting Files (from Phase 1, still used)
@@ -125,9 +125,9 @@ docs/
 
 | Document | Purpose | Read Time |
 |----------|---------|-----------|
-| PHASE_2_SUMMARY.md | Executive overview | 15 min |
-| PHASE_2_COMPLETION.md | Implementation guide | 20 min |
-| PHASE_2_DELIVERABLES.md | Complete file listing | Reference |
+| docs/PHASE_2_SUMMARY.md | Executive overview | 15 min |
+| docs/PHASE_2_COMPLETION.md | Implementation guide | 20 min |
+| docs/PHASE_2_docs/DELIVERABLES.md | Complete file listing | Reference |
 | docs/REUSABLE_WORKFLOWS.md | Workflow reference | 30 min |
 
 ---
@@ -201,12 +201,12 @@ docs/
 ## 🎓 Learning Path
 
 ### Level 1: Basic Usage (5 minutes)
-1. Read [PHASE_2_SUMMARY.md](./PHASE_2_SUMMARY.md) - "How to Use Phase 2" section
+1. Read [docs/PHASE_2_SUMMARY.md](./docs/PHASE_2_SUMMARY.md) - "How to Use Phase 2" section
 2. Add `main.yml` to your project
 3. Push and watch it work
 
 ### Level 2: Understanding (15 minutes)
-1. Read [PHASE_2_COMPLETION.md](./PHASE_2_COMPLETION.md) - entire document
+1. Read [docs/PHASE_2_COMPLETION.md](./docs/PHASE_2_COMPLETION.md) - entire document
 2. Review step-by-step migration example
 3. Look at one example workflow in `.github/workflows/reusable/`
 
@@ -220,7 +220,7 @@ docs/
 ### Level 4: Expert (2+ hours)
 1. Deep dive into each workflow
 2. Understand every step and conditional
-3. Review architecture decisions in [ARCHITECTURE.md](./ARCHITECTURE.md)
+3. Review architecture decisions in [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
 4. Able to extend/modify workflows as needed
 
 ---
@@ -303,7 +303,7 @@ A: Phase 3 will fix the ephemeral keychain script and consolidate helper scripts
 
 ## ✅ Checklist: Before Using Phase 2
 
-- [ ] Read [PHASE_2_SUMMARY.md](./PHASE_2_SUMMARY.md)
+- [ ] Read [docs/PHASE_2_SUMMARY.md](./docs/PHASE_2_SUMMARY.md)
 - [ ] Understand project manifest format (`.cicd/projects/project.yml`)
 - [ ] Ensure nelson-grey is available as reference
 - [ ] Have all required secrets for your platforms
@@ -315,12 +315,12 @@ A: Phase 3 will fix the ephemeral keychain script and consolidate helper scripts
 ## 📞 Support
 
 **Documentation**: 
-- Quick reference: [PHASE_2_SUMMARY.md](./PHASE_2_SUMMARY.md)
+- Quick reference: [docs/PHASE_2_SUMMARY.md](./docs/PHASE_2_SUMMARY.md)
 - Deep dive: [docs/REUSABLE_WORKFLOWS.md](./docs/REUSABLE_WORKFLOWS.md)
 - Troubleshooting: [docs/TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md)
 
 **Examples**:
-- Migration guide: [PHASE_2_COMPLETION.md](./PHASE_2_COMPLETION.md)
+- Migration guide: [docs/PHASE_2_COMPLETION.md](./docs/PHASE_2_COMPLETION.md)
 - Project configs: `.cicd/projects/` directory
 
 **Issues**:
@@ -341,7 +341,7 @@ A: Phase 3 will fix the ephemeral keychain script and consolidate helper scripts
 - ✅ All 3 projects supported
 - ✅ Ready for immediate use
 
-**Next**: Review [PHASE_2_SUMMARY.md](./PHASE_2_SUMMARY.md) and start implementing!
+**Next**: Review [docs/PHASE_2_SUMMARY.md](./docs/PHASE_2_SUMMARY.md) and start implementing!
 
 ---
 

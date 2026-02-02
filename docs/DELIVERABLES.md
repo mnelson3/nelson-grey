@@ -10,7 +10,7 @@
 
 ### 📋 Documentation (4 files, 4000+ lines)
 
-#### 1. **ARCHITECTURE.md** - Complete Design Document
+#### 1. **docs/ARCHITECTURE.md** - Complete Design Document
 - Three-layer architecture (Projects → Reusable Workflows → Infrastructure)
 - Project discovery system
 - Configuration inheritance model
@@ -18,7 +18,7 @@
 - Migration strategy for existing projects
 - Success metrics
 
-#### 2. **IMPLEMENTATION_PLAN.md** - Phased Rollout Plan
+#### 2. **docs/IMPLEMENTATION_PLAN.md** - Phased Rollout Plan
 - 5-week implementation timeline
 - Phase-by-phase breakdown with expected effort
 - Quick start guides
@@ -115,8 +115,8 @@ Each manifest defines:
 ### Core Design Files
 ```
 nelson-grey/
-├── ARCHITECTURE.md                    # Design document (complete)
-├── IMPLEMENTATION_PLAN.md             # 5-week implementation (complete)
+├── docs/ARCHITECTURE.md                    # Design document (complete)
+├── docs/IMPLEMENTATION_PLAN.md             # 5-week implementation (complete)
 └── .cicd/
     ├── schemas/
     │   └── project-manifest.schema.json    # Validation schema (complete)
@@ -235,13 +235,13 @@ Project Manifest → Workflow Template → Infrastructure Scripts
 ## How to Use This Package
 
 ### 1. **Understand the Vision**
-Read: `ARCHITECTURE.md` (15 min)
+Read: `docs/ARCHITECTURE.md` (15 min)
 - Explains the three-layer design
 - Shows why this solves the problems
 - Describes how it works
 
 ### 2. **Plan the Implementation**
-Read: `IMPLEMENTATION_PLAN.md` (10 min)
+Read: `docs/IMPLEMENTATION_PLAN.md` (10 min)
 - 5-week phased approach
 - Clear deliverables per week
 - Success criteria
@@ -294,7 +294,7 @@ Reference: `docs/TROUBLESHOOTING.md`
 
 ### For Executives/Stakeholders
 ```
-Read: IMPLEMENTATION_PLAN.md (10 min)
+Read: docs/IMPLEMENTATION_PLAN.md (10 min)
 → Understand the 5-week timeline
 → See the before/after comparison
 → Review success criteria
@@ -302,7 +302,7 @@ Read: IMPLEMENTATION_PLAN.md (10 min)
 
 ### For Project Leads
 ```
-Read: ARCHITECTURE.md (15 min)
+Read: docs/ARCHITECTURE.md (15 min)
 Read: docs/PROJECT_MANIFEST.md (20 min)
 Review: .cicd/projects/your-project.yml
 → Understand how your project is configured
@@ -310,8 +310,8 @@ Review: .cicd/projects/your-project.yml
 
 ### For DevOps/Infrastructure
 ```
-Read: IMPLEMENTATION_PLAN.md (10 min)
-Read: ARCHITECTURE.md (15 min)
+Read: docs/IMPLEMENTATION_PLAN.md (10 min)
+Read: docs/ARCHITECTURE.md (15 min)
 Read: docs/SETUP.md (45 min)
 → Implement phases 2-5
 ```
@@ -345,8 +345,8 @@ After implementation:
 ## Next Steps
 
 ### Immediate (Next 24 hours)
-1. ✅ Read IMPLEMENTATION_PLAN.md
-2. ✅ Review ARCHITECTURE.md
+1. ✅ Read docs/IMPLEMENTATION_PLAN.md
+2. ✅ Review docs/ARCHITECTURE.md
 3. ✅ Look at a project manifest
 4. Share plan with team
 
@@ -365,16 +365,16 @@ After implementation:
 ## Support & Questions
 
 ### Documentation Map
-- **"How does it work?"** → ARCHITECTURE.md
-- **"How do I implement it?"** → IMPLEMENTATION_PLAN.md
+- **"How does it work?"** → docs/ARCHITECTURE.md
+- **"How do I implement it?"** → docs/IMPLEMENTATION_PLAN.md
 - **"How do I configure my project?"** → docs/PROJECT_MANIFEST.md
 - **"How do I set it up?"** → docs/SETUP.md
 - **"How do I fix X?"** → docs/TROUBLESHOOTING.md
 
 ### Documentation Index
 All documents:
-1. ARCHITECTURE.md (this repo)
-2. IMPLEMENTATION_PLAN.md (this repo)
+1. docs/ARCHITECTURE.md (this repo)
+2. docs/IMPLEMENTATION_PLAN.md (this repo)
 3. docs/SETUP.md (this repo)
 4. docs/PROJECT_MANIFEST.md (this repo)
 5. docs/TROUBLESHOOTING.md (this repo)
@@ -405,8 +405,8 @@ This comprehensive redesign represents insights from 2+ months of real-world CI/
 
 ## Document Checklist
 
-- [x] ARCHITECTURE.md - Design document
-- [x] IMPLEMENTATION_PLAN.md - Implementation roadmap
+- [x] docs/ARCHITECTURE.md - Design document
+- [x] docs/IMPLEMENTATION_PLAN.md - Implementation roadmap
 - [x] docs/SETUP.md - Setup guide
 - [x] docs/PROJECT_MANIFEST.md - Configuration reference
 - [x] docs/TROUBLESHOOTING.md - Issue resolution

@@ -6,7 +6,7 @@ if [ "$#" -ne 2 ]; then
   exit 2
 fi
 
-SECRET_PATH="$1"   # e.g. secret/data/nelson-grey/asc_private_key
+SECRET_PATH="$1"   # e.g. secret/data/nelson-grey/app_store_connect_key
 FILE="$2"
 
 if [ ! -f "$FILE" ]; then

@@ -1,11 +1,10 @@
 # Secrets Mapping Guide - Phase 5b
 
 ## Problem
-Old secrets use repo-specific names (e.g., `ASC_KEY_ID`, `ASC_ISSUER_ID`).
-New workflows expect standardized names: `APP_STORE_CONNECT_KEY_ID`, `APP_STORE_CONNECT_ISSUER_ID`.
+Workflows require standardized names: `APP_STORE_CONNECT_KEY_ID`, `APP_STORE_CONNECT_ISSUER_ID`, `APP_STORE_CONNECT_KEY`.
 
 ## Solution
-Add environment variable mappings in each repo's `load-config` job to alias old secrets to new names.
+Ensure environment variables in each repo's `load-config` job use the standardized names.
 
 ---
 
@@ -13,9 +12,9 @@ Add environment variable mappings in each repo's `load-config` job to alias old 
 
 ### modulo-squares
 **Existing secrets** → **New workflow expects**:
-- `ASC_KEY_ID` → `APP_STORE_CONNECT_KEY_ID`
-- `ASC_ISSUER_ID` → `APP_STORE_CONNECT_ISSUER_ID`
-- `ASC_PRIVATE_KEY` → `APP_STORE_CONNECT_KEY`
+- `APP_STORE_CONNECT_KEY_ID`
+- `APP_STORE_CONNECT_ISSUER_ID`
+- `APP_STORE_CONNECT_KEY`
 - `FIREBASE_TOKEN` ✅ (matches)
 - `MATCH_PASSWORD` ✅ (matches)
 - `MATCH_GIT_URL` ✅ (matches)
@@ -24,9 +23,9 @@ Add environment variable mappings in each repo's `load-config` job to alias old 
 **Action**: Update `master-pipeline.yml` load-config step to map secrets:
 ```yaml
 env:
-  APP_STORE_CONNECT_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-  APP_STORE_CONNECT_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+  APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+  APP_STORE_CONNECT_KEY: ${{ secrets.APP_STORE_CONNECT_KEY }}
   FIREBASE_PROJECT_DEV: ${{ secrets.FIREBASE_PROJECT_DEVELOPMENT || 'modulo-squares-dev' }}
   FIREBASE_PROJECT_STAGING: ${{ secrets.FIREBASE_PROJECT_STAGING || 'modulo-squares-staging' }}
   FIREBASE_PROJECT_PROD: ${{ secrets.FIREBASE_PROJECT_PRODUCTION || 'modulo-squares-prod' }}
@@ -37,9 +36,9 @@ env:
 
 ### vehicle-vitals
 **Existing secrets** → **New workflow expects**:
-- `ASC_KEY_ID` → `APP_STORE_CONNECT_KEY_ID`
-- `ASC_ISSUER_ID` → `APP_STORE_CONNECT_ISSUER_ID`
-- `ASC_PRIVATE_KEY` → `APP_STORE_CONNECT_KEY`
+- `APP_STORE_CONNECT_KEY_ID`
+- `APP_STORE_CONNECT_ISSUER_ID`
+- `APP_STORE_CONNECT_KEY`
 - `FIREBASE_TOKEN` ✅ (matches)
 - `MATCH_PASSWORD` ✅ (matches)
 - `MATCH_GIT_URL` ✅ (matches)
@@ -52,9 +51,9 @@ env:
 
 ### wishlist-wizard
 **Existing secrets** → **New workflow expects**:
-- `ASC_KEY_ID` → `APP_STORE_CONNECT_KEY_ID`
-- `ASC_ISSUER_ID` → `APP_STORE_CONNECT_ISSUER_ID`
-- `ASC_PRIVATE_KEY` → `APP_STORE_CONNECT_KEY`
+- `APP_STORE_CONNECT_KEY_ID`
+- `APP_STORE_CONNECT_ISSUER_ID`
+- `APP_STORE_CONNECT_KEY`
 - `FIREBASE_TOKEN` ✅ (matches)
 - `CHROME_CLIENT_ID` ✅ (matches)
 - `CHROME_CLIENT_SECRET` ✅ (matches)
@@ -89,10 +88,10 @@ jobs:
     name: Load Project Configuration
     runs-on: self-hosted
     env:
-      # Alias old secret names to new workflow-expected names
-      APP_STORE_CONNECT_KEY_ID: ${{ secrets.ASC_KEY_ID || '' }}
-      APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID || '' }}
-      APP_STORE_CONNECT_KEY: ${{ secrets.ASC_PRIVATE_KEY || '' }}
+      # Standard App Store Connect secrets
+      APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID || '' }}
+      APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID || '' }}
+      APP_STORE_CONNECT_KEY: ${{ secrets.APP_STORE_CONNECT_KEY || '' }}
       FIREBASE_PROJECT_DEV: ${{ secrets.FIREBASE_PROJECT_DEVELOPMENT || secrets.FIREBASE_PROJECT_DEV || '' }}
       FIREBASE_PROJECT_STAGING: ${{ secrets.FIREBASE_PROJECT_STAGING || '' }}
       FIREBASE_PROJECT_PROD: ${{ secrets.FIREBASE_PROJECT_PRODUCTION || secrets.FIREBASE_PROJECT_PROD || '' }}

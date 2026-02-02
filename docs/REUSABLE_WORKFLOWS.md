@@ -633,7 +633,7 @@ jobs:
 - **Documentation**: See nelson-grey `docs/` folder
 - **Troubleshooting**: See `docs/TROUBLESHOOTING.md`
 - **Configuration**: See `.cicd/projects/` examples
-- **Architecture**: See `ARCHITECTURE.md` for design rationale
+- **Architecture**: See `docs/ARCHITECTURE.md` for design rationale
 
 ---
 

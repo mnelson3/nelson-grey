@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # CI runner script for rotating certs via fastlane
-# Usage: CI should set environment variables (MATCH_GIT_URL, MATCH_PASSWORD, ASC_PRIVATE_KEY, ASC_ISSUER_ID, ASC_KEY_ID, FASTLANE_APPLE_ID)
+# Usage: CI should set environment variables (MATCH_GIT_URL, MATCH_PASSWORD, APP_STORE_CONNECT_KEY, APP_STORE_CONNECT_ISSUER_ID, APP_STORE_CONNECT_KEY_ID, FASTLANE_APPLE_ID)
 
 ROOT_DIR="$(cd "$(dirname "$0")" && cd .. && pwd)"
 cd "$ROOT_DIR"
@@ -58,9 +58,14 @@ run_for_project() {
   export MATCH_GIT_URL=$(get_var MATCH_GIT_URL)
   export MATCH_PASSWORD=$(get_var MATCH_PASSWORD)
   export MATCH_GIT_URL_TOKEN=$(get_var MATCH_GIT_URL_TOKEN)
-  export ASC_PRIVATE_KEY=$(get_var ASC_PRIVATE_KEY)
-  export ASC_ISSUER_ID=$(get_var ASC_ISSUER_ID)
-  export ASC_KEY_ID=$(get_var ASC_KEY_ID)
+
+  app_store_connect_key=$(get_var APP_STORE_CONNECT_KEY)
+  app_store_connect_issuer_id=$(get_var APP_STORE_CONNECT_ISSUER_ID)
+  app_store_connect_key_id=$(get_var APP_STORE_CONNECT_KEY_ID)
+
+  export APP_STORE_CONNECT_KEY="$app_store_connect_key"
+  export APP_STORE_CONNECT_ISSUER_ID="$app_store_connect_issuer_id"
+  export APP_STORE_CONNECT_KEY_ID="$app_store_connect_key_id"
   export FASTLANE_APPLE_ID=$(get_var FASTLANE_APPLE_ID)
 
   # If MATCH_GIT_URL uses HTTPS and a token is provided, embed the token for non-interactive auth

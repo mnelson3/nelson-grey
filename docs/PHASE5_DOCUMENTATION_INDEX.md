@@ -12,7 +12,7 @@ This index guides you through all Phase 5 deliverables and how to use them.
 - **[README_PHASE5_COMPLETE.md](./README_PHASE5_COMPLETE.md)** — Executive summary + next steps
 
 ### ⚡ Quick Execution (Choose One)
-- **[PHASE5B_QUICK_START.md](./PHASE5B_QUICK_START.md)** — Manual step-by-step guide (GitHub CLI or UI)
+- **[PHASE5B_docs/QUICK_START.md](./PHASE5B_docs/QUICK_START.md)** — Manual step-by-step guide (GitHub CLI or UI)
 - **[phase5b-execute.sh](../shared/runner-scripts/phase5b-execute.sh)** — Automated script (recommended)
 
 ### 📊 Validation Results
@@ -24,9 +24,9 @@ This index guides you through all Phase 5 deliverables and how to use them.
 - **[SECRETS_MAPPING.md](./SECRETS_MAPPING.md)** — Secret name conversions (old → new)
 
 ### 📚 Reference
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)** — Full system design
+- **[docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** — Full system design
 - **[PROJECT_MANIFEST.md](./PROJECT_MANIFEST.md)** — Manifest file specification
-- **[IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md)** — Full 6-phase roadmap
+- **[docs/IMPLEMENTATION_PLAN.md](./docs/IMPLEMENTATION_PLAN.md)** — Full 6-phase roadmap
 
 ---
 
@@ -45,7 +45,7 @@ This index guides you through all Phase 5 deliverables and how to use them.
 
 ---
 
-### PHASE5B_QUICK_START.md
+### PHASE5B_docs/QUICK_START.md
 **Purpose**: Manual execution guide  
 **Audience**: DevOps engineers, developers  
 **Key Info**:
@@ -140,7 +140,7 @@ This index guides you through all Phase 5 deliverables and how to use them.
 
 ---
 
-### ARCHITECTURE.md
+### docs/ARCHITECTURE.md
 **Purpose**: Full system design documentation  
 **Audience**: Architects, senior developers  
 **Key Info**:
@@ -168,7 +168,7 @@ This index guides you through all Phase 5 deliverables and how to use them.
 
 ---
 
-### IMPLEMENTATION_PLAN.md
+### docs/IMPLEMENTATION_PLAN.md
 **Purpose**: Full roadmap for all 6 phases  
 **Audience**: Project managers, technical leads  
 **Key Info**:
@@ -188,17 +188,17 @@ This index guides you through all Phase 5 deliverables and how to use them.
 1. Read: README_PHASE5_COMPLETE.md (2 min)
 2. Choose method: A (automated), B (manual), or C (GUI)
 3. If A: Run `phase5b-execute.sh full` (15 min)
-4. If B: Follow PHASE5B_QUICK_START.md (20 min)
+4. If B: Follow PHASE5B_docs/QUICK_START.md (20 min)
 5. If C: Use GitHub web UI (30 min)
 
 ### Scenario 2: "I need to understand what's been done"
 1. Read: README_PHASE5_COMPLETE.md (3 min)
 2. Read: PHASE5_COMPLETION_REPORT.md (10 min)
-3. Skim: ARCHITECTURE.md (15 min)
+3. Skim: docs/ARCHITECTURE.md (15 min)
 4. Reference: SECRETS_MAPPING.md if needed
 
 ### Scenario 3: "A build failed. Why?"
-1. Check: PHASE5B_QUICK_START.md → Troubleshooting section
+1. Check: PHASE5B_docs/QUICK_START.md → Troubleshooting section
 2. If iOS issue: SSH to runner, run ephemeral_keychain_fastlane_fixed.sh
 3. If Firebase issue: Verify FIREBASE_TOKEN secret
 4. If Android issue: Verify ANDROID_KEYSTORE_BASE64 secret
@@ -206,7 +206,7 @@ This index guides you through all Phase 5 deliverables and how to use them.
 
 ### Scenario 4: "I need to add a new project to this pipeline"
 1. Read: PROJECT_MANIFEST.md (full specification)
-2. Read: ARCHITECTURE.md (system overview)
+2. Read: docs/ARCHITECTURE.md (system overview)
 3. Create: `.cicd/projects/my-project.yml` based on examples
 4. Create: `.github/workflows/master-pipeline.yml` using template
 5. Validate: `ruby -e "require 'yaml'; YAML.load_file('...path...')"`
@@ -225,7 +225,7 @@ This index guides you through all Phase 5 deliverables and how to use them.
 
 ```
 README_PHASE5_COMPLETE.md (START HERE)
-    ├─→ PHASE5B_QUICK_START.md (choose method A, B, or C)
+    ├─→ PHASE5B_docs/QUICK_START.md (choose method A, B, or C)
     │   └─→ phase5b-execute.sh (method A - automated)
     │   └─→ GitHub CLI (method B - manual)
     │   └─→ GitHub Web UI (method C - GUI)
@@ -236,9 +236,9 @@ README_PHASE5_COMPLETE.md (START HERE)
     ├─→ PHASE5_STATUS.md (project status)
     │   └─→ PHASE5_VALIDATION.md (per-project checklist)
     │
-    └─→ ARCHITECTURE.md (system design)
+    └─→ docs/ARCHITECTURE.md (system design)
         ├─→ PROJECT_MANIFEST.md (manifest spec)
-        └─→ IMPLEMENTATION_PLAN.md (full roadmap)
+        └─→ docs/IMPLEMENTATION_PLAN.md (full roadmap)
 ```
 
 ---
@@ -249,14 +249,14 @@ README_PHASE5_COMPLETE.md (START HERE)
 ```
 nelson-grey/docs/
 ├── README_PHASE5_COMPLETE.md                    ← START HERE
-├── PHASE5B_QUICK_START.md
+├── PHASE5B_docs/QUICK_START.md
 ├── PHASE5_COMPLETION_REPORT.md
 ├── PHASE5_STATUS.md
 ├── PHASE5_VALIDATION.md
 ├── SECRETS_MAPPING.md
-├── ARCHITECTURE.md
+├── docs/ARCHITECTURE.md
 ├── PROJECT_MANIFEST.md
-├── IMPLEMENTATION_PLAN.md
+├── docs/IMPLEMENTATION_PLAN.md
 └── ... (other phases)
 ```
 
@@ -314,15 +314,15 @@ stream-control/.github/workflows/master-pipeline.yml (no changes needed)
 | Need | Document | Location |
 |------|----------|----------|
 | Start here | README_PHASE5_COMPLETE.md | `nelson-grey/docs/` |
-| Manual guide | PHASE5B_QUICK_START.md | `nelson-grey/docs/` |
+| Manual guide | PHASE5B_docs/QUICK_START.md | `nelson-grey/docs/` |
 | Automated script | phase5b-execute.sh | `nelson-grey/shared/runner-scripts/` |
 | Secrets mapping | SECRETS_MAPPING.md | `nelson-grey/docs/` |
-| System design | ARCHITECTURE.md | `nelson-grey/docs/` |
+| System design | docs/ARCHITECTURE.md | `nelson-grey/docs/` |
 | Manifests spec | PROJECT_MANIFEST.md | `nelson-grey/docs/` |
-| Full roadmap | IMPLEMENTATION_PLAN.md | `nelson-grey/docs/` |
+| Full roadmap | docs/IMPLEMENTATION_PLAN.md | `nelson-grey/docs/` |
 
 ---
 
 **Phase 5 Status**: VALIDATION COMPLETE ✅ | READY FOR DRY-RUN 🚀
 
-**Next Action**: Run `./phase5b-execute.sh full` or follow PHASE5B_QUICK_START.md manually
+**Next Action**: Run `./phase5b-execute.sh full` or follow PHASE5B_docs/QUICK_START.md manually

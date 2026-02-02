@@ -11,22 +11,22 @@ How it works
 
 Required secrets (per-project or global)
 - Global names (fallbacks):
-  - `MATCH_GIT_URL` — git URL for the match repo (SSH or HTTPS)
-  - `MATCH_PASSWORD` — match passphrase
-  - `MATCH_GIT_URL_TOKEN` — optional PAT if using HTTPS access
-  - `ASC_PRIVATE_KEY` — base64-encoded App Store Connect private key (.p8)
-  - `ASC_ISSUER_ID` — App Store Connect issuer ID
-  - `ASC_KEY_ID` — App Store Connect key ID
-  - `FASTLANE_APPLE_ID` — Apple ID/email for match `username`
+   - `MATCH_GIT_URL` — git URL for the match repo (SSH or HTTPS)
+   - `MATCH_PASSWORD` — match passphrase
+   - `MATCH_GIT_URL_TOKEN` — optional PAT if using HTTPS access
+   - `APP_STORE_CONNECT_KEY` — base64-encoded App Store Connect private key (.p8)
+   - `APP_STORE_CONNECT_ISSUER_ID` — App Store Connect issuer ID
+   - `APP_STORE_CONNECT_KEY_ID` — App Store Connect key ID
+   - `FASTLANE_APPLE_ID` — Apple ID/email for match `username`
 
 - Per-project names (suffix pattern):
-  - `MATCH_GIT_URL_<PROJECT>`
-  - `MATCH_PASSWORD_<PROJECT>`
-  - `MATCH_GIT_URL_TOKEN_<PROJECT>`
-  - `ASC_PRIVATE_KEY_<PROJECT>`
-  - `ASC_ISSUER_ID_<PROJECT>`
-  - `ASC_KEY_ID_<PROJECT>`
-  - `FASTLANE_APPLE_ID_<PROJECT>`
+   - `MATCH_GIT_URL_<PROJECT>`
+   - `MATCH_PASSWORD_<PROJECT>`
+   - `MATCH_GIT_URL_TOKEN_<PROJECT>`
+   - `APP_STORE_CONNECT_KEY_<PROJECT>`
+   - `APP_STORE_CONNECT_ISSUER_ID_<PROJECT>`
+   - `APP_STORE_CONNECT_KEY_ID_<PROJECT>`
+   - `FASTLANE_APPLE_ID_<PROJECT>`
 
   Where `<PROJECT>` is the uppercase project name with dashes replaced by underscores.
   Examples:
@@ -34,8 +34,8 @@ Required secrets (per-project or global)
   - Project `modulo-squares` -> suffix `_MODULO_SQUARES`
 
 Security notes
-- Prefer storing `ASC_PRIVATE_KEY` and other secrets in GitHub Secrets or a Vault and not in plaintext files.
-- `ASC_PRIVATE_KEY` value should be the base64 encoding of the `.p8` PEM contents. The CI script will decode it into `secure/asc_key.p8` with `0600` permissions before invoking Fastlane.
+- Prefer storing `APP_STORE_CONNECT_KEY` and other secrets in GitHub Secrets or a Vault and not in plaintext files.
+- `APP_STORE_CONNECT_KEY` value should be the base64 encoding of the `.p8` PEM contents. The CI script will decode it into `secure/asc_key.p8` with `0600` permissions before invoking Fastlane.
 - After any secret rotation, purge old keys from git history using the repository's `scripts/remove_key_history.sh` helper (or `git-filter-repo`).
 
 CI setup checklist
@@ -45,7 +45,7 @@ CI setup checklist
 4. Optionally, adjust the `cron` schedule in `.github/workflows/ci-rotate.yml`.
 
 Troubleshooting
-- If `fastlane` reports App Store Connect auth errors, confirm `ASC_ISSUER_ID`, `ASC_KEY_ID`, and `ASC_PRIVATE_KEY` match an active App Store Connect API key.
+- If `fastlane` reports App Store Connect auth errors, confirm `APP_STORE_CONNECT_ISSUER_ID`, `APP_STORE_CONNECT_KEY_ID`, and `APP_STORE_CONNECT_KEY` match an active App Store Connect API key.
 - If `match` cannot push to the match repo, ensure the runner has SSH keys or the PAT has repo access.
 nelson-grey secure store & Fastlane prototype
 ===========================================

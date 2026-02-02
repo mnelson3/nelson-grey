@@ -6,7 +6,7 @@ This workspace contains multiple application repos and their corresponding self-
 
 ### R1. Zero-touch iOS distribution
 - iOS builds and distribution must run without interactive prompts.
-- Apple auth uses App Store Connect API key (`ASC_KEY_ID`, `ASC_ISSUER_ID`, `ASC_PRIVATE_KEY`).
+- Apple auth uses App Store Connect API key (`APP_STORE_CONNECT_KEY_ID`, `APP_STORE_CONNECT_ISSUER_ID`, `APP_STORE_CONNECT_KEY`).
 - Code signing uses Fastlane Match via HTTPS token auth (no SSH deploy keys baked into repos).
 - Signing must run inside an ephemeral keychain (no login keychain pollution).
 - Workflows must clean up any generated secret artifacts (ASC key file, Fastlane `.env`, service-account json).

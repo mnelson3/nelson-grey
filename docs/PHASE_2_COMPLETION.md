@@ -381,7 +381,7 @@ Phase 2 is complete and production-ready. Phase 3 will:
 
 - **Reusable Workflows**: `docs/REUSABLE_WORKFLOWS.md`
 - **Project Manifests**: `.cicd/projects/` directory
-- **Architecture**: `ARCHITECTURE.md`
+- **Architecture**: `docs/ARCHITECTURE.md`
 - **Troubleshooting**: `docs/TROUBLESHOOTING.md`
 - **Setup Guide**: `docs/SETUP.md`
 - **Keychain Fix**: `docs/TROUBLESHOOTING.md` → "Keychain Problems" section

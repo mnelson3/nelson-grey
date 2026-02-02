@@ -95,7 +95,7 @@ Phase 2 (Reusable Workflows) has been completed successfully. This document prov
   - Support and Q&A
 
 ### 2. Phase 2 Implementation Guide
-**File**: `PHASE_2_COMPLETION.md`
+**File**: `docs/PHASE_2_COMPLETION.md`
 - **Lines**: 400+
 - **Content**:
   - Completion checklist
@@ -107,7 +107,7 @@ Phase 2 (Reusable Workflows) has been completed successfully. This document prov
   - Phase 3 preview
 
 ### 3. Phase 2 Executive Summary
-**File**: `PHASE_2_SUMMARY.md`
+**File**: `docs/PHASE_2_SUMMARY.md`
 - **Lines**: 500+
 - **Highlights**:
   - Executive summary of what was delivered
@@ -120,7 +120,7 @@ Phase 2 (Reusable Workflows) has been completed successfully. This document prov
   - Next steps (Phase 3)
 
 ### 4. This File
-**File**: `PHASE_2_DELIVERABLES.md`
+**File**: `docs/PHASE_2_docs/DELIVERABLES.md`
 - **Lines**: This inventory document
 - **Purpose**: Complete file listing and status tracking
 
@@ -166,9 +166,9 @@ nelson-grey/
 │   ├── TROUBLESHOOTING.md                (From Phase 1)
 │   ├── PROJECT_MANIFEST.md               (From Phase 1)
 │
-├── PHASE_2_COMPLETION.md                 (Implementation guide)
-├── PHASE_2_SUMMARY.md                    (Executive summary)
-├── PHASE_2_DELIVERABLES.md               (This file)
+├── docs/PHASE_2_COMPLETION.md                 (Implementation guide)
+├── docs/PHASE_2_SUMMARY.md                    (Executive summary)
+├── docs/PHASE_2_docs/DELIVERABLES.md               (This file)
 │
 └── .cicd/
     ├── schemas/
@@ -413,8 +413,8 @@ Phase 3 (Consolidate Runner Scripts) will focus on:
 
 ### Documentation
 - **Complete Reference**: `docs/REUSABLE_WORKFLOWS.md`
-- **Implementation Guide**: `PHASE_2_COMPLETION.md`
-- **Executive Summary**: `PHASE_2_SUMMARY.md`
+- **Implementation Guide**: `docs/PHASE_2_COMPLETION.md`
+- **Executive Summary**: `docs/PHASE_2_SUMMARY.md`
 - **Troubleshooting**: `docs/TROUBLESHOOTING.md`
 - **Configuration**: `docs/PROJECT_MANIFEST.md`
 
@@ -426,7 +426,7 @@ Phase 3 (Consolidate Runner Scripts) will focus on:
 ### Getting Help
 1. Check `docs/REUSABLE_WORKFLOWS.md` for workflow details
 2. Check `docs/TROUBLESHOOTING.md` for known issues
-3. Review migration guide in `PHASE_2_COMPLETION.md`
+3. Review migration guide in `docs/PHASE_2_COMPLETION.md`
 4. Contact nelson-grey team for questions
 
 ---

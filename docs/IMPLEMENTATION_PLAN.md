@@ -62,7 +62,7 @@ A **three-layer architecture** with a centralized configuration hub (nelson-grey
 ## What's Been Created
 
 ### 1. ✅ Complete Architecture Document
-**File**: `ARCHITECTURE.md`
+**File**: `docs/ARCHITECTURE.md`
 
 Documents:
 - Three-layer architecture design
@@ -347,7 +347,7 @@ less nelson-grey/docs/SETUP.md
 
 | Document | Purpose | Read Time |
 |----------|---------|-----------|
-| **ARCHITECTURE.md** | Understand the design | 15 min |
+| **docs/ARCHITECTURE.md** | Understand the design | 15 min |
 | **docs/SETUP.md** | Implement the infrastructure | 30 min |
 | **docs/PROJECT_MANIFEST.md** | Understand configuration format | 20 min |
 | **docs/TROUBLESHOOTING.md** | Fix issues (including keychain) | 30 min |
@@ -361,7 +361,7 @@ less nelson-grey/docs/SETUP.md
 ## Key Files
 
 ### Core Architecture
-- `ARCHITECTURE.md` - Design and rationale
+- `docs/ARCHITECTURE.md` - Design and rationale
 - `.cicd/schemas/project-manifest.schema.json` - Validation rules
 - `.cicd/templates/project.template.yml` - Template
 
@@ -428,7 +428,7 @@ If something goes wrong:
 
 ### Immediate (Next 24 hours)
 1. ✅ Read this document (you're reading it)
-2. ✅ Review ARCHITECTURE.md (15 min)
+2. ✅ Review docs/ARCHITECTURE.md (15 min)
 3. ✅ Look at one project manifest (5 min)
 4. Share this plan with team
 

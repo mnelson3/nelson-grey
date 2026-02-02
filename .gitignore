@@ -1,3 +1,5 @@
+.act-secrets/
+
 # OS
 .DS_Store
 
@@ -28,4 +30,3 @@ match_deploy_key.pub
 # Secrets and Certificates
 certs/
 profiles/
-

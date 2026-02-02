@@ -63,13 +63,13 @@ stream-control/
 
 ## Secret Mapping Applied
 
-### Old → New Name Conversions
+### App Store Connect Secret Names
 
-| Old Secret Name | New Expected Name | Repos | Status |
+| Secret Name | Usage | Repos | Status |
 |-----------------|-------------------|-------|--------|
-| ASC_KEY_ID | APP_STORE_CONNECT_KEY_ID | modulo-squares, vehicle-vitals, wishlist-wizard | ✅ Mapped |
-| ASC_ISSUER_ID | APP_STORE_CONNECT_ISSUER_ID | modulo-squares, vehicle-vitals, wishlist-wizard | ✅ Mapped |
-| ASC_PRIVATE_KEY | APP_STORE_CONNECT_KEY | modulo-squares, vehicle-vitals, wishlist-wizard | ✅ Mapped |
+| APP_STORE_CONNECT_KEY_ID | App Store Connect API key ID | modulo-squares, vehicle-vitals, wishlist-wizard | ✅ Required |
+| APP_STORE_CONNECT_ISSUER_ID | App Store Connect issuer ID | modulo-squares, vehicle-vitals, wishlist-wizard | ✅ Required |
+| APP_STORE_CONNECT_KEY | App Store Connect private key | modulo-squares, vehicle-vitals, wishlist-wizard | ✅ Required |
 | FIREBASE_PROJECT_DEVELOPMENT | FIREBASE_PROJECT_DEV | modulo-squares, vehicle-vitals | ✅ Mapped |
 | FIREBASE_PROJECT_PRODUCTION | FIREBASE_PROJECT_PROD | wishlist-wizard | ✅ Mapped |
 | *N/A* | MATCH_GIT_BRANCH | All Flutter projects | ⏳ Needs set to 'main' |
@@ -79,16 +79,16 @@ stream-control/
 Master-pipeline.yml now includes:
 ```yaml
 env:
-  APP_STORE_CONNECT_KEY_ID: ${{ secrets.ASC_KEY_ID }}
-  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
-  APP_STORE_CONNECT_KEY: ${{ secrets.ASC_PRIVATE_KEY }}
+  APP_STORE_CONNECT_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
+  APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_ISSUER_ID }}
+  APP_STORE_CONNECT_KEY: ${{ secrets.APP_STORE_CONNECT_KEY }}
   FIREBASE_PROJECT_DEV: ${{ secrets.FIREBASE_PROJECT_DEV || 'project-dev' }}
   FIREBASE_PROJECT_STAGING: ${{ secrets.FIREBASE_PROJECT_STAGING || 'project-staging' }}
   FIREBASE_PROJECT_PROD: ${{ secrets.FIREBASE_PROJECT_PROD || 'project-prod' }}
   MATCH_GIT_BRANCH: main
 ```
 
-This allows reusable workflows to use new names while repos keep existing secrets.
+This uses standardized App Store Connect secret names across repos.
 
 ---
 
@@ -115,13 +115,13 @@ wishlist-wizard/.github/workflows/master-pipeline.yml         (+12 env mappings)
 
 ### Documentation Created
 ```
-nelson-grey/docs/ARCHITECTURE.md
+nelson-grey/docs/docs/ARCHITECTURE.md
 nelson-grey/docs/SETUP.md
 nelson-grey/docs/PROJECT_MANIFEST.md
 nelson-grey/docs/SECRETS_MAPPING.md
 nelson-grey/docs/PHASE5_VALIDATION.md
 nelson-grey/docs/PHASE5_COMPLETION_REPORT.md
-nelson-grey/docs/PHASE5B_QUICK_START.md
+nelson-grey/docs/PHASE5B_docs/QUICK_START.md
 ```
 
 ---
@@ -135,13 +135,13 @@ nelson-grey/docs/PHASE5B_QUICK_START.md
 - stream-control.yml: ✅ Valid
 
 ### Secrets Verification
-- modulo-squares: 20+ secrets found (ASC_*, FIREBASE_*, MATCH_*)
+- modulo-squares: 20+ secrets found (APP_STORE_CONNECT_* with legacy ASC_*, FIREBASE_*, MATCH_*)
 - vehicle-vitals: 20+ secrets found (same pattern)
 - wishlist-wizard: 20+ secrets found (includes CHROME_*)
 - stream-control: 0 secrets (not required for Expo + Next.js + Node)
 
 ### Secret Name Mismatches Identified
-- ASC_KEY_ID vs APP_STORE_CONNECT_KEY_ID: ✅ Mapped via env
+- APP_STORE_CONNECT_* secrets must be present in each repo.
 - FIREBASE_PROJECT_DEVELOPMENT vs FIREBASE_PROJECT_DEV: ✅ Mapped via env
 - MATCH_GIT_BRANCH not yet set: ⏳ Needs manual setup
 
@@ -176,7 +176,7 @@ gh workflow run master-pipeline.yml -f action=build_all -R mnelson3/vehicle-vita
 # ... etc
 ```
 
-See [PHASE5B_QUICK_START.md](./PHASE5B_QUICK_START.md) for detailed execution steps.
+See [PHASE5B_docs/QUICK_START.md](./PHASE5B_docs/QUICK_START.md) for detailed execution steps.
 
 ---
 
@@ -197,7 +197,7 @@ See [PHASE5B_QUICK_START.md](./PHASE5B_QUICK_START.md) for detailed execution st
 
 ## Next Steps
 
-1. **Execute PHASE5B_QUICK_START.md** to trigger dry-run builds
+1. **Execute PHASE5B_docs/QUICK_START.md** to trigger dry-run builds
 2. **Monitor GitHub Actions** for test_all → build_all execution
 3. **Verify artifacts** uploaded (iOS .ipa, Android .apk, web dist/)
 4. **Archive legacy workflows** upon successful builds
@@ -207,11 +207,11 @@ See [PHASE5B_QUICK_START.md](./PHASE5B_QUICK_START.md) for detailed execution st
 
 ## Reference Documents
 
-- [ARCHITECTURE.md](./ARCHITECTURE.md) — Full system design
+- [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) — Full system design
 - [SECRETS_MAPPING.md](./SECRETS_MAPPING.md) — Secret name conversions
 - [PHASE5_COMPLETION_REPORT.md](./PHASE5_COMPLETION_REPORT.md) — Detailed validation results
-- [PHASE5B_QUICK_START.md](./PHASE5B_QUICK_START.md) — Dry-run execution steps
-- [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md) — Full 6-phase roadmap
+- [PHASE5B_docs/QUICK_START.md](./PHASE5B_docs/QUICK_START.md) — Dry-run execution steps
+- [docs/IMPLEMENTATION_PLAN.md](./docs/IMPLEMENTATION_PLAN.md) — Full 6-phase roadmap
 
 ---
 

@@ -127,9 +127,9 @@ Create these organization secrets (Organization Settings → Secrets and variabl
 #### Apple Secrets
 ```
 APPLE_TEAM_ID=<your-team-id>
-ASC_KEY_ID=<key-id-from-app-store-connect>
-ASC_ISSUER_ID=<issuer-id-from-app-store-connect>
-ASC_PRIVATE_KEY=<base64-encoded-p8-key>
+APP_STORE_CONNECT_KEY_ID=<key-id-from-app-store-connect>
+APP_STORE_CONNECT_ISSUER_ID=<issuer-id-from-app-store-connect>
+APP_STORE_CONNECT_KEY=<base64-encoded-p8-key>
 ```
 
 #### Android Secrets
@@ -556,7 +556,7 @@ nelson-grey/
    ```
 
 4. **Search Documentation**
-   - Architecture: [ARCHITECTURE.md](./ARCHITECTURE.md)
+   - Architecture: [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
    - Troubleshooting: [TROUBLESHOOTING.md](./TROUBLESHOOTING.md)
    - Examples: [EXAMPLES.md](./EXAMPLES.md)
 
@@ -564,7 +564,7 @@ nelson-grey/
 
 ## Related Documentation
 
-- [Architecture Overview](./ARCHITECTURE.md)
+- [Architecture Overview](./docs/ARCHITECTURE.md)
 - [Project Manifest Format](./PROJECT_MANIFEST.md)
 - [Advanced Troubleshooting](./TROUBLESHOOTING.md)
 - [Examples & Recipes](./EXAMPLES.md)
