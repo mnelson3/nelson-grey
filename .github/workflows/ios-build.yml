@@ -260,9 +260,14 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.match_password }}
           MATCH_GIT_URL: ${{ secrets.match_git_url }}
           MATCH_GIT_BRANCH: ${{ secrets.match_git_branch }}
+          # Set both naming conventions for backward compatibility
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.app_store_connect_key_id }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.app_store_connect_issuer_id }}
           APP_STORE_CONNECT_KEY_FILE: ${{ runner.temp }}/app_store_connect_key.json
+          # Fastfile expects these names
+          ASC_KEY_ID: ${{ secrets.app_store_connect_key_id }}
+          ASC_ISSUER_ID: ${{ secrets.app_store_connect_issuer_id }}
+          ASC_PRIVATE_KEY: ${{ secrets.app_store_connect_key }}
         run: |
           echo "🏗️ Building iOS app for ${{ inputs.project_name }}..."
 
