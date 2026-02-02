@@ -63,9 +63,12 @@ on:
       fastlane_password:
         required: false
         description: "Fastlane password for App Store Connect"
-      match_password:
+      match_git_password:
         required: true
         description: "Password for match certificate repository"
+      keychain_password:
+        required: true
+        description: "Password for macOS login keychain"
       match_git_url:
         required: true
         description: "Git URL for match certificates repository"
@@ -183,7 +186,7 @@ jobs:
 
       - name: 🔓 Setup Match Certificate Store
         env:
-          MATCH_PASSWORD: ${{ secrets.match_password }}
+          MATCH_GIT_PASSWORD: ${{ secrets.match_git_password }}
           MATCH_GIT_URL: ${{ secrets.match_git_url }}
           MATCH_GIT_BRANCH: ${{ secrets.match_git_branch }}
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.app_store_connect_key_id }}
@@ -208,9 +211,11 @@ jobs:
       # 5. Build Steps
       - name: 🏗️ Build iOS App
         env:
-          MATCH_PASSWORD: ${{ secrets.match_password }}
+          MATCH_GIT_PASSWORD: ${{ secrets.match_git_password }}
+          MATCH_PASSWORD: ${{ secrets.match_git_password }}  # Fastlane expects MATCH_PASSWORD for repo encryption
           MATCH_GIT_URL: ${{ secrets.match_git_url }}
           MATCH_GIT_BRANCH: ${{ secrets.match_git_branch }}
+          MATCH_KEYCHAIN_PASSWORD: ${{ secrets.keychain_password }}
           # Set both naming conventions for backward compatibility
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.app_store_connect_key_id }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.app_store_connect_issuer_id }}
