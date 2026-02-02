@@ -260,6 +260,7 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.match_password }}
           MATCH_GIT_URL: ${{ secrets.match_git_url }}
           MATCH_GIT_BRANCH: ${{ secrets.match_git_branch }}
+          MATCH_KEYCHAIN_PASSWORD: ${{ secrets.match_password }}
           # Set both naming conventions for backward compatibility
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.app_store_connect_key_id }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.app_store_connect_issuer_id }}
