@@ -222,7 +222,13 @@ jobs:
             KEYCHAIN_PATH="$HOME/Library/Keychains/login.keychain-db"
             if [ -f "$KEYCHAIN_PATH" ]; then
               echo "🔓 Unlocking keychain for certificate operations..."
-              security unlock-keychain -p "${{ secrets.keychain_password }}" "$KEYCHAIN_PATH" || true
+              # Use printf to avoid shell interpretation of special characters
+              printf '%s' '${{ secrets.keychain_password }}' | security unlock-keychain -p "$(cat -)" "$KEYCHAIN_PATH" || {
+                echo "⚠️ Failed to unlock keychain with KEYCHAIN_PASSWORD"
+                # Try alternative method with explicit password passing
+                KEYCHAIN_PWD='${{ secrets.keychain_password }}'
+                security unlock-keychain -p "${KEYCHAIN_PWD}" "$KEYCHAIN_PATH" || echo "⚠️ Keychain unlock failed, continuing..."
+              }
               security set-keychain-settings -t 3600 "$KEYCHAIN_PATH" || true
             fi
 
