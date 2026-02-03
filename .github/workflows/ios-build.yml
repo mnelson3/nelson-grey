@@ -82,10 +82,6 @@ jobs:
     runs-on: [self-hosted, macOS, ios]
     environment:
       name: ${{ (inputs.release_type == 'app_store' || inputs.release_type == 'full_pipeline') && 'PRODUCTION' || 'DEVELOPMENT' }}
-    env:
-      COCOAPODS_HOME: ${{ runner.temp }}/cocoapods
-      CP_HOME_DIR: ${{ runner.temp }}/cocoapods
-      MATCH_KEYCHAIN_PASSWORD: ${{ secrets.keychain_password }}
     defaults:
       run:
         working-directory: ${{ inputs.mobile_dir }}
@@ -109,6 +105,12 @@ jobs:
 
       - name: 📥 Checkout Code
         uses: actions/checkout@v4
+
+      - name: 🔧 Set CocoaPods Home
+        run: |
+          echo "COCOAPODS_HOME=$RUNNER_TEMP/cocoapods" >> $GITHUB_ENV
+          echo "CP_HOME_DIR=$RUNNER_TEMP/cocoapods" >> $GITHUB_ENV
+          mkdir -p "$RUNNER_TEMP/cocoapods"
 
       - name: ⏰ Sync NTP Time
         run: |
@@ -204,6 +206,7 @@ jobs:
           MATCH_GIT_PASSWORD: ${{ secrets.match_git_password }}
           MATCH_GIT_URL: ${{ secrets.match_git_url }}
           MATCH_GIT_BRANCH: ${{ secrets.match_git_branch }}
+          MATCH_KEYCHAIN_PASSWORD: ${{ secrets.keychain_password }}
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.app_store_connect_key_id }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.app_store_connect_issuer_id }}
           APP_STORE_CONNECT_KEY_FILE: ${{ runner.temp }}/app_store_connect_key.json
