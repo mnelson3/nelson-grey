@@ -82,6 +82,10 @@ jobs:
     runs-on: [self-hosted, macOS, ios]
     environment:
       name: ${{ (inputs.release_type == 'app_store' || inputs.release_type == 'full_pipeline') && 'PRODUCTION' || 'DEVELOPMENT' }}
+    env:
+      COCOAPODS_HOME: ${{ runner.temp }}/cocoapods
+      CP_HOME_DIR: ${{ runner.temp }}/cocoapods
+      MATCH_KEYCHAIN_PASSWORD: ${{ secrets.keychain_password }}
     defaults:
       run:
         working-directory: ${{ inputs.mobile_dir }}
