@@ -201,7 +201,25 @@ jobs:
           chmod 600 "$ASC_KEY_FILE"
           echo "✅ App Store Connect key configured"
 
-      - name: 🔓 Setup Match Certificate Store
+      - name: � Create Fastlane Keychain
+        env:
+          KEYCHAIN_PASSWORD: ${{ secrets.keychain_password }}
+        run: |
+          echo "🔐 Creating dedicated keychain for Fastlane..."
+          KEYCHAIN_NAME="fastlane_tmp_keychain"
+          KEYCHAIN_PATH="$HOME/Library/Keychains/${KEYCHAIN_NAME}-db"
+
+          echo "MATCH_KEYCHAIN_NAME=${KEYCHAIN_NAME}" >> $GITHUB_ENV
+          echo "MATCH_KEYCHAIN_PATH=${KEYCHAIN_PATH}" >> $GITHUB_ENV
+          echo "MATCH_KEYCHAIN_PASSWORD=${KEYCHAIN_PASSWORD}" >> $GITHUB_ENV
+
+          security delete-keychain "$KEYCHAIN_PATH" 2>/dev/null || true
+          security create-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-keychain-settings -t 3600 "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security list-keychains -d user -s "$KEYCHAIN_PATH" $(security list-keychains -d user | tr -d '"')
+
+      - name: �🔓 Setup Match Certificate Store
         env:
           MATCH_GIT_PASSWORD: ${{ secrets.match_git_password }}
           MATCH_GIT_URL: ${{ secrets.match_git_url }}
