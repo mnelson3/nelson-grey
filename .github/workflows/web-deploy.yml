@@ -107,7 +107,11 @@ jobs:
           npm run build --workspace=@vehicle-vitals/shared 2>/dev/null || echo "✓ @vehicle-vitals/shared (skip)"
           npm run build --workspace=@modulo-squares/shared 2>/dev/null || echo "✓ @modulo-squares/shared (skip)"
           npm run build --workspace=@wishlist-wizard/shared 2>/dev/null || echo "✓ @wishlist-wizard/shared (skip)"
-          npm run build --workspace=@shared/firebase-utils 2>/dev/null || echo "✓ @shared/firebase-utils (skip)"
+          if [ -d "packages/firebase-utils" ]; then
+            npm run build --workspace=@shared/firebase-utils
+          else
+            echo "✓ @shared/firebase-utils (skip)"
+          fi
           echo "✅ Shared packages built"
 
       - name: 🏗️ Build Web App
