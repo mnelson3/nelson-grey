@@ -93,7 +93,7 @@ jobs:
           echo "🍎 Running on self-hosted macOS runner for iOS builds"
           echo "📍 Hostname: $(hostname)"
           echo "🖥️  macOS version: $(sw_vers -productVersion)"
-          echo "🛠️  Xcode version: $(xcodebuild -version | head -1)"
+          echo "🛠️  Xcode version: $(xcodebuild -version)"
           echo "💰 Using self-hosted runner (cost savings)"
 
       - name: 🔧 Fix Git Config for HTTPS Checkout
@@ -218,6 +218,17 @@ jobs:
           security set-keychain-settings -t 3600 "$KEYCHAIN_PATH"
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
           security list-keychains -d user -s "$KEYCHAIN_PATH" $(security list-keychains -d user | tr -d '"')
+
+      - name: 🔐 Configure Keychain Access for Codesign
+        env:
+          KEYCHAIN_PASSWORD: ${{ secrets.keychain_password }}
+        run: |
+          KEYCHAIN_NAME="fastlane_tmp_keychain"
+          KEYCHAIN_PATH="$HOME/Library/Keychains/${KEYCHAIN_NAME}-db"
+
+          security default-keychain -s "$KEYCHAIN_PATH"
+          security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH" || true
 
       - name: �🔓 Setup Match Certificate Store
         env:
@@ -355,6 +366,15 @@ jobs:
           rm -f "$HOME/.appstoreconnect/key.p8"
           rm -f "${{ runner.temp }}/app_store_connect_key.json"
           echo "✅ Cleanup complete"
+
+      - name: 📦 Upload Gym Logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-gym-logs
+          path: |
+            ${{ runner.home }}/Library/Logs/gym/*.log
+          if-no-files-found: warn
 
       - name: 📊 Build Summary
         if: success()
