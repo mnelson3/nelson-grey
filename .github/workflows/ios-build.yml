@@ -315,6 +315,11 @@ jobs:
           
           echo "✅ CocoaPods dependencies updated"
 
+      - name: 🔎 Verify Codesign Identities
+        run: |
+          echo "🔎 Available codesign identities:"
+          security find-identity -v -p codesigning || true
+
       # 5. Build Steps
       - name: 🏗️ Build iOS App
         env:
@@ -322,6 +327,8 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.match_git_password }}  # Fastlane expects MATCH_PASSWORD for repo encryption
           MATCH_GIT_URL: ${{ secrets.match_git_url }}
           MATCH_GIT_BRANCH: ${{ secrets.match_git_branch }}
+          MATCH_KEYCHAIN_NAME: fastlane_tmp_keychain
+          MATCH_KEYCHAIN_PATH: ${{ env.MATCH_KEYCHAIN_PATH }}
           MATCH_KEYCHAIN_PASSWORD: ${{ secrets.keychain_password }}
           # App Store Connect authentication
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.app_store_connect_key_id }}
