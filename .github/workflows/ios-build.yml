@@ -315,6 +315,43 @@ jobs:
           
           echo "✅ CocoaPods dependencies updated"
 
+      - name: 🧨 One-Time Purge Match App Store Assets
+        env:
+          MATCH_GIT_URL: ${{ secrets.match_git_url }}
+          MATCH_GIT_BRANCH: ${{ secrets.match_git_branch }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${MATCH_GIT_URL:-}" ]; then
+            echo "MATCH_GIT_URL not set; skipping match purge."
+            exit 0
+          fi
+
+          MATCH_BRANCH="${MATCH_GIT_BRANCH:-main}"
+          TMP_DIR="$(mktemp -d)"
+          MARKER_FILE=".ci/match_purge_done"
+
+          git clone "${MATCH_GIT_URL}" "${TMP_DIR}"
+          cd "${TMP_DIR}"
+          git checkout "${MATCH_BRANCH}"
+
+          if [ -f "${MARKER_FILE}" ]; then
+            echo "Match repo already purged once; skipping."
+            exit 0
+          fi
+
+          mkdir -p .ci
+          rm -f profiles/appstore/*.mobileprovision || true
+          rm -f certs/distribution/*.cer certs/distribution/*.p12 || true
+
+          echo "purged $(date -u)" > "${MARKER_FILE}"
+
+          if [ -n "$(git status --porcelain)" ]; then
+            git add -A
+            git -c user.email=ci@nelson-grey.local -c user.name=nelson-grey-ci commit -m "CI: one-time purge appstore signing assets"
+            git push origin "${MATCH_BRANCH}"
+          fi
+
       - name: 🔎 Verify Codesign Identities
         run: |
           echo "🔎 Available codesign identities:"
