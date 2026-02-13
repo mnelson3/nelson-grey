@@ -367,6 +367,7 @@ jobs:
           MATCH_KEYCHAIN_NAME: fastlane_tmp_keychain
           MATCH_KEYCHAIN_PATH: ${{ env.MATCH_KEYCHAIN_PATH }}
           MATCH_KEYCHAIN_PASSWORD: ${{ secrets.keychain_password }}
+          GYM_BUILDLOG_PATH: ${{ runner.temp }}/gym_logs
           # App Store Connect authentication
           APP_STORE_CONNECT_KEY_ID: ${{ secrets.app_store_connect_key_id }}
           APP_STORE_CONNECT_ISSUER_ID: ${{ secrets.app_store_connect_issuer_id }}
@@ -374,6 +375,7 @@ jobs:
           APP_STORE_CONNECT_KEY_FILE: ${{ runner.temp }}/app_store_connect_key.json
         run: |
           echo "🏗️ Building iOS app for ${{ inputs.project_name }}..."
+          mkdir -p "${GYM_BUILDLOG_PATH}"
 
           case "${{ inputs.release_type }}" in
             build_only)
@@ -424,7 +426,9 @@ jobs:
         with:
           name: ios-gym-logs
           path: |
+            ${{ runner.temp }}/gym_logs/*.log
             ${{ runner.home }}/Library/Logs/gym/*.log
+            /Library/Logs/gym/*.log
           if-no-files-found: warn
 
       - name: 📊 Build Summary
