@@ -225,16 +225,11 @@ jobs:
         run: |
           KEYCHAIN_NAME="fastlane_tmp_keychain"
           KEYCHAIN_PATH="$HOME/Library/Keychains/${KEYCHAIN_NAME}-db"
-          LOGIN_KEYCHAIN="$HOME/Library/Keychains/login.keychain-db"
 
           security default-keychain -s "$KEYCHAIN_PATH"
           security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH"
-          security list-keychains -d user -s "$KEYCHAIN_PATH" "$LOGIN_KEYCHAIN" $(security list-keychains -d user | tr -d '"')
+          security list-keychains -d user -s "$KEYCHAIN_PATH" $(security list-keychains -d user | tr -d '"')
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$KEYCHAIN_PATH" || true
-          if [ -f "$LOGIN_KEYCHAIN" ]; then
-            security unlock-keychain -p "$KEYCHAIN_PASSWORD" "$LOGIN_KEYCHAIN" || true
-            security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k "$KEYCHAIN_PASSWORD" "$LOGIN_KEYCHAIN" || true
-          fi
           security find-identity -v -p codesigning || true
 
       - name: �🔓 Setup Match Certificate Store
@@ -375,6 +370,9 @@ jobs:
           APP_STORE_CONNECT_KEY_FILE: ${{ runner.temp }}/app_store_connect_key.json
         run: |
           echo "🏗️ Building iOS app for ${{ inputs.project_name }}..."
+          security default-keychain -s "${MATCH_KEYCHAIN_PATH}"
+          security unlock-keychain -p "${MATCH_KEYCHAIN_PASSWORD}" "${MATCH_KEYCHAIN_PATH}"
+          security list-keychains -d user -s "${MATCH_KEYCHAIN_PATH}" $(security list-keychains -d user | tr -d '"')
           mkdir -p "${GYM_BUILDLOG_PATH}"
 
           case "${{ inputs.release_type }}" in
